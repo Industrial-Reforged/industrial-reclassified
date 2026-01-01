@@ -1,0 +1,192 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.107'
+    id 'idea'
+
+    id 'net.darkhax.curseforgegradle' version '1.1.15'
+    id "com.modrinth.minotaur" version "2.+"
+}
+
+tasks.named('wrapper', Wrapper).configure {
+    // Define wrapper values here so as to not have to always do so when updating gradlew.properties.
+    // Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
+    // documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
+    // file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
+    // (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
+group = mod_group_id
+
+repositories {
+    mavenLocal()
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+
+    // Porting Dead Libs
+    maven { url 'https://jitpack.io' }
+}
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
+
+    runs {
+        client {
+            client()
+
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    implementation "com.github.Porting-Dead-Mods:Porting-Dead-Libs:${pdl_version}"
+}
+
+def parts = pdl_version.tokenize('.')
+def pdl_nextMinor = "${parts[0]}.${(parts[1].toInteger() + 1)}.0"
+
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+            pdl_version            : pdl_version,
+            pdl_nextMinor          : pdl_nextMinor
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from('src/main/neoforge.mods.toml') {
+        rename '(.*)', 'META-INF/$1'
+    }
+    into 'build/generated/modMetadata'
+}
+
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+if (System.getenv('CURSEFORGE_TOKEN')) {
+    task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+
+        apiToken = System.getenv('CURSEFORGE_TOKEN')
+        disableVersionDetection()
+
+        // Upload main jar
+        def mainFile = upload(curseforge_project_id, jar)
+        mainFile.changelog = System.getenv('CHANGELOG') ?: 'See GitHub for changes'
+        mainFile.changelogType = 'markdown'
+        mainFile.releaseType = System.getenv('RELEASE_TYPE') ?: 'release'
+        mainFile.displayName = "${mod_id}-${mod_version}-${minecraft_version}"
+        mainFile.addGameVersion minecraft_version
+        mainFile.addModLoader 'NeoForge'
+
+        // Add sources and javadoc as additional files
+        def sourcesFile = mainFile.withAdditionalFile(sourcesJar)
+        sourcesFile.displayName = "${mod_id}-${mod_version}-${minecraft_version}-sources"
+
+        def javadocFile = mainFile.withAdditionalFile(javadocJar)
+        javadocFile.displayName = "${mod_id}-${mod_version}-${minecraft_version}-javadoc"
+    }
+}
+
+
+if (System.getenv('MODRINTH_TOKEN')) {
+    modrinth {
+        token = System.getenv("MODRINTH_TOKEN")
+        projectId = System.getenv("MODRINTH_PROJECT_SLUG")
+        versionNumber = mod_version
+        versionType = System.getenv('RELEASE_TYPE') ?: 'release'
+        uploadFile = jar
+        additionalFiles = [sourcesJar, javadocJar]
+        changelog = System.getenv('CHANGELOG') ?: 'See GitHub for changes'
+        gameVersions = [minecraft_version]
+        loaders = ["neoforge"]
+    }
+}
