@@ -1,8 +1,8 @@
 package com.portingdeadmods.examplemod.datagen.data;
 
-import com.portingdeadmods.examplemod.ExampleMod;
+import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.registries.EMBlocks;
-import com.portingdeadmods.examplemod.registries.EMItems;
+import com.portingdeadmods.examplemod.registries.IRItems;
 import com.portingdeadmods.portingdeadlibs.api.fluids.PDLFluid;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -38,7 +38,7 @@ public class EMTagsProvider {
 
         @Override
         protected void addTags(HolderLookup.@NotNull Provider provider) {
-            tag(ItemTags.COMPASSES, EMItems.EXAMPLE_ITEM.get());
+            tag(ItemTags.COMPASSES, IRItems.EXAMPLE_ITEM.get());
         }
 
         private void tag(TagKey<Item> itemTagKey, ItemLike... items) {
@@ -59,7 +59,7 @@ public class EMTagsProvider {
 
     protected static class BlocksProvider extends BlockTagsProvider {
         public BlocksProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
-            super(output, lookupProvider, ExampleMod.MODID, existingFileHelper);
+            super(output, lookupProvider, IndustrialReclassified.MODID, existingFileHelper);
         }
 
         @Override
@@ -85,7 +85,7 @@ public class EMTagsProvider {
 
     public static class FluidsProvider extends FluidTagsProvider {
         public FluidsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
-            super(output, provider, ExampleMod.MODID, existingFileHelper);
+            super(output, provider, IndustrialReclassified.MODID, existingFileHelper);
         }
 
         @Override

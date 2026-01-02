@@ -1,6 +1,6 @@
 package com.portingdeadmods.examplemod.datagen.data;
 
-import com.portingdeadmods.examplemod.registries.EMItems;
+import com.portingdeadmods.examplemod.registries.IRItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -20,7 +20,7 @@ public class EMRecipeProvider extends RecipeProvider {
     protected void buildRecipes(RecipeOutput output) {
         super.buildRecipes(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EMItems.EXAMPLE_ITEM.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.EXAMPLE_ITEM.get())
                 .pattern("IDI")
                 .pattern("D D")
                 .pattern("IDI")

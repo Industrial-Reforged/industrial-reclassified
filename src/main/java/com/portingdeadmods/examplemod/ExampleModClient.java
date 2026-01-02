@@ -11,7 +11,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
-@Mod(value = ExampleMod.MODID, dist = Dist.CLIENT)
+@Mod(value = IndustrialReclassified.MODID, dist = Dist.CLIENT)
 public final class ExampleModClient {
     public ExampleModClient(IEventBus modEventBus, ModContainer container) {
         modEventBus.addListener(this::registerMenuScreens);

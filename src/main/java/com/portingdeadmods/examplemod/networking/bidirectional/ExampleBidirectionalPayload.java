@@ -1,6 +1,6 @@
 package com.portingdeadmods.examplemod.networking.bidirectional;
 
-import com.portingdeadmods.examplemod.ExampleMod;
+import com.portingdeadmods.examplemod.IndustrialReclassified;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record ExampleBidirectionalPayload(int payload) implements CustomPacketPayload {
-    public static final Type<ExampleBidirectionalPayload> TYPE = new Type<>(ExampleMod.rl("example_bidirectional_payload"));
+    public static final Type<ExampleBidirectionalPayload> TYPE = new Type<>(IndustrialReclassified.rl("example_bidirectional_payload"));
     public static final StreamCodec<? super RegistryFriendlyByteBuf, ExampleBidirectionalPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT,
             ExampleBidirectionalPayload::payload,
@@ -43,7 +43,7 @@ public record ExampleBidirectionalPayload(int payload) implements CustomPacketPa
                 // Logic
             }
         }).exceptionally(err -> {
-            ExampleMod.LOGGER.error("Failed to handle " + TYPE.id(), err);
+            IndustrialReclassified.LOGGER.error("Failed to handle " + TYPE.id(), err);
             return null;
         });
     }

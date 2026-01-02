@@ -1,6 +1,6 @@
 package com.portingdeadmods.examplemod.datagen;
 
-import com.portingdeadmods.examplemod.ExampleMod;
+import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.datagen.assets.EMBlockStateProvider;
 import com.portingdeadmods.examplemod.datagen.assets.EMEnUsLangProvider;
 import com.portingdeadmods.examplemod.datagen.assets.EMItemModelProvider;
@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = ExampleMod.MODID)
+@EventBusSubscriber(modid = IndustrialReclassified.MODID)
 public final class EMDataGatherer {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {

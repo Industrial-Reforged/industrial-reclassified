@@ -1,12 +1,19 @@
 package com.portingdeadmods.examplemod;
 
+import com.portingdeadmods.examplemod.api.energy.EnergyItem;
+import com.portingdeadmods.examplemod.impl.energy.ItemEnergyHandlerWrapper;
 import com.portingdeadmods.examplemod.registries.*;
 import com.portingdeadmods.portingdeadlibs.api.blockentities.ContainerBlockEntity;
+import com.portingdeadmods.portingdeadlibs.api.config.PDLConfigHelper;
+import com.portingdeadmods.portingdeadlibs.api.items.IEnergyItem;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -16,24 +23,31 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 
-@Mod(ExampleMod.MODID)
-public final class ExampleMod {
+@Mod(IndustrialReclassified.MODID)
+public final class IndustrialReclassified {
     public static final String MODID = "examplemod";
     public static final String MODNAME = "Example Mod";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public ExampleMod(IEventBus modEventBus, ModContainer modContainer) {
+    public IndustrialReclassified(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::registerPayloads);
         modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(this::registerRegistries);
 
-        EMItems.ITEMS.register(modEventBus);
+        IRItems.ITEMS.register(modEventBus);
+        IREnergyTiers.ENERGY_TIERS.register(modEventBus);
+        IRDataComponents.DATA_COMPONENT_TYPES.register(modEventBus);
         EMBlocks.BLOCKS.register(modEventBus);
-        EMTranslations.TRANSLATIONS.register(modEventBus);
+        IRTranslations.TRANSLATIONS.register(modEventBus);
         EMCreativeTabs.TABS.register(modEventBus);
         EMBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
         EMMenuTypes.MENU_TYPES.register(modEventBus);
 
-        modContainer.registerConfig(ModConfig.Type.COMMON, ExampleModConfig.SPEC);
+        PDLConfigHelper.registerConfig(IRConfig.class, ModConfig.Type.COMMON, modContainer);
+    }
+
+    private void registerRegistries(NewRegistryEvent event) {
+        event.register(IRRegistries.ENERGY_TIER);
     }
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
@@ -41,7 +55,13 @@ public final class ExampleMod {
     }
 
     private void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, EMBlockEntityTypes.EXAMPLE.get(), ContainerBlockEntity::getItemHandlerOnSide);
+        for (Item item : BuiltInRegistries.ITEM) {
+            if (item instanceof EnergyItem energyItem) {
+                event.registerItem(IRCapabilities.ENERGY_ITEM,
+                        (stack, ctx) -> new ItemEnergyHandlerWrapper(stack, energyItem::getEnergyTier, energyItem.getDefaultCapacity()), item);
+            }
+        }
+
     }
 
     public static ResourceLocation rl(String path) {
