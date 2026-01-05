@@ -1,16 +1,15 @@
 package com.portingdeadmods.examplemod.datagen;
 
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.datagen.assets.EMBlockStateProvider;
-import com.portingdeadmods.examplemod.datagen.assets.EMEnUsLangProvider;
-import com.portingdeadmods.examplemod.datagen.assets.EMItemModelProvider;
-import com.portingdeadmods.examplemod.datagen.data.EMBlockLootTableProvider;
-import com.portingdeadmods.examplemod.datagen.data.EMRecipeProvider;
-import com.portingdeadmods.examplemod.datagen.data.EMTagsProvider;
+import com.portingdeadmods.examplemod.datagen.assets.IRBlockStateProvider;
+import com.portingdeadmods.examplemod.datagen.assets.IREnUsLangProvider;
+import com.portingdeadmods.examplemod.datagen.assets.IRItemModelProvider;
+import com.portingdeadmods.examplemod.datagen.data.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -30,14 +29,16 @@ public final class EMDataGatherer {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
-        generator.addProvider(event.includeClient(), new EMBlockStateProvider(packOutput, existingFileHelper));
-        generator.addProvider(event.includeClient(), new EMItemModelProvider(packOutput, existingFileHelper));
-        generator.addProvider(event.includeClient(), new EMEnUsLangProvider(packOutput));
+        generator.addProvider(event.includeClient(), new IRBlockStateProvider(packOutput, existingFileHelper));
+        generator.addProvider(event.includeClient(), new IRItemModelProvider(packOutput, existingFileHelper));
+        generator.addProvider(event.includeClient(), new IREnUsLangProvider(packOutput));
 
-        EMTagsProvider.createTagProviders(generator, packOutput, lookupProvider, existingFileHelper, event.includeServer());
-        generator.addProvider(event.includeServer(), new EMRecipeProvider(packOutput, lookupProvider));
+        IRTagsProvider.createTagProviders(generator, packOutput, lookupProvider, existingFileHelper, event.includeServer());
+        generator.addProvider(event.includeServer(), new IRRecipeProvider(packOutput, lookupProvider));
         generator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(), List.of(
-                new LootTableProvider.SubProviderEntry(EMBlockLootTableProvider::new, LootContextParamSets.BLOCK)
+                new LootTableProvider.SubProviderEntry(IRBlockLootTableProvider::new, LootContextParamSets.BLOCK),
+                new LootTableProvider.SubProviderEntry(IRMiscLootTableProvider::new, LootContextParamSets.EMPTY)
         ), lookupProvider));
+        generator.addProvider(event.includeServer(), new IRDatapackEntriesProvider(packOutput, lookupProvider));
     }
 }

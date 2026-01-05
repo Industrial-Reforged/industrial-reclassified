@@ -67,11 +67,11 @@ public final class IRConfig {
     public static int advancedDrillCapacity = 32_000;
     @ConfigValue(key = "advanced_chainsaw", name = "Advanced Chainsaw Energy Capacity", comment = "The Energy Capacity of the Advanced Chainsaw", category = ITEMS_ENERGY_CAPACITY)
     public static int advancedChainsawCapacity = 32_000;
-    @ConfigValue(key = "advanced_battery", name = "Advanced Battery Energy Capacity", comment = "The Energy Capacity of the Advanced Battery", category = ITEMS_ENERGY_CAPACITY)
-    public static int advancedBatteryCapacity = 32_000;
+    @ConfigValue(key = "energy_crystal", name = "Energy Crystal Capacity", comment = "The Energy Capacity of the Energy Crystal", category = ITEMS_ENERGY_CAPACITY)
+    public static int energyCrystalCapacity = 32_000;
 
-    @ConfigValue(key = "ultimate_battery", name = "Ultimate Battery Energy Capacity", comment = "The Energy Capacity of the Ultimate Battery", category = ITEMS_ENERGY_CAPACITY)
-    public static int ultimateBatteryCapacity = 128_000;
+    @ConfigValue(key = "lapotron_crystal", name = "Lapotron Crystal Energy Capacity", comment = "The Energy Capacity of the Lapotron Crystal", category = ITEMS_ENERGY_CAPACITY)
+    public static int lapotronCrystalCapacity = 128_000;
 
     private static final String ITEMS_ENERGY_USAGE = "items.energy.usage";
 

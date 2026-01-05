@@ -51,6 +51,9 @@ neoForge {
         client {
             client()
 
+            programArgument '--nogui'
+            //programArgument "-Dmixin.debug.verbose=true"
+            //programArgument "-Dmixin.debug.export=true"
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
@@ -143,6 +146,11 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+tasks.withType(JavaExec).configureEach {
+    jvmArgs "-Dmixin.debug.verbose=true"
+    jvmArgs "-Dmixin.debug.export=true"
 }
 
 idea {

@@ -2,9 +2,8 @@ package com.portingdeadmods.examplemod.registries;
 
 import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.content.items.ElectricHoeItem;
-import com.portingdeadmods.examplemod.content.items.ElectricTreetapItem;
-import com.portingdeadmods.examplemod.content.items.ElectricWrenchItem;
+import com.portingdeadmods.examplemod.content.items.*;
+import com.portingdeadmods.examplemod.content.items.electric.*;
 import com.portingdeadmods.portingdeadlibs.api.utils.PDLDeferredRegisterItems;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
@@ -28,24 +27,30 @@ public final class IRItems {
     public static final DeferredItem<Item> TIN_PLATE = ITEMS.registerSimpleItem("tin_plate");
     public static final DeferredItem<Item> IRIDIUM_PLATE = ITEMS.registerSimpleItem("iridium_plate");
     public static final DeferredItem<Item> ADVANCED_ALLOY_PLATE = ITEMS.registerSimpleItem("advanced_alloy_plate");
+    /* Dusts */
+    public static final DeferredItem<Item> TIN_DUST = ITEMS.registerSimpleItem("tin_dust");
+    public static final DeferredItem<Item> COPPER_DUST = ITEMS.registerSimpleItem("copper_dust");
+    public static final DeferredItem<Item> IRON_DUST = ITEMS.registerSimpleItem("iron_dust");
+    public static final DeferredItem<Item> GOLD_DUST = ITEMS.registerSimpleItem("gold_dust");
+    public static final DeferredItem<Item> COAL_DUST = ITEMS.registerSimpleItem("coal_dust");
     /* Circuits */
     public static final DeferredItem<Item> BASIC_CIRCUIT = ITEMS.registerSimpleItem("basic_circuit");
     public static final DeferredItem<Item> ADVANCED_CIRCUIT = ITEMS.registerSimpleItem("advanced_circuit");
     /* Tools */
-    public static final DeferredItem<Item> TREETAP = ITEMS.registerSimpleItem("treetap");
-    public static final DeferredItem<Item> WRENCH = ITEMS.registerSimpleItem("wrench");
-    public static final DeferredItem<Item> CUTTER = ITEMS.registerSimpleItem("cutter");
+    public static final DeferredItem<TreetapItem> TREETAP = ITEMS.registerItem("treetap", TreetapItem::defaultItem);
+    public static final DeferredItem<WrenchItem> WRENCH = ITEMS.registerItem("wrench", WrenchItem::defaultItem);
+    public static final DeferredItem<CutterItem> CUTTER = ITEMS.registerItem("cutter", CutterItem::defaultItem);
     /* Electric Tools */
     public static final DeferredItem<ElectricTreetapItem> ELECTRIC_TREETAP = ITEMS.register("electric_treetap", () -> new ElectricTreetapItem(new Item.Properties(), IREnergyTiers.LOW, () -> IRConfig.electricTreeTapEnergyUsage, () -> IRConfig.electricTreeTapCapacity));
     public static final DeferredItem<ElectricWrenchItem> ELECTRIC_WRENCH = ITEMS.register("electric_wrench", () -> new ElectricWrenchItem(new Item.Properties(), IREnergyTiers.LOW, () -> IRConfig.electricWrenchEnergyUsage, () -> IRConfig.electricWrenchCapacity));
     public static final DeferredItem<ElectricHoeItem> ELECTRIC_HOE = ITEMS.register("electric_hoe",
             () -> new ElectricHoeItem(new Item.Properties(), Tiers.IRON, 1, -2.8F, IREnergyTiers.LOW, () -> IRConfig.electricHoeEnergyUsage, () -> IRConfig.electricHoeCapacity));
-    public static final DeferredItem<Item> MINING_LASER = ITEMS.registerSimpleItem("mining_laser");
-    public static final DeferredItem<Item> NANO_SABER = ITEMS.registerSimpleItem("nano_saber");
-    public static final DeferredItem<Item> BASIC_DRILL = ITEMS.registerSimpleItem("basic_drill");
-    public static final DeferredItem<Item> ADVANCED_DRILL = ITEMS.registerSimpleItem("advanced_drill");
-    public static final DeferredItem<Item> BASIC_CHAINSAW = ITEMS.registerSimpleItem("basic_chainsaw");
-    public static final DeferredItem<Item> ADVANCED_CHAINSAW = ITEMS.registerSimpleItem("advanced_chainsaw");
+    public static final DeferredItem<MiningLaserItem> MINING_LASER = ITEMS.registerItem("mining_laser", MiningLaserItem::defaultItem);
+    public static final DeferredItem<NanoSaberItem> NANO_SABER = ITEMS.registerItem("nano_saber", NanoSaberItem::defaultItem);
+    public static final DeferredItem<ElectricDrillItem> BASIC_DRILL = ITEMS.registerItem("basic_drill", ElectricDrillItem::basicItem);
+    public static final DeferredItem<ElectricDrillItem> ADVANCED_DRILL = ITEMS.registerItem("advanced_drill", ElectricDrillItem::advancedItem);
+    public static final DeferredItem<ElectricChainsawItem> BASIC_CHAINSAW = ITEMS.registerItem("basic_chainsaw", ElectricChainsawItem::basicItem);
+    public static final DeferredItem<ElectricChainsawItem> ADVANCED_CHAINSAW = ITEMS.registerItem("advanced_chainsaw", ElectricChainsawItem::advancedItem);
     /* Electric Armor */
     public static final DeferredItem<Item> NANO_HELMET = ITEMS.registerSimpleItem("nano_helmet");
     public static final DeferredItem<Item> NANO_CHESTPLATE = ITEMS.registerSimpleItem("nano_chestplate");
@@ -60,14 +65,14 @@ public final class IRItems {
     public static final DeferredItem<Item> JETPACK = ITEMS.registerSimpleItem("jetpack");
     public static final DeferredItem<Item> ELECTRIC_JETPACK = ITEMS.registerSimpleItem("electric_jetpack");
     /* Batteries */
-    public static final DeferredItem<Item> REDSTONE_BATTERY = ITEMS.registerSimpleItem("redstone_battery");
-    public static final DeferredItem<Item> ENERGY_CRYSTAL = ITEMS.registerSimpleItem("energy_crystal");
-    public static final DeferredItem<Item> LAPOTRON_CRYSTAL = ITEMS.registerSimpleItem("lapotron_crystal");
+    public static final DeferredItem<BatteryItem> REDSTONE_BATTERY = ITEMS.registerItem("redstone_battery", BatteryItem::batteryItem);
+    public static final DeferredItem<BatteryItem> ENERGY_CRYSTAL = ITEMS.registerItem("energy_crystal", BatteryItem::energyCrystalItem);
+    public static final DeferredItem<BatteryItem> LAPOTRON_CRYSTAL = ITEMS.registerItem("lapotron_crystal", BatteryItem::lapotronCrystalItem);
 
     /* Misc */
-    public static final DeferredItem<Item> FLUID_CELL = ITEMS.registerSimpleItem("fluid_cell");
+    public static final DeferredItem<Item> FLUID_CELL = ITEMS.registerItem("fluid_cell", FluidCellItem::defaultItem);
     public static final DeferredItem<Item> TIN_CAN = ITEMS.registerSimpleItem("tin_can");
-    public static final DeferredItem<Item> TIN_CAN_FOOD = ITEMS.registerSimpleItem("tin_can_food");
+    public static final DeferredItem<TinCanWithFoodItem> TIN_CAN_FOOD = ITEMS.registerItem("tin_can_food", TinCanWithFoodItem::defaultItem);
 
     /* Coal is way too useful lol */
     public static final DeferredItem<Item> COAL_BALL = ITEMS.registerSimpleItem("coal_ball");
@@ -78,6 +83,13 @@ public final class IRItems {
     public static final DeferredItem<Item> CARBON_PLATE = ITEMS.registerSimpleItem("carbon_plate");
 
     public static final DeferredItem<Item> SCRAP = ITEMS.registerSimpleItem("scrap");
-    public static final DeferredItem<Item> SCRAP_BOX = ITEMS.registerSimpleItem("scrap_box");
+    public static final DeferredItem<ScrapBoxItem> SCRAP_BOX = ITEMS.registerItem("scrap_box", ScrapBoxItem::new);
     public static final DeferredItem<Item> UU_MATTER = ITEMS.registerSimpleItem("uu_matter");
+
+    /* Rubber */
+    public static final DeferredItem<Item> STICKY_RESIN = ITEMS.registerSimpleItem("stick_resin");
+    public static final DeferredItem<Item> RUBBER = ITEMS.registerSimpleItem("rubber");
+
+    /* Plant stuff - mmmmm yummy */
+    public static final DeferredItem<Item> PLANT_BALL = ITEMS.registerSimpleItem("plant_ball");
 }

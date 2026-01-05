@@ -11,6 +11,6 @@ import java.util.function.Supplier;
 public final class EMBlockEntityTypes {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, IndustrialReclassified.MODID);
 
-    public static final Supplier<BlockEntityType<ExampleBlockEntity>> EXAMPLE = BLOCK_ENTITY_TYPES.register("example", () -> BlockEntityType.Builder.of(ExampleBlockEntity::new, EMBlocks.EXAMPLE_BLOCK.get())
+    public static final Supplier<BlockEntityType<ExampleBlockEntity>> EXAMPLE = BLOCK_ENTITY_TYPES.register("example", () -> BlockEntityType.Builder.of(ExampleBlockEntity::new, IRBlocks.EXAMPLE_BLOCK.get())
             .build(null));
 }
