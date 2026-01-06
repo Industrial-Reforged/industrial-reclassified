@@ -19,11 +19,38 @@ public final class IRBlocks {
     public static final BlockSetType RUBBER_SET_TYPE = BlockSetType.register(new BlockSetType(IndustrialReclassified.MODID + ":rubber"));
     public static final BlockSetType REINFORCED_STONE_SET_TYPE = BlockSetType.register(new BlockSetType("reinforced_stone", false, false, false, BlockSetType.PressurePlateSensitivity.EVERYTHING, SoundType.METAL, SoundEvents.IRON_DOOR_CLOSE, SoundEvents.IRON_DOOR_OPEN, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundEvents.IRON_TRAPDOOR_OPEN, SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF, SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON, SoundEvents.STONE_BUTTON_CLICK_OFF, SoundEvents.STONE_BUTTON_CLICK_ON));
     public static final WoodType RUBBER_WOOD_TYPE = WoodType.register(new WoodType(IndustrialReclassified.MODID + ":rubber", RUBBER_SET_TYPE));
+    public static final BlockBehaviour.Properties MACHINE_FRAME_PROPS = BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK);
 
     public static final Set<DeferredBlock<? extends Block>> CUSTOM_ITEM_MODELS;
 
     public static final DeferredBlock<ExampleBlock> EXAMPLE_BLOCK = BLOCKS.registerBlockWithItem("example_block", ExampleBlock::new);
-    public static final DeferredBlock<Block> MACHINE_FRAME = BLOCKS.registerBlockWithItem("machine_frame", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final DeferredBlock<Block> MACHINE_FRAME = BLOCKS.registerBlockWithItem("machine_frame", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> ADVANCED_MACHINE_FRAME = BLOCKS.registerBlockWithItem("advanced_machine_frame", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
+
+    // Generators
+    public static final DeferredBlock<Block> BASIC_GENERATOR = BLOCKS.registerBlockWithItem("basic_generator", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> BASIC_SOLAR_PANEL = BLOCKS.registerBlockWithItem("basic_solar_panel", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> WIND_MILL = BLOCKS.registerBlockWithItem("wind_mill", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> WATER_MILL = BLOCKS.registerBlockWithItem("water_mill", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> NUCLEAR_REACTOR_CHAMBER = BLOCKS.registerBlockWithItem("nuclear_reactor_chamber", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> NUCLEAR_REACTOR = BLOCKS.registerBlockWithItem("nuclear_reactor", Block::new, MACHINE_FRAME_PROPS);
+
+    // Machines
+    public static final DeferredBlock<Block> ELECTRIC_FURNACE = BLOCKS.registerBlockWithItem("electric_furnace", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> MACERATOR = BLOCKS.registerBlockWithItem("macerator", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> COMPRESSOR = BLOCKS.registerBlockWithItem("compressor", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> EXTRACTOR = BLOCKS.registerBlockWithItem("extractor", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<Block> CANNING_MACHINE = BLOCKS.registerBlockWithItem("canning_machine", Block::new, MACHINE_FRAME_PROPS);
+
+    // Storage Blocks
+    public static final DeferredBlock<Block> TIN_BLOCK = BLOCKS.registerBlockWithItem("tin_block", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final DeferredBlock<Block> URANIUM_BLOCK = BLOCKS.registerBlockWithItem("uranium_block", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final DeferredBlock<Block> BRONZE_BLOCK = BLOCKS.registerBlockWithItem("bronze_block", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
+
+    // Sheets
+    public static final DeferredBlock<LayeredSheetBlock> RUBBER_SHEET = BLOCKS.registerBlockWithItem("rubber_sheet", LayeredSheetBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.BLACK_WOOL));
+    public static final DeferredBlock<LayeredSheetBlock> STICKY_RESIN_SHEET = BLOCKS.registerBlockWithItem("sticky_resin_sheet", LayeredSheetBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.HONEY_BLOCK));
+
     // Reinforced Blocks
     public static final DeferredBlock<Block> REINFORCED_STONE = BLOCKS.registerBlockWithItem("reinforced_stone", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(12.0F, 400.0F));
     public static final DeferredBlock<Block> REINFORCED_GLASS = BLOCKS.registerBlockWithItem("reinforced_glass", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
@@ -65,7 +92,7 @@ public final class IRBlocks {
 
     static {
         CUSTOM_ITEM_MODELS = Set.of(
-            RUBBER_TREE_FENCE, RUBBER_TREE_TRAPDOOR, RUBBER_TREE_BUTTON, RUBBER_TREE_SAPLING, RUBBER_TREE_DOOR, REINFORCED_DOOR
+            RUBBER_TREE_FENCE, RUBBER_TREE_TRAPDOOR, RUBBER_TREE_BUTTON, RUBBER_TREE_SAPLING, RUBBER_TREE_DOOR, REINFORCED_DOOR, RUBBER_SHEET, STICKY_RESIN_SHEET, EXAMPLE_BLOCK
         );
     }
 

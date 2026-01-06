@@ -4,7 +4,6 @@ import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.content.blocks.RubberTreeResinHoleBlock;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.portingdeadlibs.api.datagen.ModelBuilder;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -13,11 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.client.RenderTypeHelper;
-import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ModelProvider;
-import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
+import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
@@ -30,9 +25,9 @@ public class IRBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         treeStatesAndModels();
-        simpleBlock(IRBlocks.EXAMPLE_BLOCK.get());
         simpleBlock(IRBlocks.TIN_ORE.get());
         simpleBlock(IRBlocks.MACHINE_FRAME.get());
+        simpleBlock(IRBlocks.ADVANCED_MACHINE_FRAME.get());
         simpleBlock(IRBlocks.REINFORCED_STONE.get());
         simpleBlock(IRBlocks.REINFORCED_GLASS.get());
         doorBlock(IRBlocks.REINFORCED_DOOR.get(),
@@ -42,6 +37,85 @@ public class IRBlockStateProvider extends BlockStateProvider {
                 .top(block -> this.blockTextureSuffix(Blocks.TNT, "_top"))
                 .bottom(block -> this.blockTextureSuffix(Blocks.TNT, "_bottom"))
                 .create();
+        sheetBlock(IRBlocks.STICKY_RESIN_SHEET.get());
+        sheetBlock(IRBlocks.RUBBER_SHEET.get());
+
+        simpleBlock(IRBlocks.TIN_BLOCK.get());
+        simpleBlock(IRBlocks.URANIUM_BLOCK.get());
+        simpleBlock(IRBlocks.BRONZE_BLOCK.get());
+
+        modelBuilder(IRBlocks.BASIC_GENERATOR.get())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .create();
+
+        modelBuilder(IRBlocks.WATER_MILL.get())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .create();
+
+        modelBuilder(IRBlocks.WIND_MILL.get())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .create();
+
+        modelBuilder(IRBlocks.NUCLEAR_REACTOR_CHAMBER.get())
+                .defaultTexture(blockTexture(IRBlocks.ADVANCED_MACHINE_FRAME.get()))
+                .top(this::blockTexture)
+                .create();
+
+        modelBuilder(IRBlocks.NUCLEAR_REACTOR.get())
+                .defaultTexture(blockTexture(IRBlocks.ADVANCED_MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .top(this.blockTexture(IRBlocks.NUCLEAR_REACTOR_CHAMBER.get()))
+                .create();
+
+        modelBuilder(IRBlocks.BASIC_SOLAR_PANEL.get())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .top(this::blockTextureSuffix, "_top")
+                .create();
+
+        modelBuilder(IRBlocks.ELECTRIC_FURNACE.get())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .create();
+
+        modelBuilder(IRBlocks.MACERATOR.get())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .top(this::blockTextureSuffix, "_top")
+                .create();
+
+        modelBuilder(IRBlocks.COMPRESSOR.get())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .top(this::blockTextureSuffix, "_top")
+                .create();
+
+        modelBuilder(IRBlocks.EXTRACTOR.get())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .top(this::blockTextureSuffix, "_top")
+                .create();
+
+        modelBuilder(IRBlocks.CANNING_MACHINE.get())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .create();
+    }
+
+    private void sheetBlock(Block block) {
+        getVariantBuilder(block).forAllStates(state -> new ConfiguredModel[]{
+            new ConfiguredModel(state.getValue(BlockStateProperties.LAYERS) == 8
+                    ? models().cubeAll(name(block) + "_full", blockTexture(block))
+                    : sheetBlockModel(state.getBlock(), state.getValue(BlockStateProperties.LAYERS) * 2))
+        });
+    }
+
+    private BlockModelBuilder sheetBlockModel(Block block, int height) {
+        return models().withExistingParent(name(block) + height, "snow_height" + height)
+                .texture("texture", blockTexture(block))
+                .texture("particle", blockTexture(block));
     }
 
     private @NotNull ModelBuilder modelBuilder(Block block) {

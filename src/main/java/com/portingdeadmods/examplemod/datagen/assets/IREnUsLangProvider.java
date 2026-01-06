@@ -80,11 +80,15 @@ public class IREnUsLangProvider extends LanguageProvider {
 
         addBlock(IRBlocks.INDUSTRIAL_TNT, "Industrial Tnt");
 
-        addBlock(IRBlocks.MACHINE_FRAME, "Industrial Tnt");
+        addBlock(IRBlocks.MACHINE_FRAME, "Machine Frame");
 
         addBlock(IRBlocks.REINFORCED_DOOR, "Reinforced Door");
         addBlock(IRBlocks.REINFORCED_GLASS, "Reinforced Glass");
         addBlock(IRBlocks.REINFORCED_STONE, "Reinforced Stone");
+
+        addBlock(IRBlocks.TIN_BLOCK, "Tin Block");
+        addBlock(IRBlocks.URANIUM_BLOCK, "Uranium Block");
+        addBlock(IRBlocks.BRONZE_BLOCK, "Bronze Block");
 
         addBlock(IRBlocks.RUBBER_TREE_LOG, "Rubber Tree Log");
         addBlock(IRBlocks.RUBBER_TREE_WOOD, "Rubber Tree Wood");

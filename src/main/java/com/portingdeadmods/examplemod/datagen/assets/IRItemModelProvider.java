@@ -51,6 +51,8 @@ public class IRItemModelProvider extends ItemModelProvider {
 
         basicItem(IRItems.IRIDIUM_PLATE.get());
         basicItem(IRItems.TIN_PLATE.get());
+        basicItem(IRItems.COPPER_PLATE.get());
+        basicItem(IRItems.DENSE_COPPER_PLATE.get());
         basicItem(IRItems.ADVANCED_ALLOY_PLATE.get());
 
         basicItem(IRItems.TIN_DUST.get());
@@ -118,6 +120,8 @@ public class IRItemModelProvider extends ItemModelProvider {
         parentItemBlock(IRBlocks.RUBBER_TREE_TRAPDOOR.get().asItem(), "_bottom");
 
         basicItemBlock(IRBlocks.REINFORCED_DOOR.asItem(), null);
+        parentItemBlock(IRBlocks.STICKY_RESIN_SHEET.asItem(), "2");
+        parentItemBlock(IRBlocks.RUBBER_SHEET.asItem(), "2");
 
         basicItem(IRItems.PLANT_BALL.get());
 
