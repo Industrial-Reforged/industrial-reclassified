@@ -102,6 +102,10 @@ public class IRItemModelProvider extends ItemModelProvider {
         basicItem(IRItems.STICKY_RESIN.get());
         basicItem(IRItems.RUBBER.get());
 
+        basicItem(IRItems.SINGLE_URANIUM_FUEL_ROD.get());
+        basicItem(IRItems.DOUBLE_URANIUM_FUEL_ROD.get());
+        basicItem(IRItems.QUAD_URANIUM_FUEL_ROD.get());
+
         basicItem(IRItems.COAL_BALL.get());
         basicItem(IRItems.COMPRESSED_COAL_BALL.get());
         basicItem(IRItems.GRAPHENE.get());

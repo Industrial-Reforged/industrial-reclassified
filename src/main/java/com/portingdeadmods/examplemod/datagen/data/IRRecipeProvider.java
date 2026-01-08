@@ -2,6 +2,7 @@ package com.portingdeadmods.examplemod.datagen.data;
 
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;
+import com.portingdeadmods.examplemod.registries.IRMachines;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -84,17 +85,7 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_bronze", has(IRItems.BRONZE_INGOT))
                 .save(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.MIXED_METAL_INGOT.get())
-                .pattern("III")
-                .pattern("BBB")
-                .pattern("TTT")
-                .define('I', IRItems.REFINED_IRON_INGOT)
-                .define('B', IRItems.BRONZE_INGOT)
-                .define('T', IRItems.TIN_INGOT)
-                .unlockedBy("has_bronze", has(IRItems.BRONZE_INGOT))
-                .save(output);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRBlocks.BASIC_GENERATOR.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRMachines.BASIC_GENERATOR.getBlock())
                 .pattern("B")
                 .pattern("M")
                 .pattern("F")

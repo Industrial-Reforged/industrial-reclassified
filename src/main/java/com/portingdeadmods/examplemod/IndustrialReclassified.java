@@ -42,11 +42,12 @@ public final class IndustrialReclassified {
         IRBlocks.BLOCKS.register(modEventBus);
         IRTranslations.TRANSLATIONS.register(modEventBus);
         IRCreativeTabs.TABS.register(modEventBus);
-        EMBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
+        IRBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
         IREntityTypes.ENTITY_TYPES.register(modEventBus);
-        EMMenuTypes.MENU_TYPES.register(modEventBus);
+        IRMenuTypes.MENU_TYPES.register(modEventBus);
         IRPlacerTypes.FOLIAGE_PLACERS.register(modEventBus);
         IRPlacerTypes.TRUNK_PLACERS.register(modEventBus);
+        IRMachines.HELPER.register(modEventBus);
 
         PDLConfigHelper.registerConfig(IRConfig.class, ModConfig.Type.COMMON, modContainer);
     }

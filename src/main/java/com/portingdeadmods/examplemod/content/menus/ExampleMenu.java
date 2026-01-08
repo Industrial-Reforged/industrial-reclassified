@@ -1,7 +1,7 @@
 package com.portingdeadmods.examplemod.content.menus;
 
 import com.portingdeadmods.examplemod.content.blockentities.ExampleBlockEntity;
-import com.portingdeadmods.examplemod.registries.EMMenuTypes;
+import com.portingdeadmods.examplemod.registries.IRMenuTypes;
 import com.portingdeadmods.portingdeadlibs.api.gui.menus.PDLAbstractContainerMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,7 +14,7 @@ public class ExampleMenu extends PDLAbstractContainerMenu<ExampleBlockEntity> {
     }
 
     public ExampleMenu(int containerId, @NotNull Inventory inv, @NotNull ExampleBlockEntity blockEntity) {
-        super(EMMenuTypes.EXAMPLE.get(), containerId, inv, blockEntity);
+        super(IRMenuTypes.EXAMPLE.get(), containerId, inv, blockEntity);
 
         int startX = 62;
         int startY = 17;

@@ -3,6 +3,7 @@ package com.portingdeadmods.examplemod.datagen.assets;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.content.blocks.RubberTreeResinHoleBlock;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
+import com.portingdeadmods.examplemod.registries.IRMachines;
 import com.portingdeadmods.portingdeadlibs.api.datagen.ModelBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -44,9 +45,11 @@ public class IRBlockStateProvider extends BlockStateProvider {
         simpleBlock(IRBlocks.URANIUM_BLOCK.get());
         simpleBlock(IRBlocks.BRONZE_BLOCK.get());
 
-        modelBuilder(IRBlocks.BASIC_GENERATOR.get())
+        modelBuilder(IRMachines.BASIC_GENERATOR.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .front(this::blockTextureSuffix, "_front")
+                .horizontalFacing()
+                .active()
                 .create();
 
         modelBuilder(IRBlocks.WATER_MILL.get())
@@ -62,6 +65,7 @@ public class IRBlockStateProvider extends BlockStateProvider {
         modelBuilder(IRBlocks.NUCLEAR_REACTOR_CHAMBER.get())
                 .defaultTexture(blockTexture(IRBlocks.ADVANCED_MACHINE_FRAME.get()))
                 .top(this::blockTexture)
+                .horizontalFacing()
                 .create();
 
         modelBuilder(IRBlocks.NUCLEAR_REACTOR.get())

@@ -1,8 +1,7 @@
 package com.portingdeadmods.examplemod.content.blockentities;
 
 import com.portingdeadmods.examplemod.content.menus.ExampleMenu;
-import com.portingdeadmods.examplemod.registries.EMBlockEntityTypes;
-import com.portingdeadmods.examplemod.registries.IRTranslations;
+import com.portingdeadmods.examplemod.registries.IRBlockEntityTypes;
 import com.portingdeadmods.portingdeadlibs.api.blockentities.ContainerBlockEntity;
 import com.portingdeadmods.portingdeadlibs.utils.capabilities.HandlerUtils;
 import net.minecraft.core.BlockPos;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ExampleBlockEntity extends ContainerBlockEntity implements MenuProvider {
     public ExampleBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(EMBlockEntityTypes.EXAMPLE.get(), blockPos, blockState);
+        super(null, blockPos, blockState);
         addItemHandler(HandlerUtils::newItemStackHandler, builder -> builder
                 .slots(9)
                 .onChange(slot -> this.updateData()));

@@ -92,6 +92,11 @@ public final class IRItems {
     public static final DeferredItem<Item> STICKY_RESIN = ITEMS.registerSimpleItem("stick_resin");
     public static final DeferredItem<Item> RUBBER = ITEMS.registerSimpleItem("rubber");
 
+    /* Reactor */
+    public static final DeferredItem<Item> SINGLE_URANIUM_FUEL_ROD = ITEMS.registerSimpleItem("single_uranium_fuel_rod");
+    public static final DeferredItem<Item> DOUBLE_URANIUM_FUEL_ROD = ITEMS.registerSimpleItem("double_uranium_fuel_rod");
+    public static final DeferredItem<Item> QUAD_URANIUM_FUEL_ROD = ITEMS.registerSimpleItem("quad_uranium_fuel_rod");
+
     /* Plant stuff - mmmmm yummy */
     public static final DeferredItem<Item> PLANT_BALL = ITEMS.registerSimpleItem("plant_ball");
 }

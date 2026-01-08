@@ -28,11 +28,10 @@ public final class IRBlocks {
     public static final DeferredBlock<Block> ADVANCED_MACHINE_FRAME = BLOCKS.registerBlockWithItem("advanced_machine_frame", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
 
     // Generators
-    public static final DeferredBlock<Block> BASIC_GENERATOR = BLOCKS.registerBlockWithItem("basic_generator", Block::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<Block> BASIC_SOLAR_PANEL = BLOCKS.registerBlockWithItem("basic_solar_panel", Block::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<Block> WIND_MILL = BLOCKS.registerBlockWithItem("wind_mill", Block::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<Block> WATER_MILL = BLOCKS.registerBlockWithItem("water_mill", Block::new, MACHINE_FRAME_PROPS);
-    public static final DeferredBlock<Block> NUCLEAR_REACTOR_CHAMBER = BLOCKS.registerBlockWithItem("nuclear_reactor_chamber", Block::new, MACHINE_FRAME_PROPS);
+    public static final DeferredBlock<ReactorChamberBlock> NUCLEAR_REACTOR_CHAMBER = BLOCKS.registerBlockWithItem("nuclear_reactor_chamber", ReactorChamberBlock::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<Block> NUCLEAR_REACTOR = BLOCKS.registerBlockWithItem("nuclear_reactor", Block::new, MACHINE_FRAME_PROPS);
 
     // Machines
