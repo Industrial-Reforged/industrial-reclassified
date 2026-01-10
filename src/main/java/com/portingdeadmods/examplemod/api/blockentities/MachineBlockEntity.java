@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.ArrayList;
@@ -79,6 +80,10 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
         return amountPerBlock;
     }
 
+    public void addChargingSlot(ChargingSlot chargingSlot) {
+        this.chargingSlots.add(chargingSlot);
+    }
+
     protected void tickChargingSlot(ChargingSlot slot) {
         ItemStack itemStack = slot.getItem();
         EnergyHandler energyStorage = this.getEuStorage();
@@ -110,11 +115,11 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
         T storage = energyHandlerConstructor.apply(energyTier);
         storage.setOnChangedFunction(onChangedFunction);
         storage.setEnergyCapacity(energyCapacity);
-        this.euStorage = storage;
+        this.addEuStorage(storage);
     }
 
     public EnergyHandler getEuStorage() {
-        return euStorage;
+        return this.getHandler(IRCapabilities.ENERGY_BLOCK);
     }
 
     @Override

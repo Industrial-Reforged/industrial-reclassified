@@ -2,8 +2,8 @@ package com.portingdeadmods.examplemod;
 
 import com.portingdeadmods.examplemod.api.fluid.SimpleFluidItem;
 import com.portingdeadmods.examplemod.client.items.IRItemProperties;
-import com.portingdeadmods.examplemod.client.screens.BasicGeneratorScreen;
-import com.portingdeadmods.examplemod.client.screens.ExampleScreen;
+import com.portingdeadmods.examplemod.client.screens.*;
+import com.portingdeadmods.examplemod.content.blockentities.SolarPanelBlockEntity;
 import com.portingdeadmods.examplemod.content.items.electric.BatteryItem;
 import com.portingdeadmods.examplemod.registries.*;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -37,6 +37,9 @@ public final class IndustrialReclassifiedClient {
 
     private void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(IRMachines.BASIC_GENERATOR.getMenuType(), BasicGeneratorScreen::new);
+        event.register(IRMachines.ELECTRIC_FURNACE.getMenuType(), ElectricFurnaceScreen::new);
+        event.register(IRMachines.COMPRESSOR.getMenuType(), CompressorScreen::new);
+        event.register(IRMachines.BASIC_SOLAR_PANEL.getMenuType(), SolarPanelScreen::new);
     }
 
     private void onClientSetup(FMLClientSetupEvent event) {

@@ -44,7 +44,8 @@ public class BasicGeneratorBlockEntity extends MachineBlockEntity implements Men
                     case 0 -> item.getBurnTime(RecipeType.SMELTING) > 0;
                     case 1 -> item.getCapability(IRCapabilities.ENERGY_ITEM) != null;
                     default -> throw new IllegalArgumentException("Non existent slot " + slot + "on Basic Generator");
-                }));
+                })
+                .onChange(this::onItemsChanged));
     }
 
     private void onEuChanged(int amount) {
@@ -106,7 +107,7 @@ public class BasicGeneratorBlockEntity extends MachineBlockEntity implements Men
             EnergyHandler energyStorage = this.getEuStorage();
             if (this.burnTime > 0) {
                 if (!level.isClientSide()) {
-                    int filled = energyStorage.forceFillEnergy(getGenerationAmount(), remove);
+                    int filled = energyStorage.forceFillEnergy(getGenerationAmount(), false);
                     if (filled > 0) {
                         this.burnTime--;
                     }

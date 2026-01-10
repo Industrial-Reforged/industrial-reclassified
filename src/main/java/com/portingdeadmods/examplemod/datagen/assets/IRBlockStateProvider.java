@@ -4,6 +4,7 @@ import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.content.blocks.RubberTreeResinHoleBlock;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRMachines;
+import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import com.portingdeadmods.portingdeadlibs.api.datagen.ModelBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -74,14 +75,16 @@ public class IRBlockStateProvider extends BlockStateProvider {
                 .top(this.blockTexture(IRBlocks.NUCLEAR_REACTOR_CHAMBER.get()))
                 .create();
 
-        modelBuilder(IRBlocks.BASIC_SOLAR_PANEL.get())
+        modelBuilder(IRMachines.BASIC_SOLAR_PANEL.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .top(this::blockTextureSuffix, "_top")
+                .horizontalFacing()
                 .create();
 
-        modelBuilder(IRBlocks.ELECTRIC_FURNACE.get())
+        modelBuilder(IRMachines.ELECTRIC_FURNACE.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .front(this::blockTextureSuffix, "_front")
+                .horizontalFacing()
                 .create();
 
         modelBuilder(IRBlocks.MACERATOR.get())
@@ -90,10 +93,11 @@ public class IRBlockStateProvider extends BlockStateProvider {
                 .top(this::blockTextureSuffix, "_top")
                 .create();
 
-        modelBuilder(IRBlocks.COMPRESSOR.get())
+        modelBuilder(IRMachines.COMPRESSOR.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .front(this::blockTextureSuffix, "_front")
                 .top(this::blockTextureSuffix, "_top")
+                .horizontalFacing()
                 .create();
 
         modelBuilder(IRBlocks.EXTRACTOR.get())

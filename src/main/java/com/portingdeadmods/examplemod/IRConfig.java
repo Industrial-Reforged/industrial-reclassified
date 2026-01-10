@@ -7,6 +7,8 @@ public final class IRConfig {
 
     @ConfigValue(key = "basic_generator", name = "Basic Generator Energy Capacity", comment = "The Energy Capacity of the Basic Generator", category = BLOCKS_ENERGY_CAPACITY)
     public static int basicGeneratorEnergyCapacity = 4000;
+    @ConfigValue(key = "basic_solar_panel", name = "Basic Solar Panel Energy Capacity", comment = "The Energy Capacity of the Basic Solar Panel", category = BLOCKS_ENERGY_CAPACITY)
+    public static int basicSolarPanelEnergyCapacity = 4000;
     @ConfigValue(key = "centrifuge", name = "Centrifuge Energy Capacity", comment = "The Energy Capacity of the Centrifuge", category = BLOCKS_ENERGY_CAPACITY)
     public static int centrifugeEnergyCapacity = 4000;
     @ConfigValue(key = "battery_box", name = "Battery Box Energy Capacity", comment = "The Energy Capacity of the Battery Box", category = BLOCKS_ENERGY_CAPACITY)
@@ -15,7 +17,9 @@ public final class IRConfig {
     private static final String BLOCKS_ENERGY_PRODUCTION = "blocks.energy.production";
 
     @ConfigValue(key = "basic_generator", name = "Basic Generator Energy Production", comment = "The amount of Energy produced by the Basic Generator", category = BLOCKS_ENERGY_PRODUCTION)
-    public static int basicGeneratorEnergyProduction = 4000;
+    public static int basicGeneratorEnergyProduction = 10;
+    @ConfigValue(key = "basic_solar_panel", name = "Basic Solar Panel Energy Production", comment = "The amount of Energy produced by the Basic Solar Panel", category = BLOCKS_ENERGY_PRODUCTION)
+    public static int basicSolarPanelEnergyProduction = 1;
 
     private static final String BLOCKS_FLUID_CAPACITY = "blocks.fluid.capacity";
 

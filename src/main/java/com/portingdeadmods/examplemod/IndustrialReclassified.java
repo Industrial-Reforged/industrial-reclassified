@@ -1,6 +1,8 @@
 package com.portingdeadmods.examplemod;
 
 import com.portingdeadmods.examplemod.api.energy.EnergyItem;
+import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
+import com.portingdeadmods.examplemod.content.recipes.RegisterRecipeLayoutEvent;
 import com.portingdeadmods.examplemod.content.worldgen.IRPlacerTypes;
 import com.portingdeadmods.examplemod.impl.energy.ItemEnergyHandlerWrapper;
 import com.portingdeadmods.examplemod.registries.*;
@@ -8,14 +10,17 @@ import com.portingdeadmods.portingdeadlibs.api.config.PDLConfigHelper;
 import com.portingdeadmods.portingdeadlibs.api.data.PDLDataComponents;
 import com.portingdeadmods.portingdeadlibs.api.items.IFluidItem;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -24,6 +29,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
+
+import java.util.Map;
 
 @Mod(IndustrialReclassified.MODID)
 public final class IndustrialReclassified {
@@ -35,6 +42,8 @@ public final class IndustrialReclassified {
         modEventBus.addListener(this::registerPayloads);
         modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(this::registerRegistries);
+        modEventBus.addListener(this::registerRecipeLayout);
+        modEventBus.addListener(RegisterEvent.class, event -> this.onRegister(event, modEventBus));
 
         IRItems.ITEMS.register(modEventBus);
         IREnergyTiers.ENERGY_TIERS.register(modEventBus);
@@ -60,6 +69,10 @@ public final class IndustrialReclassified {
         PayloadRegistrar registrar = event.registrar(MODID);
     }
 
+    private void registerRecipeLayout(RegisterRecipeLayoutEvent event) {
+        IRRecipeLayouts.LAYOUTS.forEach(event::register);
+    }
+
     private void registerCapabilities(RegisterCapabilitiesEvent event) {
         for (Item item : BuiltInRegistries.ITEM) {
             if (item instanceof EnergyItem energyItem) {
@@ -74,6 +87,16 @@ public final class IndustrialReclassified {
 
         }
 
+    }
+
+    private void onRegister(RegisterEvent event, IEventBus modEventBus) {
+        if (event.getRegistryKey().equals(Registries.RECIPE_SERIALIZER)) {
+            modEventBus.post(new RegisterRecipeLayoutEvent());
+
+            for (Map.Entry<ResourceLocation, MachineRecipeLayout> entry : RegisterRecipeLayoutEvent.LAYOUTS.entrySet()) {
+                event.register(Registries.RECIPE_SERIALIZER, entry.getKey(), () -> entry.getValue().getRecipeSerializer());
+            }
+        }
     }
 
     public static ResourceLocation rl(String path) {

@@ -1,8 +1,15 @@
 package com.portingdeadmods.examplemod.datagen.data;
 
+import com.portingdeadmods.examplemod.IndustrialReclassified;
+import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
+import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
+import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputComponent;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;
 import com.portingdeadmods.examplemod.registries.IRMachines;
+import com.portingdeadmods.examplemod.registries.IRRecipeLayouts;
+import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -25,6 +32,10 @@ public class IRRecipeProvider extends RecipeProvider {
     protected void buildRecipes(RecipeOutput output) {
         super.buildRecipes(output);
 
+        IRRecipeLayouts.COMPRESSOR.builder()
+                .component(new ItemInputComponent(Tags.Items.ANIMAL_FOODS))
+                .component(new ItemOutputComponent(IRItems.TIN_CAN.get()));
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.BASIC_DRILL.get())
                 .pattern("IDI")
                 .pattern("D D")
@@ -33,6 +44,28 @@ public class IRRecipeProvider extends RecipeProvider {
                 .define('D', Items.DIAMOND)
                 .unlockedBy("has_diamond", has(Items.DIAMOND))
                 .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.ADVANCED_CIRCUIT.get())
+                .pattern("RGR")
+                .pattern("LCL")
+                .pattern("RGR")
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .define('G', Tags.Items.DUSTS_GLOWSTONE)
+                .define('L', Tags.Items.GEMS_LAPIS)
+                .define('C', IRItems.BASIC_CIRCUIT)
+                .unlockedBy("has_basic_circuit", has(IRItems.BASIC_CIRCUIT))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.ADVANCED_CIRCUIT.get())
+                .pattern("RLR")
+                .pattern("GCG")
+                .pattern("RLR")
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .define('G', Tags.Items.DUSTS_GLOWSTONE)
+                .define('L', Tags.Items.GEMS_LAPIS)
+                .define('C', IRItems.BASIC_CIRCUIT)
+                .unlockedBy("has_basic_circuit", has(IRItems.BASIC_CIRCUIT))
+                .save(output, IndustrialReclassified.rl("advanced_circuit1"));
 
         SimpleCookingRecipeBuilder.blasting(Ingredient.of(Tags.Items.INGOTS_IRON), RecipeCategory.MISC, IRItems.REFINED_IRON_INGOT, 0.7f, 100)
                 .unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON))
@@ -45,12 +78,46 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_rubber", has(IRItems.STICKY_RESIN))
                 .save(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRBlocks.MACHINE_FRAME.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRBlocks.MACHINE_FRAME.get())
                 .pattern("###")
                 .pattern("# #")
                 .pattern("###")
                 .define('#', IRItems.REFINED_IRON_INGOT)
                 .unlockedBy("has_refined_iron", has(IRItems.REFINED_IRON_INGOT))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRBlocks.ADVANCED_MACHINE_FRAME.get())
+                .pattern(" C ")
+                .pattern("AMA")
+                .pattern(" C ")
+                .define('C', IRItems.CARBON_PLATE)
+                .define('A', IRItems.ADVANCED_ALLOY_PLATE)
+                .define('M', IRBlocks.MACHINE_FRAME)
+                .unlockedBy("has_advanced_alloy_plate", has(IRItems.ADVANCED_ALLOY_PLATE))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRBlocks.ADVANCED_MACHINE_FRAME.get())
+                .pattern(" C ")
+                .pattern("AMA")
+                .pattern(" C ")
+                .define('C', IRItems.CARBON_PLATE)
+                .define('A', IRItems.ADVANCED_ALLOY_PLATE)
+                .define('M', IRBlocks.MACHINE_FRAME)
+                .unlockedBy("has_advanced_alloy_plate", has(IRItems.ADVANCED_ALLOY_PLATE))
+                .save(output, IndustrialReclassified.rl("advanced_machine_frame1"));
+
+
+        generatorCraftingRecipes(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRMachines.ELECTRIC_FURNACE.getBlockItem())
+                .pattern(" C ")
+                .pattern("RMR")
+                .pattern(" F ")
+                .define('C', IRItems.BASIC_CIRCUIT)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .define('F', Blocks.FURNACE)
+                .define('M', IRBlocks.MACHINE_FRAME)
+                .unlockedBy("has_basic_circuit", has(IRItems.BASIC_CIRCUIT))
                 .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.MIXED_METAL_INGOT.get())
@@ -85,6 +152,20 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_bronze", has(IRItems.BRONZE_INGOT))
                 .save(output);
 
+    }
+
+    private static void generatorCraftingRecipes(RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRMachines.BASIC_SOLAR_PANEL.getBlockItem())
+                .pattern("CGC")
+                .pattern("GCG")
+                .pattern("IBI")
+                .define('C', IRItems.COAL_DUST)
+                .define('G', Tags.Items.GLASS_BLOCKS)
+                .define('I', IRItems.BASIC_CIRCUIT)
+                .define('B', IRMachines.BASIC_GENERATOR.getBlockItem())
+                .unlockedBy("has_basic_circuit", has(IRItems.BASIC_CIRCUIT))
+                .save(output);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRMachines.BASIC_GENERATOR.getBlock())
                 .pattern("B")
                 .pattern("M")
@@ -94,6 +175,5 @@ public class IRRecipeProvider extends RecipeProvider {
                 .define('F', Blocks.FURNACE)
                 .unlockedBy("has_redstone_battery", has(IRItems.REDSTONE_BATTERY))
                 .save(output);
-
     }
 }
