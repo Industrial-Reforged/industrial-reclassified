@@ -2,11 +2,20 @@ package com.portingdeadmods.examplemod.content.recipes.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.portingdeadmods.examplemod.content.recipes.flags.RecipeFlagType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 public interface RecipeComponent {
+    default Set<RecipeFlagType<?>> flags() {
+        return Collections.emptySet();
+    }
+
     Type<?> type();
 
     record Type<C extends RecipeComponent>(ResourceLocation id, Codec<C> codec, StreamCodec<RegistryFriendlyByteBuf, C> streamCodec) {

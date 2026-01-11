@@ -1,21 +1,22 @@
 package com.portingdeadmods.examplemod.content.recipes;
 
 import com.portingdeadmods.examplemod.content.recipes.components.RecipeComponent;
-import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputComponent;
-import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputComponent;
-import com.portingdeadmods.examplemod.utils.IRRecipeUtils;
+import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.RecipeComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.RecipeFlagType;
 import com.portingdeadmods.portingdeadlibs.api.recipes.PDLRecipe;
+import com.portingdeadmods.portingdeadlibs.utils.RecipeUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
     private RecipeSerializer<MachineRecipe> serializer;
@@ -41,26 +42,35 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
         return null;
     }
 
+    public <F extends RecipeComponentFlag> F getComponentByFlag(RecipeFlagType<F> flagType) {
+        for (RecipeComponent component : components.values()) {
+            if (component.flags().contains(flagType)) {
+                return (F) component;
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean matches(MachineRecipeInput machineRecipeInput, Level level) {
-        ItemInputComponent input = this.getComponent(ItemInputComponent.TYPE);
+        InputComponentFlag input = this.getComponentByFlag(RecipeComponentFlags.INPUT);
         if (input != null) {
-            return IRRecipeUtils.matches(machineRecipeInput.items(), List.of(input));
+            return RecipeUtils.compareItems(machineRecipeInput.items(), input.getIngredients());
         }
         return false;
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) {
-        ItemOutputComponent output = this.getComponent(ItemOutputComponent.TYPE);
+    public @NotNull ItemStack getResultItem(HolderLookup.Provider provider) {
+        OutputComponentFlag output = this.getComponentByFlag(RecipeComponentFlags.OUTPUT);
         if (output != null) {
-            return output.item();
+            return output.getOutputs().getFirst();
         }
         return ItemStack.EMPTY;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         if (this.serializer == null) {
             this.serializer = RegisterRecipeLayoutEvent.LAYOUTS.get(this.id).getRecipeSerializer();
         }
@@ -68,34 +78,15 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public @NotNull RecipeType<?> getType() {
         if (this.type == null) {
             this.type = RegisterRecipeLayoutEvent.LAYOUTS.get(this.id).getRecipeType();
         }
         return this.type;
     }
 
-    public Map<String, RecipeComponent> components() {
-        return components;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (MachineRecipe) obj;
-        return Objects.equals(this.components, that.components);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(components);
-    }
-
-    @Override
-    public String toString() {
-        return "MachineRecipe[" +
-                "components=" + components + ']';
+    public Map<String, RecipeComponent> getComponents() {
+        return this.components;
     }
 
 }

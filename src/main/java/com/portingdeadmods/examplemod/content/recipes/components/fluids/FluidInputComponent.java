@@ -19,8 +19,8 @@ import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 public record FluidInputComponent(FluidIngredient ingredient, int amount, float chance) implements RecipeComponent {
     public static final MapCodec<FluidInputComponent> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             FluidIngredient.CODEC.fieldOf("ingredient").forGetter(FluidInputComponent::ingredient),
-            Codec.INT.fieldOf("amount").forGetter(FluidInputComponent::amount),
-            Codec.FLOAT.fieldOf("chance").forGetter(FluidInputComponent::chance)
+            Codec.INT.optionalFieldOf("amount", 1000).forGetter(FluidInputComponent::amount),
+            Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter(FluidInputComponent::chance)
     ).apply(inst, FluidInputComponent::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, FluidInputComponent> STREAM_CODEC = StreamCodec.composite(
             FluidIngredient.STREAM_CODEC,

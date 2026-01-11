@@ -9,6 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -23,14 +24,21 @@ public abstract class MachineRecipeLayout {
     private RecipeType<MachineRecipe> recipeType;
     private RecipeSerializer<MachineRecipe> recipeSerializer;
     private final Map<RecipeComponent.Type<?>, String> components;
+    private final Map<RecipeComponent.Type<?>, RecipeComponent> defaultComponentValues;
 
     public MachineRecipeLayout(ResourceLocation id) {
         this.id = id;
         this.components = new LinkedHashMap<>();
+        this.defaultComponentValues = new LinkedHashMap<>();
     }
 
-    protected void addComponent(RecipeComponent.Type<?> type, String id) {
+    protected <C extends RecipeComponent> void addComponent(RecipeComponent.Type<C> type, String id) {
         this.components.put(type, id);
+    }
+
+    protected <C extends RecipeComponent> void addComponent(RecipeComponent.Type<C> type, String id, C defaultComponent) {
+        this.addComponent(type, id);
+        this.defaultComponentValues.put(type, defaultComponent);
     }
 
     private <R extends MachineRecipe> MapCodec<R> createMapCodec(BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> factory) {
@@ -52,7 +60,12 @@ public abstract class MachineRecipeLayout {
                         RecipeComponent component = result.getOrThrow().getFirst();
                         recipeComponents.put(entry.getValue(), component);
                     } else {
-                        return DataResult.error(() -> "Failed to decode Recipe Component: " + result.error().get().message(), factory.apply(id, recipeComponents));
+                        RecipeComponent defaultComponent = defaultComponentValues.get(entry.getKey());
+                        if (defaultComponent != null) {
+                            recipeComponents.put(entry.getValue(), defaultComponent);
+                        } else {
+                            return DataResult.error(() -> "Failed to decode Recipe Component: " + result.error().get().message(), factory.apply(id, recipeComponents));
+                        }
                     }
                 }
                 return DataResult.success(factory.apply(id, recipeComponents));
@@ -60,7 +73,7 @@ public abstract class MachineRecipeLayout {
 
             @Override
             public <T> RecordBuilder<T> encode(R input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
-                for (Map.Entry<String, ? extends RecipeComponent> entry : input.components().entrySet()) {
+                for (Map.Entry<String, ? extends RecipeComponent> entry : input.getComponents().entrySet()) {
                     RecipeComponent.Type<?> type = entry.getValue().type();
                     DataResult<T> result = type.rawCodec().encodeStart(ops, entry.getValue());
                     if (result.isSuccess()) {
@@ -102,13 +115,17 @@ public abstract class MachineRecipeLayout {
         }
 
         public Builder component(RecipeComponent component) {
-            this.recipe.components().put(components.get(component.type()), component);
+            this.recipe.getComponents().put(components.get(component.type()), component);
             return this;
         }
 
-        public void save(RecipeOutput output, ResourceLocation id) {
+        public MachineRecipe getRecipe() {
+            return recipe;
         }
 
+        public MachineRecipe build() {
+            return recipe;
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package com.portingdeadmods.examplemod;
 
+import com.portingdeadmods.examplemod.api.blockentities.MachineBlockEntity;
+import com.portingdeadmods.examplemod.api.blocks.MachineBlock;
 import com.portingdeadmods.examplemod.api.energy.EnergyItem;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
 import com.portingdeadmods.examplemod.content.recipes.RegisterRecipeLayoutEvent;
@@ -9,16 +11,22 @@ import com.portingdeadmods.examplemod.registries.*;
 import com.portingdeadmods.portingdeadlibs.api.config.PDLConfigHelper;
 import com.portingdeadmods.portingdeadlibs.api.data.PDLDataComponents;
 import com.portingdeadmods.portingdeadlibs.api.items.IFluidItem;
+import com.portingdeadmods.portingdeadlibs.utils.capabilities.CapabilityRegistrationHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
@@ -86,6 +94,18 @@ public final class IndustrialReclassified {
             }
 
         }
+
+        for (DeferredHolder<BlockEntityType<?>, ? extends BlockEntityType<?>> be : IRBlockEntityTypes.BLOCK_ENTITY_TYPES.getEntries()) {
+            Block validBlock = be.get().getValidBlocks().stream().iterator().next();
+            BlockEntity testBE = be.get().create(BlockPos.ZERO, validBlock.defaultBlockState());
+            if (testBE instanceof MachineBlockEntity containerBlockEntity) {
+                if (containerBlockEntity.getEuStorage() != null) {
+                    event.registerBlockEntity(IRCapabilities.ENERGY_BLOCK, (BlockEntityType<MachineBlockEntity>) be.get(), MachineBlockEntity::getEuHandlerOnSide);
+                }
+            }
+            CapabilityRegistrationHelper.registerBECaps(event, IRBlockEntityTypes.BLOCK_ENTITY_TYPES);
+        }
+
 
     }
 

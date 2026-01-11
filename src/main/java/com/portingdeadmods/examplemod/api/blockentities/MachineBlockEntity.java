@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,5 +171,9 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
         tag1.ifPresent(value -> {
             tag.put("redstone_signal", value);
         });
+    }
+
+    public @Nullable EnergyHandler getEuHandlerOnSide(@Nullable Direction direction) {
+        return this.getEuStorage();
     }
 }

@@ -3,8 +3,11 @@ package com.portingdeadmods.examplemod.datagen.data;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
+import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputComponent;
+import com.portingdeadmods.examplemod.datagen.MachineRecipeBuilder;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;
 import com.portingdeadmods.examplemod.registries.IRMachines;
@@ -34,7 +37,14 @@ public class IRRecipeProvider extends RecipeProvider {
 
         IRRecipeLayouts.COMPRESSOR.builder()
                 .component(new ItemInputComponent(Tags.Items.ANIMAL_FOODS))
-                .component(new ItemOutputComponent(IRItems.TIN_CAN.get()));
+                .component(new ItemOutputComponent(IRItems.TIN_CAN));
+
+        this.compressorRecipe()
+                .component(new ItemInputComponent(IRItems.MIXED_METAL_INGOT))
+                .component(new ItemOutputComponent(IRItems.ADVANCED_ALLOY_PLATE))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output, IndustrialReclassified.rl("advanced_alloy_plate_compressing"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.BASIC_DRILL.get())
                 .pattern("IDI")
@@ -152,6 +162,10 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_bronze", has(IRItems.BRONZE_INGOT))
                 .save(output);
 
+    }
+
+    private MachineRecipeBuilder compressorRecipe() {
+        return new MachineRecipeBuilder(IRRecipeLayouts.COMPRESSOR);
     }
 
     private static void generatorCraftingRecipes(RecipeOutput output) {

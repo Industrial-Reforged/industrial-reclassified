@@ -4,7 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
+import com.portingdeadmods.examplemod.content.recipes.RecipeComponentFlags;
 import com.portingdeadmods.examplemod.content.recipes.components.RecipeComponent;
+import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.RecipeFlagType;
+import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -15,11 +19,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
-public record ItemInputComponent(Ingredient ingredient, int count, float chance) implements RecipeComponent {
+import java.util.List;
+import java.util.Set;
+
+public record ItemInputComponent(Ingredient ingredient, int count, float chance) implements RecipeComponent, InputComponentFlag {
     public static final MapCodec<ItemInputComponent> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC.fieldOf("ingredient").forGetter(ItemInputComponent::ingredient),
-            Codec.INT.fieldOf("count").forGetter(ItemInputComponent::count),
-            Codec.FLOAT.fieldOf("chance").forGetter(ItemInputComponent::chance)
+            Codec.INT.optionalFieldOf("count", 1).forGetter(ItemInputComponent::count),
+            Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter(ItemInputComponent::chance)
     ).apply(inst, ItemInputComponent::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemInputComponent> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC,
@@ -31,6 +38,7 @@ public record ItemInputComponent(Ingredient ingredient, int count, float chance)
             ItemInputComponent::new
     );
     public static final Type<ItemInputComponent> TYPE = new Type<>(IndustrialReclassified.rl("item_input"), CODEC, STREAM_CODEC);
+    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(RecipeComponentFlags.INPUT);
 
     public ItemInputComponent(Ingredient ingredient, int count) {
         this(ingredient, count, 1);
@@ -49,6 +57,11 @@ public record ItemInputComponent(Ingredient ingredient, int count, float chance)
     }
 
     @Override
+    public Set<RecipeFlagType<?>> flags() {
+        return FLAGS;
+    }
+
+    @Override
     public Type<?> type() {
         return TYPE;
     }
@@ -61,4 +74,13 @@ public record ItemInputComponent(Ingredient ingredient, int count, float chance)
         return random.nextFloat() < this.chance();
     }
 
+    @Override
+    public List<IngredientWithCount> getIngredients() {
+        return List.of(new IngredientWithCount(this.ingredient(), this.count()));
+    }
+
+    @Override
+    public List<Float> getChances() {
+        return List.of(this.chance());
+    }
 }

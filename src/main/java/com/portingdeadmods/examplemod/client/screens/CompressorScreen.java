@@ -8,12 +8,14 @@ import com.portingdeadmods.examplemod.content.menus.CompressorMenu;
 import com.portingdeadmods.examplemod.registries.IRTranslations;
 import com.portingdeadmods.portingdeadlibs.client.screens.widgets.EnergyBarWidget;
 import com.portingdeadmods.portingdeadlibs.client.screens.widgets.RedstonePanelWidget;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class CompressorScreen extends MachineScreen<CompressorMenu> {
+    public static final ResourceLocation PROGRESS_ARROW_SPRITE = IndustrialReclassified.rl("container/progress_arrow");
     public static final ResourceLocation TEXTURE = IndustrialReclassified.rl("textures/gui/compressor.png");
 
     public CompressorScreen(CompressorMenu menu, Inventory playerInventory, Component title) {
@@ -32,6 +34,19 @@ public class CompressorScreen extends MachineScreen<CompressorMenu> {
         );
         addPanelWidget(new RedstonePanelWidget(this.leftPos + this.imageWidth, this.topPos + 2));
         addRenderableOnly(new BatterySlotWidget(this.leftPos + 8, this.topPos + 14 + energyBarWidget.getHeight() + 5));
+    }
+
+    @Override
+    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+
+        float progress;
+        if (this.menu.blockEntity.getCachedRecipe() != null) {
+            progress = (float) this.menu.blockEntity.getProgress() / this.menu.blockEntity.getMaxProgress();
+        } else {
+            progress = 0;
+        }
+        pGuiGraphics.blitSprite(PROGRESS_ARROW_SPRITE, 24, 16, 0, 0, this.getGuiLeft() + 76, this.getGuiTop() + 45, (int) (24 * progress), 16);
     }
 
     @Override
