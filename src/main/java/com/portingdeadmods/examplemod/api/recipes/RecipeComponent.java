@@ -1,14 +1,12 @@
-package com.portingdeadmods.examplemod.content.recipes.components;
+package com.portingdeadmods.examplemod.api.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.portingdeadmods.examplemod.content.recipes.flags.RecipeFlagType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 public interface RecipeComponent {

@@ -1,5 +1,6 @@
 package com.portingdeadmods.examplemod.content.recipes.flags;
 
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponentFlag;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;

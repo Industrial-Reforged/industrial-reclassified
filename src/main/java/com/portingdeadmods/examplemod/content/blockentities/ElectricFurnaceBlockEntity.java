@@ -89,7 +89,7 @@ public class ElectricFurnaceBlockEntity extends MachineBlockEntity implements Me
                     this.getItemHandler().insertItem(1, resultItem.copy(), false);
                     this.getItemHandler().extractItem(0, 1, false);
                 }
-            } else {
+            } else if (this.progress != 0) {
                 this.progress = 0;
                 this.updateData();
             }

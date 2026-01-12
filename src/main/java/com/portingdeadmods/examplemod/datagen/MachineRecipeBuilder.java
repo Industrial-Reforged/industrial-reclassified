@@ -1,10 +1,9 @@
 package com.portingdeadmods.examplemod.datagen;
 
-import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
-import com.portingdeadmods.examplemod.content.recipes.components.RecipeComponent;
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputComponent;
-import com.portingdeadmods.examplemod.registries.IRRecipeLayouts;
+import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -36,7 +35,7 @@ public class MachineRecipeBuilder implements RecipeBuilder {
 
     @Override
     public Item getResult() {
-        return this.builder.getRecipe().getComponent(ItemOutputComponent.TYPE).item().getItem();
+        return this.builder.getRecipe().getComponentByFlag(IRRecipeComponentFlags.OUTPUT).getOutputs().getFirst().getItem();
     }
 
     @Override

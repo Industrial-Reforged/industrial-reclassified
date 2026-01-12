@@ -87,10 +87,11 @@ public class IRBlockStateProvider extends BlockStateProvider {
                 .horizontalFacing()
                 .create();
 
-        modelBuilder(IRBlocks.MACERATOR.get())
+        modelBuilder(IRMachines.MACERATOR.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .front(this::blockTextureSuffix, "_front")
                 .top(this::blockTextureSuffix, "_top")
+                .horizontalFacing()
                 .create();
 
         modelBuilder(IRMachines.COMPRESSOR.getBlock())

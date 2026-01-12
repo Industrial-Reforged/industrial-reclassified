@@ -1,10 +1,11 @@
 package com.portingdeadmods.examplemod.content.recipes;
 
-import com.portingdeadmods.examplemod.content.recipes.components.RecipeComponent;
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
 import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
-import com.portingdeadmods.examplemod.content.recipes.flags.RecipeComponentFlag;
-import com.portingdeadmods.examplemod.content.recipes.flags.RecipeFlagType;
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponentFlag;
+import com.portingdeadmods.examplemod.api.recipes.RecipeFlagType;
+import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.portingdeadlibs.api.recipes.PDLRecipe;
 import com.portingdeadmods.portingdeadlibs.utils.RecipeUtils;
 import net.minecraft.core.HolderLookup;
@@ -53,7 +54,7 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
 
     @Override
     public boolean matches(MachineRecipeInput machineRecipeInput, Level level) {
-        InputComponentFlag input = this.getComponentByFlag(RecipeComponentFlags.INPUT);
+        InputComponentFlag input = this.getComponentByFlag(IRRecipeComponentFlags.INPUT);
         if (input != null) {
             return RecipeUtils.compareItems(machineRecipeInput.items(), input.getIngredients());
         }
@@ -62,7 +63,7 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
 
     @Override
     public @NotNull ItemStack getResultItem(HolderLookup.Provider provider) {
-        OutputComponentFlag output = this.getComponentByFlag(RecipeComponentFlags.OUTPUT);
+        OutputComponentFlag output = this.getComponentByFlag(IRRecipeComponentFlags.OUTPUT);
         if (output != null) {
             return output.getOutputs().getFirst();
         }

@@ -36,9 +36,9 @@ public record ItemEnergyHandlerWrapper(ItemStack itemStack, Supplier<? extends E
         if (componentEuStorage != null)
             return componentEuStorage.energyStored();
         else
-            throw new NullPointerException("Failed to get energy component for item: "
+            throw new NullPointerException("Failed to get energy component for items: "
                     + itemStack.getItem()
-                    + " please add it under the item properties using .component(...) or preferably inherit one of the electric item classes");
+                    + " please add it under the items properties using .component(...) or preferably inherit one of the electric items classes");
     }
 
     @Override
@@ -54,9 +54,9 @@ public record ItemEnergyHandlerWrapper(ItemStack itemStack, Supplier<? extends E
         if (componentEuStorage != null)
             return componentEuStorage.energyCapacity();
         else
-            throw new NullPointerException("Failed to get energy component for item: "
+            throw new NullPointerException("Failed to get energy component for items: "
                     + itemStack.getItem()
-                    + " please add it under the item properties using .component(...) or preferably inherit one of the electric item classes");
+                    + " please add it under the items properties using .component(...) or preferably inherit one of the electric items classes");
     }
 
     @Override

@@ -9,6 +9,6 @@ public class TinCanWithFoodItem extends Item {
     }
 
     public static TinCanWithFoodItem defaultItem(Properties properties) {
-        return new TinCanWithFoodItem(properties.food(IRFoodProperties.EMPTY));
+        return new TinCanWithFoodItem(properties.food(IRFoodProperties.TIN_CAN));
     }
 }

@@ -7,6 +7,7 @@ import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputListComponent;
 import com.portingdeadmods.examplemod.datagen.MachineRecipeBuilder;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;
@@ -35,16 +36,43 @@ public class IRRecipeProvider extends RecipeProvider {
     protected void buildRecipes(RecipeOutput output) {
         super.buildRecipes(output);
 
-        IRRecipeLayouts.COMPRESSOR.builder()
-                .component(new ItemInputComponent(Tags.Items.ANIMAL_FOODS))
-                .component(new ItemOutputComponent(IRItems.TIN_CAN));
-
         this.compressorRecipe()
                 .component(new ItemInputComponent(IRItems.MIXED_METAL_INGOT))
                 .component(new ItemOutputComponent(IRItems.ADVANCED_ALLOY_PLATE))
                 .component(new TimeComponent(200))
                 .component(new EnergyComponent(800))
-                .save(output, IndustrialReclassified.rl("advanced_alloy_plate_compressing"));
+                .save(output);
+        this.compressorRecipe()
+                .component(new ItemInputComponent(IRItems.CARBON_MESH))
+                .component(new ItemOutputComponent(IRItems.CARBON_PLATE))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output);
+
+        this.maceratorRecipe()
+                .component(new ItemInputComponent(IRItems.TIN_INGOT))
+                .component(new ItemOutputListComponent(IRItems.TIN_DUST))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output);
+        this.maceratorRecipe()
+                .component(new ItemInputComponent(Tags.Items.INGOTS_COPPER))
+                .component(new ItemOutputListComponent(IRItems.COPPER_DUST))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output);
+        this.maceratorRecipe()
+                .component(new ItemInputComponent(Tags.Items.INGOTS_IRON))
+                .component(new ItemOutputListComponent(IRItems.IRON_DUST))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output);
+        this.maceratorRecipe()
+                .component(new ItemInputComponent(Tags.Items.INGOTS_IRON))
+                .component(new ItemOutputListComponent(IRItems.IRON_DUST))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.BASIC_DRILL.get())
                 .pattern("IDI")
@@ -140,10 +168,6 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_bronze", has(IRItems.BRONZE_INGOT))
                 .save(output);
 
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(IRItems.MIXED_METAL_INGOT), RecipeCategory.MISC, IRItems.ADVANCED_ALLOY_PLATE, 0.7f, 200)
-                .unlockedBy("has_mixed_metal", has(IRItems.MIXED_METAL_INGOT))
-                .save(output);
-
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, IRItems.CARBON_FIBER)
                 .requires(IRItems.COAL_DUST, 4)
                 .unlockedBy("has_coal_dust", has(IRItems.COAL_DUST))
@@ -166,6 +190,10 @@ public class IRRecipeProvider extends RecipeProvider {
 
     private MachineRecipeBuilder compressorRecipe() {
         return new MachineRecipeBuilder(IRRecipeLayouts.COMPRESSOR);
+    }
+
+    private MachineRecipeBuilder maceratorRecipe() {
+        return new MachineRecipeBuilder(IRRecipeLayouts.MACERATOR);
     }
 
     private static void generatorCraftingRecipes(RecipeOutput output) {

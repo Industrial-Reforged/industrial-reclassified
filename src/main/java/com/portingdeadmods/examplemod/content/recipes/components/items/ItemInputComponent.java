@@ -4,10 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.content.recipes.RecipeComponentFlags;
-import com.portingdeadmods.examplemod.content.recipes.components.RecipeComponent;
+import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
-import com.portingdeadmods.examplemod.content.recipes.flags.RecipeFlagType;
+import com.portingdeadmods.examplemod.api.recipes.RecipeFlagType;
 import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -26,7 +26,7 @@ public record ItemInputComponent(Ingredient ingredient, int count, float chance)
     public static final MapCodec<ItemInputComponent> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC.fieldOf("ingredient").forGetter(ItemInputComponent::ingredient),
             Codec.INT.optionalFieldOf("count", 1).forGetter(ItemInputComponent::count),
-            Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter(ItemInputComponent::chance)
+            Codec.FLOAT.optionalFieldOf("chances", 1f).forGetter(ItemInputComponent::chance)
     ).apply(inst, ItemInputComponent::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemInputComponent> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC,
@@ -38,7 +38,7 @@ public record ItemInputComponent(Ingredient ingredient, int count, float chance)
             ItemInputComponent::new
     );
     public static final Type<ItemInputComponent> TYPE = new Type<>(IndustrialReclassified.rl("item_input"), CODEC, STREAM_CODEC);
-    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(RecipeComponentFlags.INPUT);
+    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(IRRecipeComponentFlags.INPUT);
 
     public ItemInputComponent(Ingredient ingredient, int count) {
         this(ingredient, count, 1);

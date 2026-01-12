@@ -2,6 +2,7 @@ package com.portingdeadmods.examplemod.registries;
 
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.content.recipes.CompressorRecipeLayout;
+import com.portingdeadmods.examplemod.content.recipes.MaceratorRecipeLayout;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
 import net.minecraft.resources.ResourceLocation;
 
@@ -15,6 +16,7 @@ public final class IRRecipeLayouts {
     public static final Map<ResourceLocation, MachineRecipeLayout> LAYOUTS = new HashMap<>();
 
     public static final CompressorRecipeLayout COMPRESSOR = register("compressor", CompressorRecipeLayout::new);
+    public static final MaceratorRecipeLayout MACERATOR = register("macerator", MaceratorRecipeLayout::new);
 
     private static <L extends MachineRecipeLayout> L register(String key, Function<ResourceLocation, L> factory) {
         ResourceLocation id = IndustrialReclassified.rl(key);

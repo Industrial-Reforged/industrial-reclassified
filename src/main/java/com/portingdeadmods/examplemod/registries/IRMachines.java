@@ -2,14 +2,8 @@ package com.portingdeadmods.examplemod.registries;
 
 
 import com.portingdeadmods.examplemod.api.blocks.MachineBlock;
-import com.portingdeadmods.examplemod.content.blockentities.BasicGeneratorBlockEntity;
-import com.portingdeadmods.examplemod.content.blockentities.CompressorBlockEntity;
-import com.portingdeadmods.examplemod.content.blockentities.ElectricFurnaceBlockEntity;
-import com.portingdeadmods.examplemod.content.blockentities.SolarPanelBlockEntity;
-import com.portingdeadmods.examplemod.content.menus.BasicGeneratorMenu;
-import com.portingdeadmods.examplemod.content.menus.CompressorMenu;
-import com.portingdeadmods.examplemod.content.menus.ElectricFurnaceMenu;
-import com.portingdeadmods.examplemod.content.menus.SolarPanelMenu;
+import com.portingdeadmods.examplemod.content.blockentities.*;
+import com.portingdeadmods.examplemod.content.menus.*;
 import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import com.portingdeadmods.examplemod.utils.machines.MachineRegistrationHelper;
 
@@ -40,6 +34,14 @@ public final class IRMachines {
             )
             .blockEntity(CompressorBlockEntity::new)
             .menu(CompressorMenu::new));
+    public static final IRMachine MACERATOR = HELPER.registerMachine("macerator", IRMachine.builder(IREnergyTiers.LOW)
+            .block(MachineBlock::new, builder -> builder
+                    .activatable()
+                    .rotatable()
+                    .ticking()
+            )
+            .blockEntity(MaceratorBlockEntity::new)
+            .menu(MaceratorMenu::new));
     public static final IRMachine BASIC_SOLAR_PANEL = HELPER.registerMachine("basic_solar_panel", IRMachine.builder(IREnergyTiers.LOW)
             .block(MachineBlock::new, builder -> builder
                     .activatable()

@@ -2,21 +2,18 @@ package com.portingdeadmods.examplemod.content.recipes;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
-import com.portingdeadmods.examplemod.content.recipes.components.RecipeComponent;
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.portingdeadlibs.utils.RecipeUtils;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class MachineRecipeLayout {

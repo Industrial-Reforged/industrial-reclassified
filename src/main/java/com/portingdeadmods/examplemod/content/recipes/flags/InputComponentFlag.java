@@ -1,5 +1,6 @@
 package com.portingdeadmods.examplemod.content.recipes.flags;
 
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponentFlag;
 import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
 
 import java.util.List;

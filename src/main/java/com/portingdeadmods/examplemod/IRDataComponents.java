@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-// Registry for minecraft's item data component system
+// Registry for minecraft's items data component system
 // entities and blockentities are handled in IRAttachmentTypes
 public final class IRDataComponents {
     public static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, IndustrialReclassified.MODID);
@@ -27,7 +27,7 @@ public final class IRDataComponents {
             () -> builder -> builder.persistent(ComponentEuStorage.CODEC).networkSynchronized(ComponentEuStorage.STREAM_CODEC));
     public static final Supplier<DataComponentType<SimpleFluidContent>> FLUID = registerDataComponentType("fluid",
             () -> builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC));
-    public static final Supplier<DataComponentType<List<ItemStack>>> ITEM = registerDataComponentType("item",
+    public static final Supplier<DataComponentType<List<ItemStack>>> ITEM = registerDataComponentType("items",
             () -> builder -> builder.persistent(ItemStack.CODEC.listOf()).networkSynchronized(ItemStack.LIST_STREAM_CODEC));
 
     public static <T> Supplier<DataComponentType<T>> registerDataComponentType(

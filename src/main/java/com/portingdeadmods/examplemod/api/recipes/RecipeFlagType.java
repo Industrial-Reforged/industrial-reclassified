@@ -1,4 +1,4 @@
-package com.portingdeadmods.examplemod.content.recipes.flags;
+package com.portingdeadmods.examplemod.api.recipes;
 
 import net.minecraft.resources.ResourceLocation;
 

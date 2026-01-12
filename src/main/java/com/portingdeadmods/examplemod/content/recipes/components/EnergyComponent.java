@@ -1,8 +1,8 @@
 package com.portingdeadmods.examplemod.content.recipes.components;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;

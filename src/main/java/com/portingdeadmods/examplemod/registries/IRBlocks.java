@@ -34,7 +34,6 @@ public final class IRBlocks {
     public static final DeferredBlock<Block> NUCLEAR_REACTOR = BLOCKS.registerBlockWithItem("nuclear_reactor", Block::new, MACHINE_FRAME_PROPS);
 
     // Machines
-    public static final DeferredBlock<Block> MACERATOR = BLOCKS.registerBlockWithItem("macerator", Block::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<Block> EXTRACTOR = BLOCKS.registerBlockWithItem("extractor", Block::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<Block> CANNING_MACHINE = BLOCKS.registerBlockWithItem("canning_machine", Block::new, MACHINE_FRAME_PROPS);
 

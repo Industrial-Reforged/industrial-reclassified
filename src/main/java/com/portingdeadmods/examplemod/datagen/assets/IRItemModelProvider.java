@@ -132,7 +132,7 @@ public class IRItemModelProvider extends ItemModelProvider {
     }
 
     private void fluidCellModel(ItemLike item) {
-        withExistingParent(name(item), ResourceLocation.fromNamespaceAndPath("neoforge", "item/default"))
+        withExistingParent(name(item), ResourceLocation.fromNamespaceAndPath("neoforge", "items/default"))
                 .texture("base", itemTexture(item))
                 .texture("fluid", itemTexture(item).withSuffix("_overlay"))
                 .texture("particle", itemTexture(item).withSuffix("_overlay"))
@@ -164,15 +164,15 @@ public class IRItemModelProvider extends ItemModelProvider {
 
     public ItemModelBuilder basicItem(ItemLike item, ResourceLocation texture) {
         return getBuilder(name(item))
-                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .parent(new ModelFile.UncheckedModelFile("items/generated"))
                 .texture("layer0", ResourceLocation.fromNamespaceAndPath(texture.getNamespace(), texture.getPath()));
     }
 
     public ItemModelBuilder basicItem(ItemLike item, String suffix) {
         ResourceLocation location = key(item);
         return getBuilder(location + suffix)
-                .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", ResourceLocation.fromNamespaceAndPath(location.getNamespace(), "item/" + location.getPath() + suffix));
+                .parent(new ModelFile.UncheckedModelFile("items/generated"))
+                .texture("layer0", ResourceLocation.fromNamespaceAndPath(location.getNamespace(), "items/" + location.getPath() + suffix));
     }
 
     public ResourceLocation itemTexture(ItemLike item) {
@@ -185,7 +185,7 @@ public class IRItemModelProvider extends ItemModelProvider {
         if (textureFolder == null || textureFolder.trim().isEmpty())
             folder = "";
         ResourceLocation name = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item));
-        return getBuilder(name.toString()).parent(new ModelFile.UncheckedModelFile("item/generated"))
+        return getBuilder(name.toString()).parent(new ModelFile.UncheckedModelFile("items/generated"))
                 .texture("layer0", ResourceLocation.fromNamespaceAndPath(name.getNamespace(), "block/" + folder + name.getPath()));
     }
 
