@@ -1,0 +1,77 @@
+package com.portingdeadmods.examplemod.content.recipes.components.items;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.portingdeadmods.examplemod.IndustrialReclassified;
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
+import com.portingdeadmods.examplemod.api.recipes.RecipeFlagType;
+import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
+import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
+import com.portingdeadmods.examplemod.utils.IRRecipeUtils;
+import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+public record ItemInputListComponent(List<ItemInputComponent> inputs) implements RecipeComponent, InputComponentFlag {
+    public static final Codec<ItemInputListComponent> CODEC = ItemInputComponent.CODEC.listOf().xmap(ItemInputListComponent::new, ItemInputListComponent::inputs);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemInputListComponent> STREAM_CODEC = ItemInputComponent.STREAM_CODEC.apply(ByteBufCodecs.list()).map(ItemInputListComponent::new, ItemInputListComponent::inputs);
+    public static final Type<ItemInputListComponent> TYPE = new Type<>(IndustrialReclassified.rl("item_input_list"), CODEC, STREAM_CODEC);
+    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(IRRecipeComponentFlags.INPUT);
+
+    public ItemInputListComponent(Ingredient ingredient, int count) {
+        this(List.of(new ItemInputComponent(ingredient, count, 1)));
+    }
+
+    public ItemInputListComponent(Ingredient ingredient) {
+        this(ingredient, 1);
+    }
+
+    public ItemInputListComponent(ItemLike ...items) {
+        this(Arrays.stream(items).map(ItemInputComponent::new).toList());
+    }
+
+    public ItemInputListComponent(TagKey<Item> tag) {
+        this(Ingredient.of(tag), 1);
+    }
+
+    @Override
+    public Set<RecipeFlagType<?>> flags() {
+        return FLAGS;
+    }
+
+    @Override
+    public Type<?> type() {
+        return TYPE;
+    }
+
+    public boolean test(List<ItemStack> items) {
+        return IRRecipeUtils.matches(items, this.inputs());
+    }
+
+    public boolean isConsumed(RandomSource random, int slot) {
+        return random.nextFloat() < this.inputs.get(slot).chance();
+    }
+
+    @Override
+    public List<IngredientWithCount> getIngredients() {
+        return this.inputs().stream().map(i -> new IngredientWithCount(i.ingredient(), i.count())).toList();
+    }
+
+    @Override
+    public List<Float> getChances() {
+        return this.inputs().stream().map(ItemInputComponent::chance).toList();
+    }
+
+}

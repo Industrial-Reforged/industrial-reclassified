@@ -20,27 +20,22 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public record ItemOutputListComponent(List<ItemStack> items, List<Float> chances) implements RecipeComponent, OutputComponentFlag {
-    public static final MapCodec<ItemOutputListComponent> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            ItemStack.CODEC.listOf().fieldOf("items").forGetter(ItemOutputListComponent::items),
-            Codec.FLOAT.listOf().optionalFieldOf("chances", List.of()).forGetter(ItemOutputListComponent::chances)
-    ).apply(inst, ItemOutputListComponent::new));
-    public static final StreamCodec<RegistryFriendlyByteBuf, ItemOutputListComponent> STREAM_CODEC = StreamCodec.composite(
-            ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()),
-            ItemOutputListComponent::items,
-            ByteBufCodecs.FLOAT.apply(ByteBufCodecs.list()),
-            ItemOutputListComponent::chances,
-            ItemOutputListComponent::new
-    );
+public record ItemOutputListComponent(List<ItemOutputComponent> outputs) implements RecipeComponent, OutputComponentFlag {
+    public static final Codec<ItemOutputListComponent> CODEC = ItemOutputComponent.CODEC.listOf().xmap(ItemOutputListComponent::new, ItemOutputListComponent::outputs);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemOutputListComponent> STREAM_CODEC = ItemOutputComponent.STREAM_CODEC.apply(ByteBufCodecs.list()).map(ItemOutputListComponent::new, ItemOutputListComponent::outputs);
     public static final Type<ItemOutputListComponent> TYPE = new Type<>(IndustrialReclassified.rl("item_output_list"), CODEC, STREAM_CODEC);
     public static final Set<RecipeFlagType<?>> FLAGS = Set.of(IRRecipeComponentFlags.OUTPUT);
 
     public ItemOutputListComponent(ItemStack item) {
-        this(List.of(item), FloatList.of(1));
+        this(List.of(new ItemOutputComponent(item)));
     }
 
     public ItemOutputListComponent(ItemLike item) {
-        this(List.of(new ItemStack(item)), FloatList.of(1));
+        this(List.of(new ItemOutputComponent(item)));
+    }
+
+    public ItemOutputListComponent(ItemLike item, int count) {
+        this(List.of(new ItemOutputComponent(new ItemStack(item, count))));
     }
 
     @Override
@@ -53,21 +48,21 @@ public record ItemOutputListComponent(List<ItemStack> items, List<Float> chances
         return FLAGS;
     }
 
-    public boolean isOutputted(RandomSource random, int i) {
-        if (i < this.chances().size()) {
-            return random.nextFloat() < this.chances().get(i);
+    public boolean isOutputted(RandomSource random, int slot) {
+        if (slot < this.outputs.size()) {
+            return random.nextFloat() < this.outputs().get(slot).chance();
         }
         return true;
     }
 
     @Override
     public List<ItemStack> getOutputs() {
-        return this.items();
+        return this.outputs().stream().map(ItemOutputComponent::item).toList();
     }
 
     @Override
     public List<Float> getChances() {
-        return this.chances();
+        return this.outputs().stream().map(ItemOutputComponent::chance).toList();
     }
 
 }

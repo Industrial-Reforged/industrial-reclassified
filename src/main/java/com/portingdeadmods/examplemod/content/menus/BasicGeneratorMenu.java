@@ -2,18 +2,11 @@ package com.portingdeadmods.examplemod.content.menus;
 
 import com.portingdeadmods.examplemod.api.menus.MachineMenu;
 import com.portingdeadmods.examplemod.content.blockentities.BasicGeneratorBlockEntity;
-import com.portingdeadmods.examplemod.content.blockentities.ExampleBlockEntity;
 import com.portingdeadmods.examplemod.registries.IRMachines;
-import com.portingdeadmods.examplemod.registries.IRMenuTypes;
-import com.portingdeadmods.portingdeadlibs.api.gui.menus.PDLAbstractContainerMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import org.jetbrains.annotations.NotNull;
 
 public class BasicGeneratorMenu extends MachineMenu<BasicGeneratorBlockEntity> {
     public BasicGeneratorMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {

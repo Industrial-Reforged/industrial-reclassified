@@ -1,24 +1,28 @@
 package com.portingdeadmods.examplemod.registries;
 
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.content.recipes.CompressorRecipeLayout;
-import com.portingdeadmods.examplemod.content.recipes.MaceratorRecipeLayout;
+import com.portingdeadmods.examplemod.content.recipes.FoodCanningMachineRecipe;
+import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
+import com.portingdeadmods.examplemod.content.recipes.layouts.*;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 public final class IRRecipeLayouts {
-    public static final Map<ResourceLocation, MachineRecipeLayout> LAYOUTS = new HashMap<>();
+    public static final Map<ResourceLocation, MachineRecipeLayout<?>> LAYOUTS = new HashMap<>();
 
     public static final CompressorRecipeLayout COMPRESSOR = register("compressor", CompressorRecipeLayout::new);
     public static final MaceratorRecipeLayout MACERATOR = register("macerator", MaceratorRecipeLayout::new);
+    public static final ExtractorRecipeLayout EXTRACTOR = register("extractor", ExtractorRecipeLayout::new);
+    public static final RecipeType<MachineRecipe> CANNING_RECIPE_TYPE = RecipeType.simple(IndustrialReclassified.rl("canning_machine"));
+    public static final CanningMachineRecipeLayout CANNING_MACHINE = register("canning_machine", CanningMachineRecipeLayout::new);
+    public static final FoodCanningMachineRecipeLayout FOOD_CANNING_MACHINE = register("food_canning_machine", FoodCanningMachineRecipeLayout::new);
 
-    private static <L extends MachineRecipeLayout> L register(String key, Function<ResourceLocation, L> factory) {
+    private static <L extends MachineRecipeLayout<?>> L register(String key, Function<ResourceLocation, L> factory) {
         ResourceLocation id = IndustrialReclassified.rl(key);
         L layout = factory.apply(id);
         LAYOUTS.put(id, layout);

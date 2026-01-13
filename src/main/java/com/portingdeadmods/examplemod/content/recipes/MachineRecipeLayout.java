@@ -14,19 +14,27 @@ import net.minecraft.world.item.crafting.RecipeType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-public abstract class MachineRecipeLayout {
+public abstract class MachineRecipeLayout<R extends MachineRecipe> {
     private final ResourceLocation id;
-    private RecipeType<MachineRecipe> recipeType;
-    private RecipeSerializer<MachineRecipe> recipeSerializer;
+    private BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> recipeFactory;
+    private RecipeType<R> recipeType;
+    private RecipeSerializer<R> recipeSerializer;
     private final Map<RecipeComponent.Type<?>, String> components;
     private final Map<RecipeComponent.Type<?>, RecipeComponent> defaultComponentValues;
 
-    public MachineRecipeLayout(ResourceLocation id) {
+    public MachineRecipeLayout(ResourceLocation id, RecipeType<R> recipeType, BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> recipeFactory) {
         this.id = id;
+        this.recipeFactory = recipeFactory;
         this.components = new LinkedHashMap<>();
         this.defaultComponentValues = new LinkedHashMap<>();
+        this.recipeType = recipeType;
+    }
+
+    public MachineRecipeLayout(ResourceLocation id, BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> recipeFactory) {
+        this(id, null, recipeFactory);
     }
 
     protected <C extends RecipeComponent> void addComponent(RecipeComponent.Type<C> type, String id) {
@@ -38,7 +46,15 @@ public abstract class MachineRecipeLayout {
         this.defaultComponentValues.put(type, defaultComponent);
     }
 
-    private <R extends MachineRecipe> MapCodec<R> createMapCodec(BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> factory) {
+    public String getComponentKey(RecipeComponent.Type<?> componentType) {
+        return this.components.get(componentType);
+    }
+
+    public ResourceLocation getId() {
+        return id;
+    }
+
+    private MapCodec<R> createMapCodec(BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> factory) {
         return new MapCodec<>() {
             @Override
             public <T> Stream<T> keys(DynamicOps<T> ops) {
@@ -84,45 +100,27 @@ public abstract class MachineRecipeLayout {
         };
     }
 
-    public RecipeSerializer<MachineRecipe> getRecipeSerializer() {
+    public R createRecipe(ResourceLocation id, Map<String, RecipeComponent> components) {
+        return this.recipeFactory.apply(id, components);
+    }
+
+    public RecipeSerializer<R> getRecipeSerializer() {
         if (this.recipeSerializer == null) {
-            MapCodec<MachineRecipe> mapCodec = this.createMapCodec(MachineRecipe::new);
-            StreamCodec<RegistryFriendlyByteBuf, MachineRecipe> streamCodec = ByteBufCodecs.fromCodec(mapCodec.codec()).cast();
+            MapCodec<R> mapCodec = this.createMapCodec(this::createRecipe);
+            StreamCodec<RegistryFriendlyByteBuf, R> streamCodec = ByteBufCodecs.fromCodec(mapCodec.codec()).cast();
             this.recipeSerializer = RecipeUtils.newRecipeSerializer(mapCodec, streamCodec);
         }
         return this.recipeSerializer;
     }
 
-    public Builder builder() {
-        return new Builder(new MachineRecipe(this.id));
-    }
-
-    public RecipeType<MachineRecipe> getRecipeType() {
+    public RecipeType<R> getRecipeType() {
         if (this.recipeType == null) {
             this.recipeType = RecipeType.simple(this.id);
         }
         return this.recipeType;
     }
 
-    public class Builder {
-        private final MachineRecipe recipe;
-
-        public Builder(MachineRecipe recipe) {
-            this.recipe = recipe;
-        }
-
-        public Builder component(RecipeComponent component) {
-            this.recipe.getComponents().put(components.get(component.type()), component);
-            return this;
-        }
-
-        public MachineRecipe getRecipe() {
-            return recipe;
-        }
-
-        public MachineRecipe build() {
-            return recipe;
-        }
+    public static class Builder {
     }
 
 }

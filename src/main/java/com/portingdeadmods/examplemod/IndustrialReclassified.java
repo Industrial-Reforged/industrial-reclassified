@@ -113,7 +113,7 @@ public final class IndustrialReclassified {
         if (event.getRegistryKey().equals(Registries.RECIPE_SERIALIZER)) {
             modEventBus.post(new RegisterRecipeLayoutEvent());
 
-            for (Map.Entry<ResourceLocation, MachineRecipeLayout> entry : RegisterRecipeLayoutEvent.LAYOUTS.entrySet()) {
+            for (Map.Entry<ResourceLocation, MachineRecipeLayout<?>> entry : RegisterRecipeLayoutEvent.LAYOUTS.entrySet()) {
                 event.register(Registries.RECIPE_SERIALIZER, entry.getKey(), () -> entry.getValue().getRecipeSerializer());
             }
         }

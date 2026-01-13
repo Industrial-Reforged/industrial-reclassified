@@ -1,8 +1,8 @@
 package com.portingdeadmods.examplemod.datagen;
 
+import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
-import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputComponent;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -12,10 +12,10 @@ import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
 
 public class MachineRecipeBuilder implements RecipeBuilder {
-    private final MachineRecipeLayout.Builder builder;
+    private final MachineRecipe.Builder<MachineRecipe> builder;
 
-    public MachineRecipeBuilder(MachineRecipeLayout layout) {
-        this.builder = layout.builder();
+    public MachineRecipeBuilder(MachineRecipeLayout<MachineRecipe> layout) {
+        this.builder = MachineRecipe.builder(layout.getId());
     }
 
     public MachineRecipeBuilder component(RecipeComponent component) {
@@ -35,7 +35,7 @@ public class MachineRecipeBuilder implements RecipeBuilder {
 
     @Override
     public Item getResult() {
-        return this.builder.getRecipe().getComponentByFlag(IRRecipeComponentFlags.OUTPUT).getOutputs().getFirst().getItem();
+        return this.builder.build().getComponentByFlag(IRRecipeComponentFlags.OUTPUT).getOutputs().getFirst().getItem();
     }
 
     @Override

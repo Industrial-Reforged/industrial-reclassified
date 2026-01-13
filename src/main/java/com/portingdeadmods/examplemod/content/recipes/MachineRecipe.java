@@ -9,6 +9,7 @@ import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.portingdeadlibs.api.recipes.PDLRecipe;
 import com.portingdeadmods.portingdeadlibs.utils.RecipeUtils;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -18,10 +19,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
-    private RecipeSerializer<MachineRecipe> serializer;
-    private RecipeType<MachineRecipe> type;
+    private RecipeSerializer<? extends MachineRecipe> serializer;
+    private RecipeType<? extends MachineRecipe> type;
     private final Map<String, RecipeComponent> components;
     private final ResourceLocation id;
 
@@ -73,21 +76,63 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
     @Override
     public @NotNull RecipeSerializer<?> getSerializer() {
         if (this.serializer == null) {
-            this.serializer = RegisterRecipeLayoutEvent.LAYOUTS.get(this.id).getRecipeSerializer();
+            this.serializer = getLayout().getRecipeSerializer();
         }
         return this.serializer;
+    }
+
+    private MachineRecipeLayout<?> getLayout() {
+        return RegisterRecipeLayoutEvent.LAYOUTS.get(this.id);
     }
 
     @Override
     public @NotNull RecipeType<?> getType() {
         if (this.type == null) {
-            this.type = RegisterRecipeLayoutEvent.LAYOUTS.get(this.id).getRecipeType();
+            this.type = getLayout().getRecipeType();
         }
         return this.type;
     }
 
     public Map<String, RecipeComponent> getComponents() {
         return this.components;
+    }
+
+    public static <R extends MachineRecipe> Builder<R> builder(ResourceLocation id, BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> recipeFactory) {
+        return new Builder<>(id, recipeFactory);
+    }
+
+    public static Builder<MachineRecipe> builder(ResourceLocation id) {
+        return new Builder<>(id, MachineRecipe::new);
+    }
+
+    public static Builder<MachineRecipe> builder(MachineRecipeLayout<MachineRecipe> layout) {
+        return new Builder<>(layout.getId(), MachineRecipe::new);
+    }
+
+    public static class Builder<R extends MachineRecipe> {
+        private final ResourceLocation id;
+        private final BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> recipeFactory;
+        private final Map<String, RecipeComponent> components;
+
+        private Builder(ResourceLocation id, BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> recipeFactory) {
+            this.id = id;
+            this.recipeFactory = recipeFactory;
+            this.components = new LinkedHashMap<>();
+        }
+
+        public Builder<R> component(RecipeComponent component) {
+            this.components.put(this.getLayout().getComponentKey(component.type()), component);
+            return this;
+        }
+
+        private MachineRecipeLayout<?> getLayout() {
+            return RegisterRecipeLayoutEvent.LAYOUTS.get(this.id);
+        }
+
+        public R build() {
+            return this.recipeFactory.apply(this.id, this.components);
+        }
+
     }
 
 }

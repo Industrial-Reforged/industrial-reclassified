@@ -62,7 +62,6 @@ public class IRTagsProvider {
 
         @Override
         protected void addTags(HolderLookup.Provider provider) {
-            tag(BlockTags.NEEDS_IRON_TOOL, IRBlocks.EXAMPLE_BLOCK.get());
         }
 
         private void tag(TagKey<Block> itemTagKey, Block... blocks) {

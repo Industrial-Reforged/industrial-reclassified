@@ -1,18 +1,17 @@
 package com.portingdeadmods.examplemod.content.menus;
 
 import com.portingdeadmods.examplemod.api.menus.MachineMenu;
-import com.portingdeadmods.examplemod.content.blockentities.MaceratorBlockEntity;
+import com.portingdeadmods.examplemod.content.blockentities.ExtractorBlockEntity;
 import com.portingdeadmods.examplemod.registries.IRMachines;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class MaceratorMenu extends MachineMenu<MaceratorBlockEntity> {
-    public MaceratorMenu(int containerId, @NotNull Inventory inv, @NotNull MaceratorBlockEntity blockEntity) {
-        super(IRMachines.MACERATOR.getMenuType(), containerId, inv, blockEntity);
+public class ExtractorMenu extends MachineMenu<ExtractorBlockEntity> {
+    public ExtractorMenu(int containerId, @NotNull Inventory inv, @NotNull ExtractorBlockEntity blockEntity) {
+        super(IRMachines.EXTRACTOR.getMenuType(), containerId, inv, blockEntity);
         checkContainerSize(inv, 4);
 
         IItemHandler itemHandler = blockEntity.getItemHandler();
@@ -26,8 +25,7 @@ public class MaceratorMenu extends MachineMenu<MaceratorBlockEntity> {
         addPlayerHotbar(inv, 141 + 21);
     }
 
-    public MaceratorMenu(int containerId, @NotNull Inventory inv, @NotNull FriendlyByteBuf byteBuf) {
-        this(containerId, inv, (MaceratorBlockEntity) inv.player.level().getBlockEntity(byteBuf.readBlockPos()));
+    public ExtractorMenu(int containerId, @NotNull Inventory inv, @NotNull FriendlyByteBuf byteBuf) {
+        this(containerId, inv, (ExtractorBlockEntity) inv.player.level().getBlockEntity(byteBuf.readBlockPos()));
     }
-
 }

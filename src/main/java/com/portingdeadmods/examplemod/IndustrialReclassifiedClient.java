@@ -39,6 +39,8 @@ public final class IndustrialReclassifiedClient {
         event.register(IRMachines.ELECTRIC_FURNACE.getMenuType(), ElectricFurnaceScreen::new);
         event.register(IRMachines.COMPRESSOR.getMenuType(), CompressorScreen::new);
         event.register(IRMachines.MACERATOR.getMenuType(), MaceratorScreen::new);
+        event.register(IRMachines.EXTRACTOR.getMenuType(), ExtractorScreen::new);
+        event.register(IRMachines.CANNING_MACHINE.getMenuType(), CanningMachineScreen::new);
         event.register(IRMachines.BASIC_SOLAR_PANEL.getMenuType(), SolarPanelScreen::new);
     }
 

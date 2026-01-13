@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 public record ItemInputComponent(Ingredient ingredient, int count, float chance) implements RecipeComponent, InputComponentFlag {
-    public static final MapCodec<ItemInputComponent> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+    public static final Codec<ItemInputComponent> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Ingredient.CODEC.fieldOf("ingredient").forGetter(ItemInputComponent::ingredient),
             Codec.INT.optionalFieldOf("count", 1).forGetter(ItemInputComponent::count),
             Codec.FLOAT.optionalFieldOf("chances", 1f).forGetter(ItemInputComponent::chance)

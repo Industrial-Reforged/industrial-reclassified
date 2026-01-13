@@ -6,6 +6,7 @@ import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
 import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputListComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputListComponent;
 import com.portingdeadmods.examplemod.datagen.MachineRecipeBuilder;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.portingdeadmods.examplemod.IndustrialReclassified.rl;
@@ -68,11 +70,24 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new EnergyComponent(800))
                 .save(output);
         this.maceratorRecipe()
-                .component(new ItemInputComponent(Tags.Items.INGOTS_IRON))
-                .component(new ItemOutputListComponent(IRItems.IRON_DUST))
+                .component(new ItemInputComponent(Tags.Items.INGOTS_GOLD))
+                .component(new ItemOutputListComponent(IRItems.GOLD_DUST))
                 .component(new TimeComponent(200))
                 .component(new EnergyComponent(800))
                 .save(output);
+
+        this.extractorRecipe()
+                .component(new ItemInputComponent(IRItems.STICKY_RESIN))
+                .component(new ItemOutputListComponent(IRItems.RUBBER, 3))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output, IndustrialReclassified.rl("sticky_resin_extracting"));
+
+        this.foodCanningMachineRecipe()
+                .component(new ItemInputComponent(IRItems.TIN_CAN))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output, IndustrialReclassified.rl("food_canning"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.BASIC_DRILL.get())
                 .pattern("IDI")
@@ -194,6 +209,18 @@ public class IRRecipeProvider extends RecipeProvider {
 
     private MachineRecipeBuilder maceratorRecipe() {
         return new MachineRecipeBuilder(IRRecipeLayouts.MACERATOR);
+    }
+
+    private MachineRecipeBuilder extractorRecipe() {
+        return new MachineRecipeBuilder(IRRecipeLayouts.EXTRACTOR);
+    }
+
+    private MachineRecipeBuilder canningMachineRecipe() {
+        return new MachineRecipeBuilder(IRRecipeLayouts.CANNING_MACHINE);
+    }
+
+    private MachineRecipeBuilder foodCanningMachineRecipe() {
+        return new MachineRecipeBuilder(IRRecipeLayouts.FOOD_CANNING_MACHINE);
     }
 
     private static void generatorCraftingRecipes(RecipeOutput output) {

@@ -18,6 +18,14 @@ public final class IRMachines {
             )
             .blockEntity(BasicGeneratorBlockEntity::new)
             .menu(BasicGeneratorMenu::new));
+//    public static final IRMachine GEOTHERMAL_GENERATOR = HELPER.registerMachine("geothermal_generator", IRMachine.builder(IREnergyTiers.MEDIUM)
+//            .block(MachineBlock::new, builder -> builder
+//                    .activatable()
+//                    .rotatable()
+//                    .ticking()
+//            )
+//            .blockEntity(BasicGeneratorBlockEntity::new)
+//            .menu(BasicGeneratorMenu::new));
     public static final IRMachine ELECTRIC_FURNACE = HELPER.registerMachine("electric_furnace", IRMachine.builder(IREnergyTiers.LOW)
             .block(MachineBlock::new, builder -> builder
                     .activatable()
@@ -42,6 +50,22 @@ public final class IRMachines {
             )
             .blockEntity(MaceratorBlockEntity::new)
             .menu(MaceratorMenu::new));
+    public static final IRMachine EXTRACTOR = HELPER.registerMachine("extractor", IRMachine.builder(IREnergyTiers.LOW)
+            .block(MachineBlock::new, builder -> builder
+                    .activatable()
+                    .rotatable()
+                    .ticking()
+            )
+            .blockEntity(ExtractorBlockEntity::new)
+            .menu(ExtractorMenu::new));
+    public static final IRMachine CANNING_MACHINE = HELPER.registerMachine("canning_machine", IRMachine.builder(IREnergyTiers.MEDIUM)
+            .block(MachineBlock::new, builder -> builder
+                    .activatable()
+                    .rotatable()
+                    .ticking()
+            )
+            .blockEntity(CanningMachineBlockEntity::new)
+            .menu(CanningMachineMenu::new));
     public static final IRMachine BASIC_SOLAR_PANEL = HELPER.registerMachine("basic_solar_panel", IRMachine.builder(IREnergyTiers.LOW)
             .block(MachineBlock::new, builder -> builder
                     .activatable()

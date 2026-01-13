@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 public record ItemOutputComponent(ItemStack item, float chance) implements RecipeComponent, OutputComponentFlag {
-    public static final MapCodec<ItemOutputComponent> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+    public static final Codec<ItemOutputComponent> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ItemStack.CODEC.fieldOf("items").forGetter(ItemOutputComponent::item),
             Codec.FLOAT.optionalFieldOf("chances", 1f).forGetter(ItemOutputComponent::chance)
     ).apply(inst, ItemOutputComponent::new));

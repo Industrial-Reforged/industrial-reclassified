@@ -101,15 +101,17 @@ public class IRBlockStateProvider extends BlockStateProvider {
                 .horizontalFacing()
                 .create();
 
-        modelBuilder(IRBlocks.EXTRACTOR.get())
+        modelBuilder(IRMachines.EXTRACTOR.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .front(this::blockTextureSuffix, "_front")
                 .top(this::blockTextureSuffix, "_top")
+                .horizontalFacing()
                 .create();
 
-        modelBuilder(IRBlocks.CANNING_MACHINE.get())
+        modelBuilder(IRMachines.CANNING_MACHINE.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .front(this::blockTextureSuffix, "_front")
+                .horizontalFacing()
                 .create();
     }
 

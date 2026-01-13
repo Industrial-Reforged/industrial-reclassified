@@ -12,7 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 public record FluidOutputComponent(FluidStack fluid, float chance) implements RecipeComponent {
-    public static final MapCodec<FluidOutputComponent> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+    public static final Codec<FluidOutputComponent> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             FluidStack.CODEC.fieldOf("fluid").forGetter(FluidOutputComponent::fluid),
             Codec.FLOAT.optionalFieldOf("chances", 1f).forGetter(FluidOutputComponent::chance)
     ).apply(inst, FluidOutputComponent::new));

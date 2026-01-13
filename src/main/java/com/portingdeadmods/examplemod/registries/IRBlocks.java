@@ -23,7 +23,6 @@ public final class IRBlocks {
 
     public static final Set<DeferredBlock<? extends Block>> CUSTOM_ITEM_MODELS;
 
-    public static final DeferredBlock<ExampleBlock> EXAMPLE_BLOCK = BLOCKS.registerBlockWithItem("example_block", ExampleBlock::new);
     public static final DeferredBlock<Block> MACHINE_FRAME = BLOCKS.registerBlockWithItem("machine_frame", Block::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<Block> ADVANCED_MACHINE_FRAME = BLOCKS.registerBlockWithItem("advanced_machine_frame", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
 
@@ -32,10 +31,6 @@ public final class IRBlocks {
     public static final DeferredBlock<Block> WATER_MILL = BLOCKS.registerBlockWithItem("water_mill", Block::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<ReactorChamberBlock> NUCLEAR_REACTOR_CHAMBER = BLOCKS.registerBlockWithItem("nuclear_reactor_chamber", ReactorChamberBlock::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<Block> NUCLEAR_REACTOR = BLOCKS.registerBlockWithItem("nuclear_reactor", Block::new, MACHINE_FRAME_PROPS);
-
-    // Machines
-    public static final DeferredBlock<Block> EXTRACTOR = BLOCKS.registerBlockWithItem("extractor", Block::new, MACHINE_FRAME_PROPS);
-    public static final DeferredBlock<Block> CANNING_MACHINE = BLOCKS.registerBlockWithItem("canning_machine", Block::new, MACHINE_FRAME_PROPS);
 
     // Storage Blocks
     public static final DeferredBlock<Block> TIN_BLOCK = BLOCKS.registerBlockWithItem("tin_block", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
@@ -87,7 +82,7 @@ public final class IRBlocks {
 
     static {
         CUSTOM_ITEM_MODELS = Set.of(
-            RUBBER_TREE_FENCE, RUBBER_TREE_TRAPDOOR, RUBBER_TREE_BUTTON, RUBBER_TREE_SAPLING, RUBBER_TREE_DOOR, REINFORCED_DOOR, RUBBER_SHEET, STICKY_RESIN_SHEET, EXAMPLE_BLOCK
+            RUBBER_TREE_FENCE, RUBBER_TREE_TRAPDOOR, RUBBER_TREE_BUTTON, RUBBER_TREE_SAPLING, RUBBER_TREE_DOOR, REINFORCED_DOOR, RUBBER_SHEET, STICKY_RESIN_SHEET
         );
     }
 

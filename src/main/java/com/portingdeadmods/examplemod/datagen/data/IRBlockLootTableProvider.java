@@ -20,7 +20,6 @@ public class IRBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        dropSelf(IRBlocks.EXAMPLE_BLOCK.get());
     }
 
     @Override

@@ -4,7 +4,8 @@ import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.api.client.screens.MachineScreen;
 import com.portingdeadmods.examplemod.api.energy.IRGenericEnergyWrapper;
 import com.portingdeadmods.examplemod.client.screens.widgets.BatterySlotWidget;
-import com.portingdeadmods.examplemod.content.menus.MaceratorMenu;
+import com.portingdeadmods.examplemod.content.menus.CanningMachineMenu;
+import com.portingdeadmods.examplemod.content.menus.ExtractorMenu;
 import com.portingdeadmods.examplemod.registries.IRTranslations;
 import com.portingdeadmods.portingdeadlibs.client.screens.widgets.EnergyBarWidget;
 import com.portingdeadmods.portingdeadlibs.client.screens.widgets.RedstonePanelWidget;
@@ -14,11 +15,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-public class MaceratorScreen extends MachineScreen<MaceratorMenu> {
+public class CanningMachineScreen extends MachineScreen<CanningMachineMenu> {
     public static final ResourceLocation PROGRESS_ARROW_SPRITE = IndustrialReclassified.rl("container/progress_arrow");
-    public static final ResourceLocation TEXTURE = IndustrialReclassified.rl("textures/gui/macerator.png");
+    public static final ResourceLocation TEXTURE = IndustrialReclassified.rl("textures/gui/canning_machine.png");
 
-    public MaceratorScreen(MaceratorMenu menu, Inventory playerInventory, Component title) {
+    public CanningMachineScreen(CanningMachineMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
     }
 
