@@ -33,6 +33,10 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
         this.components = components;
     }
 
+    public ResourceLocation getId() {
+        return id;
+    }
+
     public MachineRecipe(ResourceLocation id) {
         this(id, new LinkedHashMap<>());
     }

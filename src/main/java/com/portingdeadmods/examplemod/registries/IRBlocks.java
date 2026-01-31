@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 import java.util.Set;
@@ -31,6 +32,23 @@ public final class IRBlocks {
     public static final DeferredBlock<Block> WATER_MILL = BLOCKS.registerBlockWithItem("water_mill", Block::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<ReactorChamberBlock> NUCLEAR_REACTOR_CHAMBER = BLOCKS.registerBlockWithItem("nuclear_reactor_chamber", ReactorChamberBlock::new, MACHINE_FRAME_PROPS);
     public static final DeferredBlock<Block> NUCLEAR_REACTOR = BLOCKS.registerBlockWithItem("nuclear_reactor", Block::new, MACHINE_FRAME_PROPS);
+
+    // Cables
+    public static final BlockBehaviour.Properties CABLE_BLOCK_PROPS = BlockBehaviour.Properties.of()
+            .sound(SoundType.WOOL)
+            .mapColor(MapColor.COLOR_BLACK)
+            .strength(0.8f);
+    // CABLES
+    public static final DeferredBlock<CableBlock> TIN_CABLE = BLOCKS.registerWithItem("tin_cable",
+            () -> new CableBlock(CABLE_BLOCK_PROPS, 6, IREnergyTiers.LOW));
+    public static final DeferredBlock<CableBlock> COPPER_CABLE = BLOCKS.registerWithItem("copper_cable",
+            () -> new CableBlock(CABLE_BLOCK_PROPS, 6, IREnergyTiers.MEDIUM));
+    public static final DeferredBlock<CableBlock> GOLD_CABLE = BLOCKS.registerWithItem("gold_cable",
+            () -> new CableBlock(CABLE_BLOCK_PROPS, 6, IREnergyTiers.HIGH));
+    public static final DeferredBlock<CableBlock> HV_CABLE = BLOCKS.registerWithItem("hv_cable",
+            () -> new CableBlock(CABLE_BLOCK_PROPS, 6, IREnergyTiers.EXTREME));
+    public static final DeferredBlock<CableBlock> BURNT_CABLE = BLOCKS.registerWithItem("burnt_cable",
+            () -> new BurntCableBlock(CABLE_BLOCK_PROPS, 6, IREnergyTiers.NONE));
 
     // Storage Blocks
     public static final DeferredBlock<Block> TIN_BLOCK = BLOCKS.registerBlockWithItem("tin_block", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
@@ -82,7 +100,7 @@ public final class IRBlocks {
 
     static {
         CUSTOM_ITEM_MODELS = Set.of(
-            RUBBER_TREE_FENCE, RUBBER_TREE_TRAPDOOR, RUBBER_TREE_BUTTON, RUBBER_TREE_SAPLING, RUBBER_TREE_DOOR, REINFORCED_DOOR, RUBBER_SHEET, STICKY_RESIN_SHEET
+            RUBBER_TREE_FENCE, RUBBER_TREE_TRAPDOOR, RUBBER_TREE_BUTTON, RUBBER_TREE_SAPLING, RUBBER_TREE_DOOR, REINFORCED_DOOR, RUBBER_SHEET, STICKY_RESIN_SHEET, TIN_CABLE, COPPER_CABLE, GOLD_CABLE, HV_CABLE, BURNT_CABLE
         );
     }
 

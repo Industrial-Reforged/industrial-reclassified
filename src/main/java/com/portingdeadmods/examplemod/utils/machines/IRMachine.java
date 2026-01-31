@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -30,7 +31,7 @@ import java.util.function.Supplier;
 public record IRMachine(String name, Supplier<? extends EnergyTier> energyTierSupplier,
                         Supplier<? extends MachineBlock> blockSupplier, Supplier<BlockItem> blockItemSupplier,
                         Supplier<BlockEntityType<? extends MachineBlockEntity>> blockEntityTypeSupplier,
-                        @Nullable Supplier<MenuType<? extends MachineMenu<?>>> menuTypeSupplier) {
+                        @Nullable Supplier<MenuType<? extends MachineMenu<?>>> menuTypeSupplier) implements ItemLike {
     public static final Map<ResourceLocation, Supplier<BlockEntityType<? extends MachineBlockEntity>>> BLOCK_ENTITY_TYPES = Collections.synchronizedMap(new HashMap<>());
     public static final AtomicReference<MachineBlock.Builder> MACHINE_BLOCK_BUILDER = new AtomicReference<>();
 
@@ -56,6 +57,11 @@ public record IRMachine(String name, Supplier<? extends EnergyTier> energyTierSu
 
     public static Builder builder(Supplier<? extends EnergyTier> energyTierSupplier) {
         return new Builder(energyTierSupplier);
+    }
+
+    @Override
+    public Item asItem() {
+        return this.getBlockItem();
     }
 
     public static class Builder {

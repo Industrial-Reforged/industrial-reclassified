@@ -2,8 +2,8 @@ package com.portingdeadmods.examplemod.content.items.electric;
 
 import com.mojang.datafixers.util.Pair;
 import com.portingdeadmods.examplemod.IRDataComponents;
-import com.portingdeadmods.examplemod.api.energy.ElectricToolItem;
-import com.portingdeadmods.examplemod.api.energy.EnergyItem;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
+import com.portingdeadmods.examplemod.api.energy.items.EnergyItem;
 import com.portingdeadmods.examplemod.impl.energy.ComponentEuStorage;
 import com.portingdeadmods.examplemod.impl.energy.EnergyTierImpl;
 import com.portingdeadmods.examplemod.utils.ItemBarUtils;

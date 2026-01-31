@@ -14,6 +14,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -148,6 +149,21 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
 
     public void setRedstoneSignalStrength(int redstoneSignalStrength) {
         this.redstoneSignalStrength = redstoneSignalStrength;
+    }
+
+    public void initCapCache() {
+        if (level instanceof ServerLevel serverLevel) {
+            for (Direction direction : Direction.values()) {
+                this.caches.add(BlockCapabilityCache.create(IRCapabilities.ENERGY_BLOCK, serverLevel, worldPosition.relative(direction), direction));
+            }
+        }
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+
+        this.initCapCache();
     }
 
     public int getRedstoneSignalStrength() {

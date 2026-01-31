@@ -5,6 +5,7 @@ import com.portingdeadmods.examplemod.client.items.IRItemProperties;
 import com.portingdeadmods.examplemod.client.screens.*;
 import com.portingdeadmods.examplemod.content.items.electric.BatteryItem;
 import com.portingdeadmods.examplemod.registries.*;
+import com.thepigcat.transportlib.client.debug.TransportNetworkRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.TntRenderer;
@@ -22,6 +23,8 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForgeMod;
 
 @Mod(value = IndustrialReclassified.MODID, dist = Dist.CLIENT)
 public final class IndustrialReclassifiedClient {
@@ -30,6 +33,7 @@ public final class IndustrialReclassifiedClient {
         modEventBus.addListener(this::onClientSetup);
         modEventBus.addListener(this::registerItemColor);
         modEventBus.addListener(this::registerEntityRenderers);
+        NeoForge.EVENT_BUS.addListener(TransportNetworkRenderer::renderNetworkNodes);
 
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }

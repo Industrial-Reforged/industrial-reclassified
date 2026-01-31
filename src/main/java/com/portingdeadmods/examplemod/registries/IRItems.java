@@ -5,6 +5,7 @@ import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.content.items.*;
 import com.portingdeadmods.examplemod.content.items.electric.*;
 import com.portingdeadmods.portingdeadlibs.api.utils.PDLDeferredRegisterItems;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -54,15 +55,15 @@ public final class IRItems {
     public static final DeferredItem<ElectricChainsawItem> BASIC_CHAINSAW = ITEMS.registerItem("basic_chainsaw", ElectricChainsawItem::basicItem);
     public static final DeferredItem<ElectricChainsawItem> ADVANCED_CHAINSAW = ITEMS.registerItem("advanced_chainsaw", ElectricChainsawItem::advancedItem);
     /* Electric Armor */
-    public static final DeferredItem<Item> NANO_HELMET = ITEMS.registerSimpleItem("nano_helmet");
-    public static final DeferredItem<Item> NANO_CHESTPLATE = ITEMS.registerSimpleItem("nano_chestplate");
-    public static final DeferredItem<Item> NANO_LEGGINGS = ITEMS.registerSimpleItem("nano_leggings");
-    public static final DeferredItem<Item> NANO_BOOTS = ITEMS.registerSimpleItem("nano_boots");
+    public static final DeferredItem<NanoArmorItem> NANO_HELMET = ITEMS.registerItem("nano_helmet", props -> NanoArmorItem.defaultItem(props, ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> NANO_CHESTPLATE = ITEMS.registerItem("nano_chestplate", props -> NanoArmorItem.defaultItem(props, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> NANO_LEGGINGS = ITEMS.registerItem("nano_leggings", props -> NanoArmorItem.defaultItem(props, ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> NANO_BOOTS = ITEMS.registerItem("nano_boots", props -> NanoArmorItem.defaultItem(props, ArmorItem.Type.BOOTS));
 
-    public static final DeferredItem<Item> QUANTUM_HELMET = ITEMS.registerSimpleItem("quantum_helmet");
-    public static final DeferredItem<Item> QUANTUM_CHESTPLATE = ITEMS.registerSimpleItem("quantum_chestplate");
-    public static final DeferredItem<Item> QUANTUM_LEGGINGS = ITEMS.registerSimpleItem("quantum_leggings");
-    public static final DeferredItem<Item> QUANTUM_BOOTS = ITEMS.registerSimpleItem("quantum_boots");
+    public static final DeferredItem<Item> QUANTUM_HELMET = ITEMS.registerItem("quantum_helmet", props -> QuantumArmorItem.defaultItem(props, ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> QUANTUM_CHESTPLATE = ITEMS.registerItem("quantum_chestplate", props -> QuantumArmorItem.defaultItem(props, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> QUANTUM_LEGGINGS = ITEMS.registerItem("quantum_leggings", props -> QuantumArmorItem.defaultItem(props, ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> QUANTUM_BOOTS = ITEMS.registerItem("quantum_boots", props -> QuantumArmorItem.defaultItem(props, ArmorItem.Type.BOOTS));
 
     public static final DeferredItem<Item> JETPACK = ITEMS.registerSimpleItem("jetpack");
     public static final DeferredItem<Item> ELECTRIC_JETPACK = ITEMS.registerSimpleItem("electric_jetpack");

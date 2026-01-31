@@ -2,6 +2,8 @@ package com.portingdeadmods.examplemod.content.items.electric;
 
 import com.portingdeadmods.examplemod.api.CustomWrenchableBlock;
 import com.portingdeadmods.examplemod.api.energy.*;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
+import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;

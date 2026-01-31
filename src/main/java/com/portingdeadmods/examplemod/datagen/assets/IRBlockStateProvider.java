@@ -1,10 +1,10 @@
 package com.portingdeadmods.examplemod.datagen.assets;
 
 import com.portingdeadmods.examplemod.IndustrialReclassified;
+import com.portingdeadmods.examplemod.api.blocks.PipeBlock;
 import com.portingdeadmods.examplemod.content.blocks.RubberTreeResinHoleBlock;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRMachines;
-import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import com.portingdeadmods.portingdeadlibs.api.datagen.ModelBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,6 +18,8 @@ import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 public class IRBlockStateProvider extends BlockStateProvider {
     public IRBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
@@ -45,6 +47,12 @@ public class IRBlockStateProvider extends BlockStateProvider {
         simpleBlock(IRBlocks.TIN_BLOCK.get());
         simpleBlock(IRBlocks.URANIUM_BLOCK.get());
         simpleBlock(IRBlocks.BRONZE_BLOCK.get());
+
+        cableBlock(IRBlocks.TIN_CABLE.get(), 6);
+        cableBlock(IRBlocks.COPPER_CABLE.get(), 6);
+        cableBlock(IRBlocks.GOLD_CABLE.get(), 6);
+        cableBlock(IRBlocks.HV_CABLE.get(), 8);
+        cableBlock(IRBlocks.BURNT_CABLE.get(), 4);
 
         modelBuilder(IRMachines.BASIC_GENERATOR.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
@@ -113,6 +121,62 @@ public class IRBlockStateProvider extends BlockStateProvider {
                 .front(this::blockTextureSuffix, "_front")
                 .horizontalFacing()
                 .create();
+
+        modelBuilder(IRMachines.CHARGE_PAD.getBlock())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .top(this::blockTextureSuffix, "_top")
+                .horizontalFacing()
+                .create();
+    }
+
+
+
+    private void cableBlock(Block block, int width) {
+        MultiPartBlockStateBuilder builder = getMultipartBuilder(block);
+        cableConnection(builder, block, width, Direction.DOWN, 0, 0);
+        cableConnection(builder, block, width, Direction.UP, 180, 0);
+        cableConnection(builder, block, width, Direction.NORTH, 90, 180);
+        cableConnection(builder, block, width, Direction.EAST, 90, 270);
+        cableConnection(builder, block, width, Direction.SOUTH, 90, 0);
+        cableConnection(builder, block, width, Direction.WEST, 90, 90);
+        builder.part().modelFile(cableBaseModel(block, width)).addModel().end();
+    }
+
+    private ModelFile cableBaseModel(Block block, int width) {
+        ResourceLocation loc = BuiltInRegistries.BLOCK.getKey(block);
+        float from = (16 - width) / 2F;
+        float to = (16 + width) / 2F;
+        return models().withExistingParent(loc.getPath() + "_base", mcLoc("block/block"))
+                .texture("texture", loc.withPrefix("block/"))
+                .texture("particle", loc.withPrefix("block/"))
+                .element()
+                .from(from, from, from)
+                .to(to, to, to)
+                .allFaces((direction, builder) -> builder.uvs(from, from, to, to).texture("#texture").end().end())
+                .end();
+    }
+
+    private ModelFile cableConnectionModel(Block block, int width) {
+        ResourceLocation loc = BuiltInRegistries.BLOCK.getKey(block);
+        float from = (16 - width) / 2F;
+        float to = (16 + width) / 2F;
+
+        return models().withExistingParent(loc.getPath() + "_connection", mcLoc("block/block"))
+                .texture("texture", loc.withPrefix("block/"))
+                .texture("particle", loc.withPrefix("block/"))
+                .element()
+                .from(from, 0, from)
+                .to(to, from, to)
+                .allFacesExcept((direction, builder) -> {
+                    if (direction == Direction.DOWN) builder.texture("#texture").cullface(direction);
+                    else builder.texture("#texture");
+                }, Set.of(Direction.UP))
+                .end();
+    }
+
+    private void cableConnection(MultiPartBlockStateBuilder builder, Block block, int width, Direction direction, int x, int y) {
+        builder.part().modelFile(cableConnectionModel(block, width)).rotationX(x).rotationY(y).addModel()
+                .condition(PipeBlock.CONNECTION[direction.get3DDataValue()], true).end();
     }
 
     private void sheetBlock(Block block) {

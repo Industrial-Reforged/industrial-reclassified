@@ -49,7 +49,11 @@ public record ItemInputComponent(Ingredient ingredient, int count, float chance)
     }
 
     public ItemInputComponent(ItemLike item) {
-        this(Ingredient.of(item), 1);
+        this(item, 1);
+    }
+
+    public ItemInputComponent(ItemLike item, int count) {
+        this(Ingredient.of(item), count);
     }
 
     public ItemInputComponent(TagKey<Item> tag) {

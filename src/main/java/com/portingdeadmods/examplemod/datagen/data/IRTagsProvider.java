@@ -1,7 +1,10 @@
 package com.portingdeadmods.examplemod.datagen.data;
 
+import com.mojang.datafixers.util.Either;
+import com.portingdeadmods.examplemod.IRTags;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
+import com.portingdeadmods.examplemod.tags.CTags;
 import com.portingdeadmods.portingdeadlibs.api.fluids.PDLFluid;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -19,7 +22,9 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public class IRTagsProvider {
     public static void createTagProviders(DataGenerator generator, PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper, boolean isServer) {
@@ -36,7 +41,16 @@ public class IRTagsProvider {
 
         @Override
         protected void addTags(HolderLookup.@NotNull Provider provider) {
-            //tag(ItemTags.COMPASSES, IRItems.EXAMPLE_ITEM.get());
+            CTags.ItemTags.TAGS.forEach(this::addTag);
+            IRTags.ItemTags.TAGS.forEach(this::addTag);
+        }
+
+        private void addTag(TagKey<Item> itemTagKey, Supplier<List<Either<ItemLike, TagKey<Item>>>> listSupplier) {
+            IntrinsicTagAppender<Item> tag = tag(itemTagKey);
+            for (Either<ItemLike, TagKey<Item>> entry : listSupplier.get()) {
+                entry.ifLeft(item -> tag.add(item.asItem()));
+                entry.ifRight(tag::addTag);
+            }
         }
 
         private void tag(TagKey<Item> itemTagKey, ItemLike... items) {

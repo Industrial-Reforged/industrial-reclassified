@@ -1,6 +1,7 @@
-package com.portingdeadmods.examplemod.api.energy;
+package com.portingdeadmods.examplemod.api.energy.items;
 
 import com.portingdeadmods.examplemod.IRCapabilities;
+import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;

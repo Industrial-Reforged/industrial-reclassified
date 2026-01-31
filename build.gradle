@@ -27,6 +27,17 @@ repositories {
         url = "https://maven.blamejared.com/"
     }
 
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
+
     // Porting Dead Libs
     maven { url 'https://jitpack.io' }
 }
@@ -100,6 +111,8 @@ dependencies {
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     implementation "com.github.Porting-Dead-Mods:Porting-Dead-Libs:${pdl_version}"
+
+    implementation "curse.maven:transport-lib-1438695:7518566"
 }
 
 def parts = pdl_version.tokenize('.')

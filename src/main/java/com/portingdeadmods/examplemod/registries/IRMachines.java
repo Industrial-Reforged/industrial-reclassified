@@ -34,6 +34,13 @@ public final class IRMachines {
             )
             .blockEntity(ElectricFurnaceBlockEntity::new)
             .menu(ElectricFurnaceMenu::new));
+    public static final IRMachine CHARGE_PAD = HELPER.registerMachine("charge_pad", IRMachine.builder(IREnergyTiers.LOW)
+            .block(MachineBlock::new, builder -> builder
+                    .activatable()
+                    .rotatable()
+                    .ticking()
+            )
+            .blockEntity(ChargePadBlockEntity::new));
     public static final IRMachine COMPRESSOR = HELPER.registerMachine("compressor", IRMachine.builder(IREnergyTiers.LOW)
             .block(MachineBlock::new, builder -> builder
                     .activatable()

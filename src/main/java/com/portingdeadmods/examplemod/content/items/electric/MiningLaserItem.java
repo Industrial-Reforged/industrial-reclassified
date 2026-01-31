@@ -1,8 +1,8 @@
 package com.portingdeadmods.examplemod.content.items.electric;
 
-import com.portingdeadmods.examplemod.api.energy.ElectricToolItem;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
-import com.portingdeadmods.examplemod.api.energy.SimpleEnergyItem;
+import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;

@@ -1,15 +1,18 @@
 package com.portingdeadmods.examplemod.datagen.assets;
 
+import com.mojang.math.Transformation;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.client.items.IRItemProperties;
 import com.portingdeadmods.examplemod.content.items.electric.BatteryItem;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;
+import net.minecraft.client.resources.model.BuiltInModel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluids;
@@ -117,6 +120,12 @@ public class IRItemModelProvider extends ItemModelProvider {
         basicItem(IRItems.SCRAP_BOX.get());
         basicItem(IRItems.UU_MATTER.get());
 
+        cableItem(IRBlocks.TIN_CABLE.get(), 6);
+        cableItem(IRBlocks.COPPER_CABLE.get(), 6);
+        cableItem(IRBlocks.GOLD_CABLE.get(), 6);
+        cableItem(IRBlocks.HV_CABLE.get(), 8);
+        cableItem(IRBlocks.BURNT_CABLE.get(), 4);
+
         basicItemBlock(IRBlocks.RUBBER_TREE_DOOR.asItem(), "tree");
         basicItemBlock(IRBlocks.RUBBER_TREE_SAPLING.asItem(), "tree");
         parentItemBlock(IRBlocks.RUBBER_TREE_BUTTON.get().asItem(), "_inventory");
@@ -140,6 +149,35 @@ public class IRItemModelProvider extends ItemModelProvider {
                 .applyTint(true)
                 .flipGas(true)
                 .fluid(Fluids.EMPTY);
+    }
+
+    protected void cableItem(ItemLike cable, int width) {
+        ResourceLocation loc = BuiltInRegistries.ITEM.getKey(cable.asItem());
+        float from = (16 - width) / 2F;
+        float to = (16 + width) / 2F;
+
+        ItemModelBuilder modelBuilder = withExistingParent(loc.getPath(), mcLoc("block/block"))
+                .texture("texture", loc.withPrefix("block/"))
+                .texture("particle", loc.withPrefix("block/"))
+                .element()
+                .from(16 - width, from, from)
+                .to(16, to, to)
+                .allFaces((direction, builder) -> builder.uvs(from, from, to, to).texture("#texture"))
+                .end()
+                .element()
+                .from(0, from, from)
+                .to(width, to, to)
+                .allFaces((direction, builder) -> builder.uvs(from, from, to, to).texture("#texture"))
+                .end();
+        // Middle part
+        if (width < 8) {
+            modelBuilder.element()
+                    .from(width, from, from)
+                    .to(16 - width, to, to)
+                    .allFaces((direction, builder) -> builder.uvs(width, 16 - width, 16 - width, 16).texture("#texture"))
+                    .end();
+        }
+
     }
 
     private void batteryModel(BatteryItem item) {

@@ -34,8 +34,8 @@ public record ItemInputListComponent(List<ItemInputComponent> inputs) implements
         this(List.of(new ItemInputComponent(ingredient, count, 1)));
     }
 
-    public ItemInputListComponent(Ingredient ingredient) {
-        this(ingredient, 1);
+    public ItemInputListComponent(Ingredient ...ingredients) {
+        this(Arrays.stream(ingredients).map(ItemInputComponent::new).toList());
     }
 
     public ItemInputListComponent(ItemLike ...items) {

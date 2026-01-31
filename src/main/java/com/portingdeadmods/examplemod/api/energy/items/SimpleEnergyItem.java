@@ -1,8 +1,8 @@
-package com.portingdeadmods.examplemod.api.energy;
+package com.portingdeadmods.examplemod.api.energy.items;
 
 import com.portingdeadmods.examplemod.IRDataComponents;
+import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import com.portingdeadmods.examplemod.impl.energy.ComponentEuStorage;
-import com.portingdeadmods.examplemod.impl.energy.EnergyTierImpl;
 import com.portingdeadmods.examplemod.utils.ItemBarUtils;
 import com.portingdeadmods.examplemod.utils.TooltipUtils;
 import net.minecraft.network.chat.Component;
@@ -43,11 +43,6 @@ public abstract class SimpleEnergyItem extends Item implements EnergyItem {
     @Override
     public boolean isBarVisible(ItemStack stack) {
         return true;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack, LivingEntity p_344979_) {
-        return 1;
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.portingdeadmods.examplemod.content.items.electric;
 
-import com.portingdeadmods.examplemod.api.energy.ElectricToolItem;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
-import com.portingdeadmods.examplemod.api.energy.SimpleEnergyItem;
+import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
 import com.portingdeadmods.examplemod.content.blocks.RubberTreeResinHoleBlock;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;

@@ -1,7 +1,8 @@
-package com.portingdeadmods.examplemod.api.energy;
+package com.portingdeadmods.examplemod.api.energy.items;
 
 import com.portingdeadmods.examplemod.IRCapabilities;
-import com.portingdeadmods.examplemod.impl.energy.EnergyTierImpl;
+import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
+import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import net.minecraft.world.item.ItemStack;
 
 public interface EnergyItem {

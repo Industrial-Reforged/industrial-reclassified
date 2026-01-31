@@ -2,9 +2,8 @@ package com.portingdeadmods.examplemod.impl.energy;
 
 import com.portingdeadmods.examplemod.IRDataComponents;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
-import com.portingdeadmods.examplemod.api.energy.EnergyItem;
+import com.portingdeadmods.examplemod.api.energy.items.EnergyItem;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
-import com.portingdeadmods.portingdeadlibs.api.items.IEnergyItem;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;

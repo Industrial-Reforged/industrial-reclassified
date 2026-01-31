@@ -10,6 +10,7 @@ import com.portingdeadmods.examplemod.content.menus.BasicGeneratorMenu;
 import com.portingdeadmods.examplemod.impl.energy.EnergyHandlerImpl;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import com.portingdeadmods.examplemod.registries.IRMachines;
+import com.portingdeadmods.examplemod.registries.IRNetworks;
 import com.portingdeadmods.examplemod.registries.IRTranslations;
 import com.portingdeadmods.portingdeadlibs.api.utils.PDLBlockStateProperties;
 import com.portingdeadmods.portingdeadlibs.utils.capabilities.CapabilityUtils;
@@ -132,8 +133,8 @@ public class BasicGeneratorBlockEntity extends MachineBlockEntity implements Men
             EnergyHandler thisEnergyStorage = this.getEuStorage();
             if (level instanceof ServerLevel serverLevel) {
                 int min = Math.min(thisEnergyStorage.getEnergyTier().maxOutput(), thisEnergyStorage.getEnergyStored());
-                //int remainder = IRNetworks.ENERGY_NETWORK.get().transport(serverLevel, this.worldPosition, min);
-                //thisEnergyStorage.drainEnergy(min - remainder, false);
+                int remainder = IRNetworks.ENERGY.get().transport(serverLevel, this.worldPosition, min);
+                thisEnergyStorage.drainEnergy(min - remainder, false);
             }
         }
     }

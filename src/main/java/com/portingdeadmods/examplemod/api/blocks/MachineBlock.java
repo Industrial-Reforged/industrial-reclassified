@@ -8,6 +8,7 @@ import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import com.portingdeadmods.portingdeadlibs.api.blockentities.ContainerBlockEntity;
 import com.portingdeadmods.portingdeadlibs.api.blocks.ContainerBlock;
 import com.portingdeadmods.portingdeadlibs.api.utils.PDLBlockStateProperties;
+import com.portingdeadmods.portingdeadlibs.utils.BlockUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -92,6 +93,13 @@ public class MachineBlock extends ContainerBlock {
             this.blockEntityType = IRMachine.BLOCK_ENTITY_TYPES.get(BuiltInRegistries.BLOCK.getKey(this)).get();
         }
         return this.blockEntityType;
+    }
+
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
+
+        BlockUtils.getBE(MachineBlockEntity.class, level, pos).initCapCache();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.portingdeadmods.examplemod.content.items.electric;
 
 import com.portingdeadmods.examplemod.IRConfig;
-import com.portingdeadmods.examplemod.api.energy.ElectricDiggerItem;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricDiggerItem;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import net.minecraft.tags.BlockTags;

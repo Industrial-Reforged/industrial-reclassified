@@ -3,7 +3,7 @@ package com.portingdeadmods.examplemod.content.items.electric;
 import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.IRDataComponents;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.api.energy.ElectricSwordItem;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricSwordItem;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;

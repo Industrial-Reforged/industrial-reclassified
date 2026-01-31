@@ -1,8 +1,7 @@
 package com.portingdeadmods.examplemod;
 
 import com.portingdeadmods.examplemod.api.blockentities.MachineBlockEntity;
-import com.portingdeadmods.examplemod.api.blocks.MachineBlock;
-import com.portingdeadmods.examplemod.api.energy.EnergyItem;
+import com.portingdeadmods.examplemod.api.energy.items.EnergyItem;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
 import com.portingdeadmods.examplemod.content.recipes.RegisterRecipeLayoutEvent;
 import com.portingdeadmods.examplemod.content.worldgen.IRPlacerTypes;
@@ -22,7 +21,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -65,6 +63,8 @@ public final class IndustrialReclassified {
         IRPlacerTypes.FOLIAGE_PLACERS.register(modEventBus);
         IRPlacerTypes.TRUNK_PLACERS.register(modEventBus);
         IRMachines.HELPER.register(modEventBus);
+        IRArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
+        IRNetworks.NETWORKS.register(modEventBus);
 
         PDLConfigHelper.registerConfig(IRConfig.class, ModConfig.Type.COMMON, modContainer);
     }

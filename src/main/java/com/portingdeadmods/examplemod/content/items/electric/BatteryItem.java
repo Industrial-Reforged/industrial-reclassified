@@ -4,7 +4,7 @@ import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.IRDataComponents;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
-import com.portingdeadmods.examplemod.api.energy.SimpleEnergyItem;
+import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import com.portingdeadmods.examplemod.registries.IRTranslations;
 import net.minecraft.ChatFormatting;
