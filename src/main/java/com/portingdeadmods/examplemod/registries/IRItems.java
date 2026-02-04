@@ -24,14 +24,15 @@ public final class IRItems {
     public static final DeferredItem<Item> IRIDIUM_INGOT = ITEMS.registerSimpleItem("iridium_ingot");
     public static final DeferredItem<Item> URANIUM_INGOT = ITEMS.registerSimpleItem("uranium_ingot");
     public static final DeferredItem<Item> MIXED_METAL_INGOT = ITEMS.registerSimpleItem("mixed_metal_ingot");
+    public static final DeferredItem<Item> IRIDIUM_ALLOY_INGOT = ITEMS.registerSimpleItem("iridium_alloy_ingot");
     /* Plates */
     public static final DeferredItem<Item> TIN_PLATE = ITEMS.registerSimpleItem("tin_plate");
     public static final DeferredItem<Item> COPPER_PLATE = ITEMS.registerSimpleItem("copper_plate");
     public static final DeferredItem<Item> DENSE_COPPER_PLATE = ITEMS.registerSimpleItem("dense_copper_plate");
-    public static final DeferredItem<Item> IRIDIUM_PLATE = ITEMS.registerSimpleItem("iridium_plate");
     public static final DeferredItem<Item> ADVANCED_ALLOY_PLATE = ITEMS.registerSimpleItem("advanced_alloy_plate");
     /* Dusts */
     public static final DeferredItem<Item> TIN_DUST = ITEMS.registerSimpleItem("tin_dust");
+    public static final DeferredItem<Item> BRONZE_DUST = ITEMS.registerSimpleItem("bronze_dust");
     public static final DeferredItem<Item> COPPER_DUST = ITEMS.registerSimpleItem("copper_dust");
     public static final DeferredItem<Item> IRON_DUST = ITEMS.registerSimpleItem("iron_dust");
     public static final DeferredItem<Item> GOLD_DUST = ITEMS.registerSimpleItem("gold_dust");

@@ -41,6 +41,11 @@ public class IRBlockStateProvider extends BlockStateProvider {
                 .top(block -> this.blockTextureSuffix(Blocks.TNT, "_top"))
                 .bottom(block -> this.blockTextureSuffix(Blocks.TNT, "_bottom"))
                 .create();
+        modelBuilder(IRBlocks.NUKE.get())
+                .sides(this::blockTextureSuffix, "_side")
+                .top(block -> this.blockTextureSuffix(Blocks.TNT, "_top"))
+                .bottom(block -> this.blockTextureSuffix(Blocks.TNT, "_bottom"))
+                .create();
         sheetBlock(IRBlocks.STICKY_RESIN_SHEET.get());
         sheetBlock(IRBlocks.RUBBER_SHEET.get());
 
@@ -52,6 +57,7 @@ public class IRBlockStateProvider extends BlockStateProvider {
         cableBlock(IRBlocks.COPPER_CABLE.get(), 6);
         cableBlock(IRBlocks.GOLD_CABLE.get(), 6);
         cableBlock(IRBlocks.HV_CABLE.get(), 8);
+        cableBlock(IRBlocks.GLASS_FIBRE_CABLE.get(), 4);
         cableBlock(IRBlocks.BURNT_CABLE.get(), 4);
 
         modelBuilder(IRMachines.BASIC_GENERATOR.getBlock())
@@ -103,6 +109,13 @@ public class IRBlockStateProvider extends BlockStateProvider {
                 .create();
 
         modelBuilder(IRMachines.COMPRESSOR.getBlock())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .top(this::blockTextureSuffix, "_top")
+                .horizontalFacing()
+                .create();
+
+        modelBuilder(IRMachines.RECYCLER.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .front(this::blockTextureSuffix, "_front")
                 .top(this::blockTextureSuffix, "_top")

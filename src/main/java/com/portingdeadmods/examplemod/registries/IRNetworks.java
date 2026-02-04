@@ -1,6 +1,7 @@
 package com.portingdeadmods.examplemod.registries;
 
 import com.portingdeadmods.examplemod.IRCapabilities;
+import com.portingdeadmods.examplemod.impl.networks.EnergyNetwork;
 import com.portingdeadmods.examplemod.impl.networks.EnergyTransportHandler;
 import com.thepigcat.transportlib.TransportLib;
 import com.thepigcat.transportlib.api.TransferSpeed;
@@ -15,7 +16,7 @@ import java.util.function.Supplier;
 public final class IRNetworks {
     public static final DeferredRegister<TransportNetwork<?>> NETWORKS = DeferredRegister.create(TransportLib.NETWORK_REGISTRY, TransportLib.MODID);
 
-    public static final Supplier<TransportNetworkImpl<Integer>> ENERGY = NETWORKS.register("energy", () -> TransportNetworkImpl.builder(EnergyTransportHandler.INSTANCE)
+    public static final Supplier<EnergyNetwork> ENERGY = NETWORKS.register("energy", () -> EnergyNetwork.build(TransportNetworkImpl.builder(EnergyTransportHandler.INSTANCE)
             //.synced(ByteBufCodecs.INT)
             .interactorCheck((level, pos, dir) -> {
                 BlockEntity be = level.getBlockEntity(pos.relative(dir));
@@ -24,7 +25,7 @@ public final class IRNetworks {
                 }
                 return false;
             })
-            .transferSpeed(TransferSpeed::instant)
-            .build());
+            .transferSpeed(TransferSpeed::instant))
+    );
 
 }

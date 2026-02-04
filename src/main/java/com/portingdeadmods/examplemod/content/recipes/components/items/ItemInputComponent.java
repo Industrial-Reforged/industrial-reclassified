@@ -56,8 +56,12 @@ public record ItemInputComponent(Ingredient ingredient, int count, float chance)
         this(Ingredient.of(item), count);
     }
 
+    public ItemInputComponent(TagKey<Item> item, int count) {
+        this(Ingredient.of(item), count);
+    }
+
     public ItemInputComponent(TagKey<Item> tag) {
-        this(Ingredient.of(tag), 1);
+        this(tag, 1);
     }
 
     @Override

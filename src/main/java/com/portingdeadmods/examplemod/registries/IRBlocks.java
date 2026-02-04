@@ -47,8 +47,10 @@ public final class IRBlocks {
             () -> new CableBlock(CABLE_BLOCK_PROPS, 6, IREnergyTiers.HIGH));
     public static final DeferredBlock<CableBlock> HV_CABLE = BLOCKS.registerWithItem("hv_cable",
             () -> new CableBlock(CABLE_BLOCK_PROPS, 6, IREnergyTiers.EXTREME));
+    public static final DeferredBlock<CableBlock> GLASS_FIBRE_CABLE = BLOCKS.registerWithItem("glass_fibre_cable",
+            () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(HV_CABLE.get()).sound(SoundType.GLASS), 4, IREnergyTiers.INSANE));
     public static final DeferredBlock<CableBlock> BURNT_CABLE = BLOCKS.registerWithItem("burnt_cable",
-            () -> new BurntCableBlock(CABLE_BLOCK_PROPS, 6, IREnergyTiers.NONE));
+            () -> new BurntCableBlock(CABLE_BLOCK_PROPS, 4, IREnergyTiers.NONE));
 
     // Storage Blocks
     public static final DeferredBlock<Block> TIN_BLOCK = BLOCKS.registerBlockWithItem("tin_block", Block::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK));
@@ -97,10 +99,11 @@ public final class IRBlocks {
             () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SLAB)));
     public static final DeferredBlock<Block> TIN_ORE = BLOCKS.registerWithItem("tin_ore",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
+    public static final DeferredBlock<TntBlock> NUKE = BLOCKS.registerBlockWithItem("nuke", TntBlock::new);
 
     static {
         CUSTOM_ITEM_MODELS = Set.of(
-            RUBBER_TREE_FENCE, RUBBER_TREE_TRAPDOOR, RUBBER_TREE_BUTTON, RUBBER_TREE_SAPLING, RUBBER_TREE_DOOR, REINFORCED_DOOR, RUBBER_SHEET, STICKY_RESIN_SHEET, TIN_CABLE, COPPER_CABLE, GOLD_CABLE, HV_CABLE, BURNT_CABLE
+            RUBBER_TREE_FENCE, RUBBER_TREE_TRAPDOOR, RUBBER_TREE_BUTTON, RUBBER_TREE_SAPLING, RUBBER_TREE_DOOR, REINFORCED_DOOR, RUBBER_SHEET, STICKY_RESIN_SHEET, TIN_CABLE, COPPER_CABLE, GOLD_CABLE, HV_CABLE, GLASS_FIBRE_CABLE, BURNT_CABLE
         );
     }
 

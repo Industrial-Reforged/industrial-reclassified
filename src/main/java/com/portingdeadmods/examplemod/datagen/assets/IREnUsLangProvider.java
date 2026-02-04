@@ -3,6 +3,7 @@ package com.portingdeadmods.examplemod.datagen.assets;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;
+import com.portingdeadmods.examplemod.registries.IRMachines;
 import com.portingdeadmods.examplemod.registries.IRTranslations;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -16,22 +17,37 @@ public class IREnUsLangProvider extends LanguageProvider {
     protected void addTranslations() {
         IRTranslations.TRANSLATIONS.getDefaultTranslations().forEach(this::add);
 
+        addItem(IRItems.RAW_TIN, "Raw Tin");
+        addItem(IRItems.RAW_URANIUM, "Raw Uranium");
+        addItem(IRItems.RAW_IRIDIUM, "Raw Iridium");
+
         addItem(IRItems.TIN_INGOT, "Tin Ingot");
-        addItem(IRItems.REFINED_IRON_INGOT, "Uranium Ingot");
+        addItem(IRItems.REFINED_IRON_INGOT, "Refined Iron Ingot");
         addItem(IRItems.URANIUM_INGOT, "Uranium Ingot");
         addItem(IRItems.BRONZE_INGOT, "Bronze Ingot");
         addItem(IRItems.IRIDIUM_INGOT, "Iridium Ingot");
-        
+        addItem(IRItems.MIXED_METAL_INGOT, "Mixed Metal Ingot");
+        addItem(IRItems.IRIDIUM_ALLOY_INGOT, "Iridium Alloy Ingot");
+
         addItem(IRItems.TIN_PLATE, "Tin Plate");
+        addItem(IRItems.COPPER_PLATE, "Copper Plate");
+        addItem(IRItems.DENSE_COPPER_PLATE, "Dense Copper Plate");
         addItem(IRItems.ADVANCED_ALLOY_PLATE, "Advanced Alloy Plate");
-        
+
+        addItem(IRItems.TIN_DUST, "Tin Dust");
+        addItem(IRItems.BRONZE_DUST, "Bronze Dust");
+        addItem(IRItems.COPPER_DUST, "Copper Dust");
+        addItem(IRItems.IRON_DUST, "Iron Dust");
+        addItem(IRItems.GOLD_DUST, "Gold Dust");
+        addItem(IRItems.COAL_DUST, "Coal Dust");
+
         addItem(IRItems.BASIC_CIRCUIT, "Basic Circuit");
         addItem(IRItems.ADVANCED_CIRCUIT, "Advanced Circuit");
-        
+
         addItem(IRItems.WRENCH, "Wrench");
         addItem(IRItems.TREETAP, "Treetap");
         addItem(IRItems.CUTTER, "Cutter");
-        
+
         addItem(IRItems.ELECTRIC_TREETAP, "Electric Treetap");
         addItem(IRItems.ELECTRIC_WRENCH, "Electric Wrench");
         addItem(IRItems.ELECTRIC_HOE, "Electric Hoe");
@@ -78,13 +94,38 @@ public class IREnUsLangProvider extends LanguageProvider {
 
         addItem(IRItems.PLANT_BALL, "Plant Ball");
 
+        addItem(IRItems.SINGLE_URANIUM_FUEL_ROD, "Uranium Fuel Rod");
+        addItem(IRItems.DOUBLE_URANIUM_FUEL_ROD, "Double Uranium Fuel Rod");
+        addItem(IRItems.QUAD_URANIUM_FUEL_ROD, "Quad Uranium Fuel Rod");
+
         addBlock(IRBlocks.INDUSTRIAL_TNT, "Industrial Tnt");
 
         addBlock(IRBlocks.MACHINE_FRAME, "Machine Frame");
+        addBlock(IRBlocks.ADVANCED_MACHINE_FRAME, "Machine Frame");
+
+        addBlock(IRBlocks.TIN_CABLE, "Tin Cable");
+        addBlock(IRBlocks.COPPER_CABLE, "Copper Cable");
+        addBlock(IRBlocks.GOLD_CABLE, "Gold Cable");
+        addBlock(IRBlocks.HV_CABLE, "HV Cable");
+        addBlock(IRBlocks.GLASS_FIBRE_CABLE, "Glass Fibre Cable");
+        addBlock(IRBlocks.BURNT_CABLE, "Burnt Cable");
 
         addBlock(IRBlocks.REINFORCED_DOOR, "Reinforced Door");
         addBlock(IRBlocks.REINFORCED_GLASS, "Reinforced Glass");
         addBlock(IRBlocks.REINFORCED_STONE, "Reinforced Stone");
+
+        addBlock(IRBlocks.RUBBER_SHEET, "Rubber Sheet");
+        addBlock(IRBlocks.STICKY_RESIN_SHEET, "Sticky Resin Sheet");
+
+        add(IRMachines.BASIC_GENERATOR.getBlock(), "Basic Generator");
+        add(IRMachines.ELECTRIC_FURNACE.getBlock(), "Electric Furnace");
+        add(IRMachines.CHARGE_PAD.getBlock(), "Charge Pad");
+        add(IRMachines.COMPRESSOR.getBlock(), "Compressor");
+        add(IRMachines.RECYCLER.getBlock(), "Recycler");
+        add(IRMachines.MACERATOR.getBlock(), "Macerator");
+        add(IRMachines.EXTRACTOR.getBlock(), "Extractor");
+        add(IRMachines.CANNING_MACHINE.getBlock(), "Canning Machine");
+        add(IRMachines.BASIC_SOLAR_PANEL.getBlock(), "Basic Solar Panel");
 
         addBlock(IRBlocks.TIN_BLOCK, "Tin Block");
         addBlock(IRBlocks.URANIUM_BLOCK, "Uranium Block");

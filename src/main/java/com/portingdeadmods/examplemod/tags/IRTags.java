@@ -1,4 +1,4 @@
-package com.portingdeadmods.examplemod;
+package com.portingdeadmods.examplemod.tags;
 
 import com.mojang.datafixers.util.Either;
 import com.portingdeadmods.examplemod.registries.IRBlocks;

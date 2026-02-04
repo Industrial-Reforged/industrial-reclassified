@@ -49,6 +49,14 @@ public final class IRMachines {
             )
             .blockEntity(CompressorBlockEntity::new)
             .menu(CompressorMenu::new));
+    public static final IRMachine RECYCLER = HELPER.registerMachine("recycler", IRMachine.builder(IREnergyTiers.LOW)
+            .block(MachineBlock::new, builder -> builder
+                    .activatable()
+                    .rotatable()
+                    .ticking()
+            )
+            .blockEntity(RecyclerBlockEntity::new)
+            .menu(RecyclerMenu::new));
     public static final IRMachine MACERATOR = HELPER.registerMachine("macerator", IRMachine.builder(IREnergyTiers.LOW)
             .block(MachineBlock::new, builder -> builder
                     .activatable()

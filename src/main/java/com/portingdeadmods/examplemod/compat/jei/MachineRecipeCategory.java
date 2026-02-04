@@ -3,6 +3,7 @@ package com.portingdeadmods.examplemod.compat.jei;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeInput;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
+import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
 import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
 import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
@@ -18,6 +19,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -77,6 +79,13 @@ public class MachineRecipeCategory extends AbstractRecipeCategory<MachineRecipe>
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, MachineRecipe recipe, IFocusGroup focuses) {
         InputComponentFlag input = recipe.getComponentByFlag(IRRecipeComponentFlags.INPUT);
-        builder.addAnimatedRecipeArrow(recipe.getComponent(TimeComponent.TYPE).time()).setPosition(this.getWidth() / 2 - 12, this.getHeight() / 2 - 8);
+        int energy = recipe.getComponent(EnergyComponent.TYPE).energy();
+        int time = recipe.getComponent(TimeComponent.TYPE).time();
+        int xPos = this.getWidth() / 2 - 12;
+        builder.addAnimatedRecipeArrow(time).setPosition(Math.max(xPos, input.getIngredients().size() * 16 + 6), this.getHeight() / 2 - 8);
+        builder.addText(Component.literal(time + "t").withStyle(ChatFormatting.DARK_GRAY), this.getWidth(), Minecraft.getInstance().font.lineHeight)
+                .setPosition(0, this.getHeight() - Minecraft.getInstance().font.lineHeight * 2);
+        builder.addText(Component.literal(energy / time + " EU/t").withStyle(ChatFormatting.DARK_GRAY), this.getWidth(), Minecraft.getInstance().font.lineHeight)
+                .setPosition(0, this.getHeight() - Minecraft.getInstance().font.lineHeight);
     }
 }

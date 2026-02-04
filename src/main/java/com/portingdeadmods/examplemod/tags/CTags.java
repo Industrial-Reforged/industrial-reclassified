@@ -1,14 +1,11 @@
 package com.portingdeadmods.examplemod.tags;
 
 import com.mojang.datafixers.util.Either;
-import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.HashMap;
@@ -39,6 +36,9 @@ public final class CTags {
         public static final TagKey<Item> DUSTS_COPPER = createTag("dusts/copper", () -> List.of(item(IRItems.COPPER_DUST)));
         public static final TagKey<Item> DUSTS_TIN = createTag("dusts/tin", () -> List.of(item(IRItems.TIN_DUST)));
         public static final TagKey<Item> DUSTS = createTag("dusts", () -> List.of(tag(DUSTS_COPPER), tag(DUSTS_TIN), tag(DUSTS_IRON), tag(DUSTS_COAL), tag(DUSTS_GOLD)));
+
+        public static final TagKey<Item> RAW_MATERIALS_IRIDIUM = createTag("raw_materials/iridium", () -> List.of(item(IRItems.RAW_IRIDIUM)));
+        public static final TagKey<Item> RAW_MATERIALS = createTag("raw_materials", () -> List.of(tag(RAW_MATERIALS_IRIDIUM)));
 
         private static TagKey<Item> createTag(String id, Supplier<List<Either<ItemLike, TagKey<Item>>>> items) {
             TagKey<Item> tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", id));

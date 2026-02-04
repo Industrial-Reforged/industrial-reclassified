@@ -44,15 +44,17 @@ public final class IndustrialReclassifiedClient {
         event.register(IRMachines.COMPRESSOR.getMenuType(), CompressorScreen::new);
         event.register(IRMachines.MACERATOR.getMenuType(), MaceratorScreen::new);
         event.register(IRMachines.EXTRACTOR.getMenuType(), ExtractorScreen::new);
+        event.register(IRMachines.RECYCLER.getMenuType(), RecyclerScreen::new);
         event.register(IRMachines.CANNING_MACHINE.getMenuType(), CanningMachineScreen::new);
         event.register(IRMachines.BASIC_SOLAR_PANEL.getMenuType(), SolarPanelScreen::new);
     }
 
     private void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            registerItemProperties();
+            this.registerItemProperties();
             ItemBlockRenderTypes.setRenderLayer(IRBlocks.REINFORCED_DOOR.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(IRBlocks.REINFORCED_GLASS.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(IRBlocks.GLASS_FIBRE_CABLE.get(), RenderType.cutout());
         });
     }
 
@@ -60,7 +62,7 @@ public final class IndustrialReclassifiedClient {
         event.registerEntityRenderer(IREntityTypes.INDUSTRIAL_TNT.get(), TntRenderer::new);
     }
 
-    private static void registerItemProperties() {
+    private void registerItemProperties() {
         ItemProperties.register(IRItems.NANO_SABER.get(), IRItemProperties.ACTIVE_KEY, (ClampedItemPropertyFunction) IRItemProperties::isActive);
         ItemProperties.register(IRItems.BASIC_CHAINSAW.get(), IRItemProperties.ACTIVE_KEY, (ClampedItemPropertyFunction) IRItemProperties::isItemHeld);
         ItemProperties.register(IRItems.ADVANCED_CHAINSAW.get(), IRItemProperties.ACTIVE_KEY, (ClampedItemPropertyFunction) IRItemProperties::isItemHeld);

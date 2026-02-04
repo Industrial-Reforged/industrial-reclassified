@@ -5,6 +5,7 @@ import com.portingdeadmods.portingdeadlibs.api.translations.DefaultTranslationCa
 import com.portingdeadmods.portingdeadlibs.api.translations.DeferredTranslation;
 import com.portingdeadmods.portingdeadlibs.api.translations.DeferredTranslationRegister;
 import com.portingdeadmods.portingdeadlibs.api.translations.TranslatableConstant;
+import net.minecraft.network.chat.Component;
 
 public final class IRTranslations {
     public static final DeferredTranslationRegister TRANSLATIONS = DeferredTranslationRegister.createTranslations(IndustrialReclassified.MODID);
@@ -57,6 +58,7 @@ public final class IRTranslations {
     public static final DeferredTranslation<TranslatableConstant> COMPRESSOR = MENUS_CATEGORY.registerWithDefault("compressor", "Compressor");
     public static final DeferredTranslation<TranslatableConstant> MACERATOR = MENUS_CATEGORY.registerWithDefault("macerator", "Macerator");
     public static final DeferredTranslation<TranslatableConstant> EXTRACTOR = MENUS_CATEGORY.registerWithDefault("extractor", "Extractor");
+    public static final DeferredTranslation<TranslatableConstant> RECYCLER = MENUS_CATEGORY.registerWithDefault("recycler", "Recycler");
 
     private static final DefaultTranslationCategory MESSAGES_CATEGORY = TRANSLATIONS.createCategory("messages");
     public static final DeferredTranslation<TranslatableConstant> GUIDE_ME_MISSING = MESSAGES_CATEGORY.registerWithDefault("guide_me_missing", "GuideME must be installed to access the guide book!");

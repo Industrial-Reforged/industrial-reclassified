@@ -1,25 +1,19 @@
 package com.portingdeadmods.examplemod.datagen.assets;
 
-import com.mojang.math.Transformation;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.client.items.IRItemProperties;
 import com.portingdeadmods.examplemod.content.items.electric.BatteryItem;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;
-import net.minecraft.client.resources.model.BuiltInModel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
-import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -48,17 +42,18 @@ public class IRItemModelProvider extends ItemModelProvider {
         basicItem(IRItems.TIN_INGOT.get());
         basicItem(IRItems.REFINED_IRON_INGOT.get());
         basicItem(IRItems.BRONZE_INGOT.get());
-        basicItem(IRItems.IRIDIUM_INGOT.get());
+        basicItem(IRItems.IRIDIUM_ALLOY_INGOT.get());
         basicItem(IRItems.MIXED_METAL_INGOT.get());
         basicItem(IRItems.URANIUM_INGOT.get());
 
-        basicItem(IRItems.IRIDIUM_PLATE.get());
+        basicItem(IRItems.IRIDIUM_INGOT.get());
         basicItem(IRItems.TIN_PLATE.get());
         basicItem(IRItems.COPPER_PLATE.get());
         basicItem(IRItems.DENSE_COPPER_PLATE.get());
         basicItem(IRItems.ADVANCED_ALLOY_PLATE.get());
 
         basicItem(IRItems.TIN_DUST.get());
+        basicItem(IRItems.BRONZE_DUST.get());
         basicItem(IRItems.COPPER_DUST.get());
         basicItem(IRItems.GOLD_DUST.get());
         basicItem(IRItems.IRON_DUST.get());
@@ -124,6 +119,7 @@ public class IRItemModelProvider extends ItemModelProvider {
         cableItem(IRBlocks.COPPER_CABLE.get(), 6);
         cableItem(IRBlocks.GOLD_CABLE.get(), 6);
         cableItem(IRBlocks.HV_CABLE.get(), 8);
+        cableItem(IRBlocks.GLASS_FIBRE_CABLE.get(), 4);
         cableItem(IRBlocks.BURNT_CABLE.get(), 4);
 
         basicItemBlock(IRBlocks.RUBBER_TREE_DOOR.asItem(), "tree");
@@ -157,24 +153,24 @@ public class IRItemModelProvider extends ItemModelProvider {
         float to = (16 + width) / 2F;
 
         ItemModelBuilder modelBuilder = withExistingParent(loc.getPath(), mcLoc("block/block"))
-                .texture("texture", loc.withPrefix("block/"))
-                .texture("particle", loc.withPrefix("block/"))
+                .texture("texture", loc.withPrefix("item/"))
+                .texture("particle", loc.withPrefix("item/"))
                 .element()
                 .from(16 - width, from, from)
                 .to(16, to, to)
-                .allFaces((direction, builder) -> builder.uvs(from, from, to, to).texture("#texture"))
+                .allFaces((direction, builder) -> builder.uvs(0, 16 - width, width, 16).texture("#texture"))
                 .end()
                 .element()
                 .from(0, from, from)
                 .to(width, to, to)
-                .allFaces((direction, builder) -> builder.uvs(from, from, to, to).texture("#texture"))
+                .allFaces((direction, builder) -> builder.uvs(0, 0, width, width).texture("#texture"))
                 .end();
         // Middle part
         if (width < 8) {
             modelBuilder.element()
                     .from(width, from, from)
                     .to(16 - width, to, to)
-                    .allFaces((direction, builder) -> builder.uvs(width, 16 - width, 16 - width, 16).texture("#texture"))
+                    .allFaces((direction, builder) -> builder.uvs(0, width, width, 16 - width).rotation(ModelBuilder.FaceRotation.CLOCKWISE_90).texture("#texture"))
                     .end();
         }
 

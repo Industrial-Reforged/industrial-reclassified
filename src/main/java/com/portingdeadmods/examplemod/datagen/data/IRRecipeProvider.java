@@ -1,9 +1,7 @@
 package com.portingdeadmods.examplemod.datagen.data;
 
-import com.portingdeadmods.examplemod.IRTags;
+import com.portingdeadmods.examplemod.tags.IRTags;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
-import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
 import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputComponent;
@@ -16,13 +14,15 @@ import com.portingdeadmods.examplemod.registries.IRItems;
 import com.portingdeadmods.examplemod.registries.IRMachines;
 import com.portingdeadmods.examplemod.registries.IRRecipeLayouts;
 import com.portingdeadmods.examplemod.tags.CTags;
-import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 
@@ -45,6 +45,12 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new ItemOutputComponent(IRItems.ADVANCED_ALLOY_PLATE))
                 .component(new TimeComponent(200))
                 .component(new EnergyComponent(800))
+                .save(output);
+        this.compressorRecipe()
+                .component(new ItemInputComponent(IRItems.IRIDIUM_ALLOY_INGOT))
+                .component(new ItemOutputComponent(IRItems.IRIDIUM_INGOT))
+                .component(new TimeComponent(800))
+                .component(new EnergyComponent(3200))
                 .save(output);
         this.compressorRecipe()
                 .component(new ItemInputComponent(IRItems.CARBON_MESH))
@@ -102,6 +108,10 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new EnergyComponent(800))
                 .save(output);
 
+        oreMacerationRecipe(Tags.Items.ORES_COPPER, Tags.Items.RAW_MATERIALS_COPPER, IRItems.COPPER_DUST, "copper", output);
+        oreMacerationRecipe(Tags.Items.ORES_IRON, Tags.Items.RAW_MATERIALS_IRON, IRItems.IRON_DUST, "iron", output);
+        oreMacerationRecipe(Tags.Items.ORES_GOLD, Tags.Items.RAW_MATERIALS_GOLD, IRItems.GOLD_DUST, "gold", output);
+
         this.extractorRecipe()
                 .component(new ItemInputComponent(IRItems.STICKY_RESIN))
                 .component(new ItemOutputListComponent(IRItems.RUBBER, 3))
@@ -121,6 +131,13 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new TimeComponent(200))
                 .component(new EnergyComponent(800))
                 .save(output, IndustrialReclassified.rl("food_canning"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, IRItems.BRONZE_DUST, 3)
+                .requires(CTags.ItemTags.DUSTS_TIN)
+                .requires(CTags.ItemTags.DUSTS_COPPER)
+                .requires(CTags.ItemTags.DUSTS_COPPER)
+                .unlockedBy("has_tin_dust", has(CTags.ItemTags.DUSTS_TIN))
+                .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.BASIC_DRILL.get())
                 .pattern(" I ")
@@ -202,84 +219,7 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_redstone_battery", has(IRItems.REDSTONE_BATTERY))
                 .save(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.NANO_HELMET.get())
-                .pattern("CEC")
-                .pattern("C C")
-                .define('C', CTags.ItemTags.PLATES_CARBON)
-                .define('E', IRItems.ENERGY_CRYSTAL)
-                .unlockedBy("has_energy_crystal", has(IRItems.ENERGY_CRYSTAL))
-                .save(output);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.NANO_CHESTPLATE.get())
-                .pattern("C C")
-                .pattern("CEC")
-                .pattern("CCC")
-                .define('C', CTags.ItemTags.PLATES_CARBON)
-                .define('E', IRItems.ENERGY_CRYSTAL)
-                .unlockedBy("has_energy_crystal", has(IRItems.ENERGY_CRYSTAL))
-                .save(output);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.NANO_LEGGINGS.get())
-                .pattern("CCC")
-                .pattern("E E")
-                .pattern("C C")
-                .define('C', CTags.ItemTags.PLATES_CARBON)
-                .define('E', IRItems.ENERGY_CRYSTAL)
-                .unlockedBy("has_energy_crystal", has(IRItems.ENERGY_CRYSTAL))
-                .save(output);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.NANO_BOOTS.get())
-                .pattern("E E")
-                .pattern("C C")
-                .define('C', CTags.ItemTags.PLATES_CARBON)
-                .define('E', IRItems.ENERGY_CRYSTAL)
-                .unlockedBy("has_energy_crystal", has(IRItems.ENERGY_CRYSTAL))
-                .save(output);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.QUANTUM_HELMET.get())
-                .pattern(" N ")
-                .pattern("ILI")
-                .pattern("AGA")
-                .define('N', IRItems.NANO_HELMET)
-                .define('I', IRItems.IRIDIUM_PLATE)
-                .define('L', IRItems.LAPOTRON_CRYSTAL)
-                .define('A', IRItems.ADVANCED_CIRCUIT)
-                .define('G', IRBlocks.REINFORCED_GLASS)
-                .unlockedBy("has_iridium_plate", has(IRItems.IRIDIUM_PLATE))
-                .save(output);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.QUANTUM_CHESTPLATE.get())
-                .pattern("ANA")
-                .pattern("ILI")
-                .pattern("IAI")
-                .define('N', IRItems.NANO_CHESTPLATE)
-                .define('I', IRItems.IRIDIUM_PLATE)
-                .define('L', IRItems.LAPOTRON_CRYSTAL)
-                .define('A', CTags.ItemTags.PLATES_ADVANCED_ALLOY)
-                .unlockedBy("has_iridium_plate", has(IRItems.IRIDIUM_PLATE))
-                .save(output);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.QUANTUM_LEGGINGS.get())
-                .pattern("MLM")
-                .pattern("INI")
-                .pattern("G G")
-                .define('N', IRItems.NANO_LEGGINGS)
-                .define('I', IRItems.IRIDIUM_PLATE)
-                .define('L', IRItems.LAPOTRON_CRYSTAL)
-                .define('M', IRBlocks.ADVANCED_MACHINE_FRAME)
-                .define('G', Tags.Items.DUSTS_GLOWSTONE)
-                .unlockedBy("has_iridium_plate", has(IRItems.IRIDIUM_PLATE))
-                .save(output);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.QUANTUM_BOOTS.get())
-                .pattern("INI")
-                .pattern("BLB")
-                .define('N', IRItems.NANO_BOOTS)
-                .define('I', IRItems.IRIDIUM_PLATE)
-                .define('L', IRItems.LAPOTRON_CRYSTAL)
-                .define('B', Items.LEATHER_BOOTS)
-                .unlockedBy("has_iridium_plate", has(IRItems.IRIDIUM_PLATE))
-                .save(output);
+        armorRecipes(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.REDSTONE_BATTERY.get())
                 .pattern(" C ")
@@ -356,6 +296,16 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_tnt", has(Items.TNT))
                 .save(output);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.IRIDIUM_ALLOY_INGOT.get())
+                .pattern("IAI")
+                .pattern("ADA")
+                .pattern("IAI")
+                .define('I', CTags.ItemTags.RAW_MATERIALS_IRIDIUM)
+                .define('A', CTags.ItemTags.PLATES_ADVANCED_ALLOY)
+                .define('D', Tags.Items.GEMS_DIAMOND)
+                .unlockedBy("has_iridium", has(CTags.ItemTags.RAW_MATERIALS_IRIDIUM))
+                .save(output);
+
         SimpleCookingRecipeBuilder.blasting(Ingredient.of(Tags.Items.INGOTS_IRON), RecipeCategory.MISC, IRItems.REFINED_IRON_INGOT, 0.7f, 100)
                 .unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON))
                 .save(output, rl("refined_iron_blasting"));
@@ -401,7 +351,6 @@ public class IRRecipeProvider extends RecipeProvider {
 
         oreSmelting(output, List.of(IRItems.RAW_URANIUM), RecipeCategory.MISC, IRItems.URANIUM_INGOT, 0.7F, 200, "uranium_ingot");
         oreSmelting(output, List.of(IRItems.RAW_TIN), RecipeCategory.MISC, IRItems.TIN_INGOT, 0.7F, 200, "tin_ingot");
-        oreSmelting(output, List.of(IRItems.RAW_IRIDIUM), RecipeCategory.MISC, IRItems.IRIDIUM_INGOT, 0.7F, 200, "iridium_ingot");
 
         oreBlasting(output, List.of(IRItems.RAW_URANIUM), RecipeCategory.MISC, IRItems.URANIUM_INGOT, 0.7F, 100, "uranium_ingot");
         oreBlasting(output, List.of(IRItems.RAW_TIN), RecipeCategory.MISC, IRItems.TIN_INGOT, 0.7F, 100, "tin_ingot");
@@ -410,9 +359,9 @@ public class IRRecipeProvider extends RecipeProvider {
         generatorCraftingRecipes(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRMachines.ELECTRIC_FURNACE.getBlockItem())
-                .pattern(" C ")
-                .pattern("RMR")
                 .pattern(" F ")
+                .pattern("RMR")
+                .pattern(" C ")
                 .define('C', IRItems.BASIC_CIRCUIT)
                 .define('R', Tags.Items.DUSTS_REDSTONE)
                 .define('F', Blocks.FURNACE)
@@ -546,11 +495,20 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND))
                 .save(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, IRBlocks.REINFORCED_STONE)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, IRBlocks.REINFORCED_STONE, 8)
                 .pattern("SSS")
                 .pattern("SAS")
                 .pattern("SSS")
                 .define('S', Tags.Items.STONES)
+                .define('A', CTags.ItemTags.PLATES_ADVANCED_ALLOY)
+                .unlockedBy("has_advanced_alloy_plate", has(CTags.ItemTags.PLATES_ADVANCED_ALLOY))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, IRBlocks.REINFORCED_GLASS, 8)
+                .pattern("GGG")
+                .pattern("GAG")
+                .pattern("GGG")
+                .define('G', Tags.Items.GLASS_BLOCKS)
                 .define('A', CTags.ItemTags.PLATES_ADVANCED_ALLOY)
                 .unlockedBy("has_advanced_alloy_plate", has(CTags.ItemTags.PLATES_ADVANCED_ALLOY))
                 .save(output);
@@ -602,6 +560,10 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_basic_circuit", has(IRItems.BASIC_CIRCUIT))
                 .save(output);
 
+        plantBallRecipe(Tags.Items.CROPS, "crops", output);
+        plantBallRecipe(ItemTags.SAPLINGS, "sapling", output);
+        plantBallRecipe(ItemTags.LEAVES, "leaves", output);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRBlocks.NUCLEAR_REACTOR_CHAMBER)
                 .pattern(" C ")
                 .pattern("CMC")
@@ -621,8 +583,156 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_nuclear_reactor_chamber", has(IRBlocks.NUCLEAR_REACTOR_CHAMBER))
                 .save(output);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRMachines.CHARGE_PAD.asItem())
+                .pattern(" D ")
+                .pattern("BMB")
+                .pattern(" C ")
+                .define('D', IRItems.DENSE_COPPER_PLATE)
+                .define('M', IRBlocks.MACHINE_FRAME)
+                .define('B', IRItems.REDSTONE_BATTERY)
+                .define('C', IRItems.BASIC_CIRCUIT)
+                .unlockedBy("has_dense_copper_plate", has(IRItems.DENSE_COPPER_PLATE))
+                .save(output);
+
+        cableRecipe(CTags.ItemTags.INGOTS_TIN, IRBlocks.TIN_CABLE, output);
+        cableRecipe(Tags.Items.INGOTS_COPPER, IRBlocks.COPPER_CABLE, output);
+        cableRecipe(Tags.Items.INGOTS_GOLD, IRBlocks.GOLD_CABLE, output);
+        cableRecipe(CTags.ItemTags.INGOTS_REFINED_IRON, IRBlocks.HV_CABLE, output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRBlocks.GLASS_FIBRE_CABLE, 4)
+                .pattern("GGG")
+                .pattern("RDR")
+                .pattern("GGG")
+                .define('G', Tags.Items.GLASS_BLOCKS)
+                .define('D', Tags.Items.GEMS_DIAMOND)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND))
+                .save(output);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, IRItems.SCRAP)
+                .requires(IRBlocks.BURNT_CABLE)
+                .unlockedBy("has_burnt_cable", has(IRBlocks.BURNT_CABLE))
+                .save(output);
+
         this.rubberWoodRecipes(output);
 
+    }
+
+    private static void plantBallRecipe(TagKey<Item> plantTag, String group, RecipeOutput output) {
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, IRItems.PLANT_BALL)
+                .requires(Tags.Items.CROPS)
+                .requires(Tags.Items.CROPS)
+                .requires(Tags.Items.CROPS)
+                .requires(Tags.Items.CROPS)
+                .unlockedBy("has_plant", has(plantTag))
+                .save(output, IndustrialReclassified.rl("plant_ball_from_" + group));
+    }
+
+    private static void cableRecipe(TagKey<Item> ingotTag, ItemLike cableBlock, RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, cableBlock, 6)
+                .pattern("RRR")
+                .pattern("III")
+                .pattern("RRR")
+                .define('R', IRItems.RUBBER)
+                .define('I', ingotTag)
+                .unlockedBy("has_rubber", has(IRItems.RUBBER))
+                .save(output);
+    }
+
+    private void oreMacerationRecipe(TagKey<Item> oreTag, TagKey<Item> rawTag, ItemLike result, String oreName, RecipeOutput output) {
+        this.maceratorRecipe()
+                .component(new ItemInputComponent(oreTag))
+                .component(new ItemOutputListComponent(result, 2))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output, IndustrialReclassified.rl(oreName + "_dust_from_ore_maceration"));
+        this.maceratorRecipe()
+                .component(new ItemInputComponent(rawTag, 4))
+                .component(new ItemOutputListComponent(result, 3))
+                .component(new TimeComponent(200))
+                .component(new EnergyComponent(800))
+                .save(output, IndustrialReclassified.rl(oreName + "_dust_from_raw_ore_maceration"));
+    }
+
+    private static void armorRecipes(RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.NANO_HELMET.get())
+                .pattern("CEC")
+                .pattern("C C")
+                .define('C', CTags.ItemTags.PLATES_CARBON)
+                .define('E', IRItems.ENERGY_CRYSTAL)
+                .unlockedBy("has_energy_crystal", has(IRItems.ENERGY_CRYSTAL))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.NANO_CHESTPLATE.get())
+                .pattern("C C")
+                .pattern("CEC")
+                .pattern("CCC")
+                .define('C', CTags.ItemTags.PLATES_CARBON)
+                .define('E', IRItems.ENERGY_CRYSTAL)
+                .unlockedBy("has_energy_crystal", has(IRItems.ENERGY_CRYSTAL))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.NANO_LEGGINGS.get())
+                .pattern("CCC")
+                .pattern("E E")
+                .pattern("C C")
+                .define('C', CTags.ItemTags.PLATES_CARBON)
+                .define('E', IRItems.ENERGY_CRYSTAL)
+                .unlockedBy("has_energy_crystal", has(IRItems.ENERGY_CRYSTAL))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.NANO_BOOTS.get())
+                .pattern("E E")
+                .pattern("C C")
+                .define('C', CTags.ItemTags.PLATES_CARBON)
+                .define('E', IRItems.ENERGY_CRYSTAL)
+                .unlockedBy("has_energy_crystal", has(IRItems.ENERGY_CRYSTAL))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.QUANTUM_HELMET.get())
+                .pattern(" N ")
+                .pattern("ILI")
+                .pattern("AGA")
+                .define('N', IRItems.NANO_HELMET)
+                .define('I', IRItems.IRIDIUM_INGOT)
+                .define('L', IRItems.LAPOTRON_CRYSTAL)
+                .define('A', IRItems.ADVANCED_CIRCUIT)
+                .define('G', IRBlocks.REINFORCED_GLASS)
+                .unlockedBy("has_iridium_ingot", has(IRItems.IRIDIUM_INGOT))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.QUANTUM_CHESTPLATE.get())
+                .pattern("ANA")
+                .pattern("ILI")
+                .pattern("IAI")
+                .define('N', IRItems.NANO_CHESTPLATE)
+                .define('I', IRItems.IRIDIUM_INGOT)
+                .define('L', IRItems.LAPOTRON_CRYSTAL)
+                .define('A', CTags.ItemTags.PLATES_ADVANCED_ALLOY)
+                .unlockedBy("has_iridium_ingot", has(IRItems.IRIDIUM_INGOT))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.QUANTUM_LEGGINGS.get())
+                .pattern("MLM")
+                .pattern("INI")
+                .pattern("G G")
+                .define('N', IRItems.NANO_LEGGINGS)
+                .define('I', IRItems.IRIDIUM_INGOT)
+                .define('L', IRItems.LAPOTRON_CRYSTAL)
+                .define('M', IRBlocks.ADVANCED_MACHINE_FRAME)
+                .define('G', Tags.Items.DUSTS_GLOWSTONE)
+                .unlockedBy("has_iridium_ingot", has(IRItems.IRIDIUM_INGOT))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.QUANTUM_BOOTS.get())
+                .pattern("INI")
+                .pattern("BLB")
+                .define('N', IRItems.NANO_BOOTS)
+                .define('I', IRItems.IRIDIUM_INGOT)
+                .define('L', IRItems.LAPOTRON_CRYSTAL)
+                .define('B', Items.LEATHER_BOOTS)
+                .unlockedBy("has_iridium_ingot", has(IRItems.IRIDIUM_INGOT))
+                .save(output);
     }
 
     private void rubberWoodRecipes(RecipeOutput output) {

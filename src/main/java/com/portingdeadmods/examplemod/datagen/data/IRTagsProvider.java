@@ -1,9 +1,8 @@
 package com.portingdeadmods.examplemod.datagen.data;
 
 import com.mojang.datafixers.util.Either;
-import com.portingdeadmods.examplemod.IRTags;
+import com.portingdeadmods.examplemod.tags.IRTags;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.tags.CTags;
 import com.portingdeadmods.portingdeadlibs.api.fluids.PDLFluid;
 import net.minecraft.core.HolderLookup;
@@ -11,7 +10,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
