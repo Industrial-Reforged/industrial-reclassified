@@ -34,7 +34,7 @@ public class ExtractorBlockEntity extends MachineBlockEntity implements MenuProv
     private int progress;
 
     public ExtractorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(IRMachines.EXTRACTOR.getBlockEntityType(), blockPos, blockState);
+        super(IRMachines.EXTRACTOR, blockPos, blockState);
         this.addEuStorage(EnergyHandlerImpl.NoDrain::new, IREnergyTiers.LOW, 4000, this::onEuChanged);
         this.addItemHandler(HandlerUtils::newItemStackHandler, builder -> builder
                 .slots(4)
@@ -83,7 +83,8 @@ public class ExtractorBlockEntity extends MachineBlockEntity implements MenuProv
         return this.cachedRecipe != null ? this.cachedRecipe.getComponent(TimeComponent.TYPE).time() : 0;
     }
 
-    private void onItemsChanged(int slot) {
+    @Override
+    protected void onItemsChanged(int slot) {
         this.updateData();
 
         MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(IRRecipeLayouts.EXTRACTOR.getRecipeType(), new MachineRecipeInput(this.getItemHandler().getStackInSlot(0)), this.level)

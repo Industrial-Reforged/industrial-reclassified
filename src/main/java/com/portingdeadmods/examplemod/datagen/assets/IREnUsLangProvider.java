@@ -1,12 +1,13 @@
 package com.portingdeadmods.examplemod.datagen.assets;
 
+import com.portingdeadmods.examplemod.IRRegistries;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.registries.IRBlocks;
-import com.portingdeadmods.examplemod.registries.IRItems;
-import com.portingdeadmods.examplemod.registries.IRMachines;
-import com.portingdeadmods.examplemod.registries.IRTranslations;
+import com.portingdeadmods.examplemod.api.energy.EnergyTier;
+import com.portingdeadmods.examplemod.registries.*;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+
+import java.util.function.Supplier;
 
 public class IREnUsLangProvider extends LanguageProvider {
     public IREnUsLangProvider(PackOutput output) {
@@ -146,6 +147,18 @@ public class IREnUsLangProvider extends LanguageProvider {
         addBlock(IRBlocks.RUBBER_TREE_BUTTON, "Rubber Tree Button");
         addBlock(IRBlocks.RUBBER_TREE_SLAB, "Rubber Tree Slab");
         addBlock(IRBlocks.RUBBER_TREE_STAIRS, "Rubber Tree Stairs");
+
+        addEnergyTier(IREnergyTiers.NONE, "None");
+        addEnergyTier(IREnergyTiers.LOW, "Low");
+        addEnergyTier(IREnergyTiers.MEDIUM, "Medium");
+        addEnergyTier(IREnergyTiers.HIGH, "High");
+        addEnergyTier(IREnergyTiers.EXTREME, "Extreme");
+        addEnergyTier(IREnergyTiers.INSANE, "Insane");
+        addEnergyTier(IREnergyTiers.CREATIVE, "Creative");
+    }
+
+    private void addEnergyTier(Supplier<? extends EnergyTier> key, String val) {
+        add("energy_tier." + IndustrialReclassified.MODID + "." + IRRegistries.ENERGY_TIER.getKey(key.get()).getPath(), val);
     }
 
 }

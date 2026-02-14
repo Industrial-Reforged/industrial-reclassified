@@ -48,6 +48,7 @@ public record ItemOutputListComponent(List<ItemOutputComponent> outputs) impleme
         return FLAGS;
     }
 
+    @Override
     public boolean isOutputted(RandomSource random, int slot) {
         if (slot < this.outputs.size()) {
             return random.nextFloat() < this.outputs().get(slot).chance();

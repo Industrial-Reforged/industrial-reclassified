@@ -56,6 +56,16 @@ public record ItemInputListComponent(List<ItemInputComponent> inputs) implements
         return TYPE;
     }
 
+    @Override
+    public boolean test(List<ItemStack> items, boolean strict) {
+        if (strict) {
+            return items.size() == this.inputs.size() && this.test(items);
+        } else if (!items.isEmpty()) {
+            return this.test(items);
+        }
+        return false;
+    }
+
     public boolean test(List<ItemStack> items) {
         return IRRecipeUtils.matches(items, this.inputs());
     }

@@ -13,12 +13,24 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RecyclerMenu extends MachineMenu<RecyclerBlockEntity> {
     public RecyclerMenu(int containerId, @NotNull Inventory inv, @NotNull RecyclerBlockEntity blockEntity) {
         super(IRMachines.RECYCLER.getMenuType(), containerId, inv, blockEntity);
+        checkContainerSize(inv, 3);
+
+        IItemHandler itemHandler = blockEntity.getItemHandler();
+
+        this.addSlot(new SlotItemHandler(itemHandler, 0, 53, 45));
+        this.addSlot(new SlotItemHandler(itemHandler, 1, 107, 45));
+        this.addSlot(new ChargingSlot(itemHandler, 2, ChargingSlot.ChargeMode.DECHARGE, 9, 68));
+
+        addPlayerInventory(inv, 83 + 21);
+        addPlayerHotbar(inv, 141 + 21);
     }
 
     public RecyclerMenu(int containerId, @NotNull Inventory inv, @NotNull FriendlyByteBuf byteBuf) {

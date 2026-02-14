@@ -61,20 +61,32 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
 
     @Override
     public boolean matches(MachineRecipeInput machineRecipeInput, Level level) {
-        InputComponentFlag input = this.getComponentByFlag(IRRecipeComponentFlags.INPUT);
-        if (input != null) {
-            return RecipeUtils.compareItems(machineRecipeInput.items(), input.getIngredients());
-        }
-        return false;
+        return matchesItems(machineRecipeInput, level);
+    }
+
+    private <R extends MachineRecipe> boolean matchesItems(MachineRecipeInput machineRecipeInput, Level level) {
+        MachineRecipeLayout<R> layout = (MachineRecipeLayout<R>) this.getLayout();
+        return layout.matches((R) this, machineRecipeInput, level);
     }
 
     @Override
     public @NotNull ItemStack getResultItem(HolderLookup.Provider provider) {
-        OutputComponentFlag output = this.getComponentByFlag(IRRecipeComponentFlags.OUTPUT);
-        if (output != null) {
-            return output.getOutputs().getFirst();
-        }
-        return ItemStack.EMPTY;
+        return createResultItemSimple(provider);
+    }
+
+    @Override
+    public @NotNull ItemStack assemble(@NotNull MachineRecipeInput container, HolderLookup.Provider provider) {
+        return createResultItem(container, provider);
+    }
+
+    private <R extends MachineRecipe> ItemStack createResultItemSimple(HolderLookup.Provider provider) {
+        MachineRecipeLayout<R> layout = (MachineRecipeLayout<R>) this.getLayout();
+        return layout.createResultItem((R) this, null, provider);
+    }
+
+    private <R extends MachineRecipe> ItemStack createResultItem(MachineRecipeInput input, HolderLookup.Provider provider) {
+        MachineRecipeLayout<R> layout = (MachineRecipeLayout<R>) this.getLayout();
+        return layout.createResultItem((R) this, input, provider);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class ElectricFurnaceBlockEntity extends MachineBlockEntity implements Me
     private int progress;
 
     public ElectricFurnaceBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(IRMachines.ELECTRIC_FURNACE.getBlockEntityType(), blockPos, blockState);
+        super(IRMachines.ELECTRIC_FURNACE, blockPos, blockState);
         this.addEuStorage(EnergyHandlerImpl.NoDrain::new, IREnergyTiers.LOW, 4000, this::onEuChanged);
         this.addItemHandler(HandlerUtils::newItemStackHandler, builder -> builder
                 .slots(3)
@@ -60,7 +60,8 @@ public class ElectricFurnaceBlockEntity extends MachineBlockEntity implements Me
         this.updateData();
     }
 
-    private void onItemsChanged(int slot) {
+    @Override
+    protected void onItemsChanged(int slot) {
         this.updateData();
 
         SingleRecipeInput recipeInput = new SingleRecipeInput(this.getItemHandler().getStackInSlot(0));

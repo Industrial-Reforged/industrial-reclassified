@@ -60,7 +60,6 @@ public class IRJeiPlugin implements IModPlugin {
         registerRecipe(registration, IRRecipeLayouts.MACERATOR);
         registerRecipe(registration, IRRecipeLayouts.EXTRACTOR);
         registerRecipe(registration, IRRecipeLayouts.CANNING_MACHINE);
-        registerRecipe(registration, IRRecipeLayouts.FOOD_CANNING_MACHINE);
     }
 
     private <R extends MachineRecipe> void registerRecipe(IRecipeRegistration registration, MachineRecipeLayout<R> layout) {

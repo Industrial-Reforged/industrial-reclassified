@@ -30,17 +30,18 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CompressorBlockEntity extends MachineBlockEntity implements MenuProvider {
     private final IItemHandler exposedItemHandler;
-    private MachineRecipe cachedRecipe;
-    private int progress;
 
     public CompressorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(IRMachines.COMPRESSOR.getBlockEntityType(), blockPos, blockState);
+        super(IRMachines.COMPRESSOR, blockPos, blockState);
         this.addEuStorage(EnergyHandlerImpl.NoDrain::new, IREnergyTiers.LOW, 4000, this::onEuChanged);
         this.addItemHandler(HandlerUtils::newItemStackHandler, builder -> builder
                 .slots(3)
@@ -54,53 +55,6 @@ public class CompressorBlockEntity extends MachineBlockEntity implements MenuPro
         this.exposedItemHandler = new LimitedItemHandler(this.getItemHandler(), IntSet.of(0), IntSet.of(1), IntSet.of(2));
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
-        if (!this.level.isClientSide()) {
-            if (this.cachedRecipe != null && this.getEuStorage().getEnergyStored() > 0) {
-                if (this.progress < this.getMaxProgress()) {
-                    this.progress++;
-                    this.getEuStorage().forceDrainEnergy(3, false);
-                } else {
-                    this.progress = 0;
-                    ItemStack resultItem = this.cachedRecipe.getResultItem(this.level.registryAccess());
-                    forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), 1, resultItem.copy(), false, this::onItemsChanged);
-                    this.getItemHandler().extractItem(0, 1, false);
-                }
-            } else if (this.progress != 0) {
-                this.progress = 0;
-                this.updateData();
-            }
-        }
-    }
-
-    public MachineRecipe getCachedRecipe() {
-        return cachedRecipe;
-    }
-
-    public int getProgress() {
-        return progress;
-    }
-
-    public int getMaxProgress() {
-        return this.cachedRecipe != null ? this.cachedRecipe.getComponent(TimeComponent.TYPE).time() : 0;
-    }
-
-    private void onItemsChanged(int slot) {
-        this.updateData();
-
-        MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(IRRecipeLayouts.COMPRESSOR.getRecipeType(), new MachineRecipeInput(this.getItemHandler().getStackInSlot(0)), this.level)
-                .map(RecipeHolder::value)
-                .orElse(null);
-        if (recipe != null && forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), 1, recipe.getResultItem(this.level.registryAccess()).copy(), true, i -> {}).isEmpty()) {
-            this.cachedRecipe = recipe;
-        } else {
-            this.cachedRecipe = null;
-        }
-    }
-
     private void onEuChanged(int oldAmount) {
         this.updateData();
     }
@@ -108,20 +62,6 @@ public class CompressorBlockEntity extends MachineBlockEntity implements MenuPro
     @Override
     public IItemHandler getItemHandlerOnSide(Direction direction) {
         return this.exposedItemHandler;
-    }
-
-    @Override
-    protected void loadData(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadData(tag, provider);
-
-        this.progress = tag.getInt("progress");
-    }
-
-    @Override
-    protected void saveData(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveData(tag, provider);
-
-        tag.putInt("progress", this.progress);
     }
 
     @Override

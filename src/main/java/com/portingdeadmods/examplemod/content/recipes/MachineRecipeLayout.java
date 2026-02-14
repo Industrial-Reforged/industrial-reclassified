@@ -3,18 +3,26 @@ package com.portingdeadmods.examplemod.content.recipes;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
+import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
+import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.portingdeadlibs.utils.RecipeUtils;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public abstract class MachineRecipeLayout<R extends MachineRecipe> {
@@ -23,7 +31,7 @@ public abstract class MachineRecipeLayout<R extends MachineRecipe> {
     private RecipeType<R> recipeType;
     private RecipeSerializer<R> recipeSerializer;
     private final Map<RecipeComponent.Type<?>, String> components;
-    private final Map<RecipeComponent.Type<?>, RecipeComponent> defaultComponentValues;
+    private final Map<RecipeComponent.Type<?>, Supplier<? extends RecipeComponent>> defaultComponentValues;
 
     public MachineRecipeLayout(ResourceLocation id, RecipeType<R> recipeType, BiFunction<ResourceLocation, Map<String, RecipeComponent>, R> recipeFactory) {
         this.id = id;
@@ -41,7 +49,7 @@ public abstract class MachineRecipeLayout<R extends MachineRecipe> {
         this.components.put(type, id);
     }
 
-    protected <C extends RecipeComponent> void addComponent(RecipeComponent.Type<C> type, String id, C defaultComponent) {
+    protected <C extends RecipeComponent> void addComponent(RecipeComponent.Type<C> type, String id, Supplier<C> defaultComponent) {
         this.addComponent(type, id);
         this.defaultComponentValues.put(type, defaultComponent);
     }
@@ -68,16 +76,25 @@ public abstract class MachineRecipeLayout<R extends MachineRecipe> {
                 for (Map.Entry<RecipeComponent.Type<?>, String> entry : components.entrySet()) {
                     T val = input.get(entry.getValue());
                     RecipeComponent.Type<?> type = entry.getKey();
-                    DataResult<? extends Pair<? extends RecipeComponent, T>> result = type.codec().decode(ops, val);
-                    if (result.isSuccess()) {
-                        RecipeComponent component = result.getOrThrow().getFirst();
-                        recipeComponents.put(entry.getValue(), component);
-                    } else {
-                        RecipeComponent defaultComponent = defaultComponentValues.get(entry.getKey());
-                        if (defaultComponent != null) {
-                            recipeComponents.put(entry.getValue(), defaultComponent);
+                    Codec<? extends RecipeComponent> codec = type.codec();
+                    Supplier<? extends RecipeComponent> defaultComponentValue = defaultComponentValues.get(entry.getKey());
+                    if (codec != null) {
+                        DataResult<? extends Pair<? extends RecipeComponent, T>> result = codec.decode(ops, val);
+                        if (result.isSuccess()) {
+                            RecipeComponent component = result.getOrThrow().getFirst();
+                            recipeComponents.put(entry.getValue(), component);
                         } else {
-                            return DataResult.error(() -> "Failed to decode Recipe Component: " + result.error().get().message(), factory.apply(id, recipeComponents));
+                            if (defaultComponentValue != null) {
+                                recipeComponents.put(entry.getValue(), defaultComponentValue.get());
+                            } else {
+                                return DataResult.error(() -> "Failed to decode Recipe Component: " + result.error().get().message(), factory.apply(id, recipeComponents));
+                            }
+                        }
+                    } else {
+                        if (defaultComponentValue != null) {
+                            recipeComponents.put(entry.getValue(), defaultComponentValue.get());
+                        } else {
+                            return DataResult.error(() -> "Failed to decode Recipe Component, neither a codec nor default value was provided for component of type: " + entry.getValue(), factory.apply(id, recipeComponents));
                         }
                     }
                 }
@@ -88,11 +105,17 @@ public abstract class MachineRecipeLayout<R extends MachineRecipe> {
             public <T> RecordBuilder<T> encode(R input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
                 for (Map.Entry<String, ? extends RecipeComponent> entry : input.getComponents().entrySet()) {
                     RecipeComponent.Type<?> type = entry.getValue().type();
-                    DataResult<T> result = type.rawCodec().encodeStart(ops, entry.getValue());
-                    if (result.isSuccess()) {
-                        prefix.add(entry.getKey(), result.getOrThrow());
-                    } else {
-                        throw new IllegalStateException("Failed to encode recipe");
+                    Codec<RecipeComponent> rawCodec = type.rawCodec();
+                    if (rawCodec != null) {
+                        DataResult<T> result = rawCodec.encodeStart(ops, entry.getValue());
+                        if (result.isSuccess()) {
+                            if (entry.getKey() == null) {
+                                System.out.println("Oops key is null");
+                            }
+                            prefix.add(entry.getKey(), result.getOrThrow());
+                        } else {
+                            throw new IllegalStateException("Failed to encode recipe");
+                        }
                     }
                 }
                 return prefix;
@@ -118,6 +141,24 @@ public abstract class MachineRecipeLayout<R extends MachineRecipe> {
             this.recipeType = RecipeType.simple(this.id);
         }
         return this.recipeType;
+    }
+
+    /* Recipe related methods */
+
+    public boolean matches(R recipe, MachineRecipeInput input, Level level) {
+        InputComponentFlag inputComp = recipe.getComponentByFlag(IRRecipeComponentFlags.INPUT);
+        if (inputComp != null) {
+            return inputComp.test(input.items(), false);
+        }
+        return false;
+    }
+
+    public ItemStack createResultItem(R recipe, @Nullable MachineRecipeInput input, HolderLookup.Provider provider) {
+        OutputComponentFlag output = recipe.getComponentByFlag(IRRecipeComponentFlags.OUTPUT);
+        if (output != null) {
+            return output.getOutputs().getFirst();
+        }
+        return ItemStack.EMPTY;
     }
 
     public static class Builder {

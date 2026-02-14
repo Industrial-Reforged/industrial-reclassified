@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ChargePadBlockEntity extends MachineBlockEntity {
     public ChargePadBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(IRMachines.CHARGE_PAD.getBlockEntityType(), blockPos, blockState);
+        super(IRMachines.CHARGE_PAD, blockPos, blockState);
         this.addEuStorage(EnergyHandlerImpl.NoDrain::new, IREnergyTiers.LOW, 64000, this::onEuChanged);
     }
 

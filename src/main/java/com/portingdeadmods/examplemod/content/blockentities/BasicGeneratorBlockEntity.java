@@ -37,7 +37,7 @@ public class BasicGeneratorBlockEntity extends MachineBlockEntity implements Men
     private int maxBurnTime;
 
     public BasicGeneratorBlockEntity(BlockPos pos, BlockState state) {
-        super(IRMachines.BASIC_GENERATOR.getBlockEntityType(), pos, state);
+        super(IRMachines.BASIC_GENERATOR, pos, state);
         addEuStorage(EnergyHandlerImpl.NoFill::new, IREnergyTiers.LOW, IRConfig.basicGeneratorEnergyCapacity, this::onEuChanged);
         addItemHandler(HandlerUtils::newItemStackHandler, builder -> builder
                 .slots(2)

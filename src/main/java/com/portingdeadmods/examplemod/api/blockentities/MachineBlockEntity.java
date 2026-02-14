@@ -5,7 +5,16 @@ import com.portingdeadmods.examplemod.IRCapabilities;
 import com.portingdeadmods.examplemod.api.capabilities.StorageChangedListener;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
+import com.portingdeadmods.examplemod.api.recipes.RecipeComponentFlag;
 import com.portingdeadmods.examplemod.content.menus.ChargingSlot;
+import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
+import com.portingdeadmods.examplemod.content.recipes.MachineRecipeInput;
+import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
+import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
+import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
+import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
+import com.portingdeadmods.examplemod.registries.IRRecipeLayouts;
+import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import com.portingdeadmods.portingdeadlibs.api.blockentities.ContainerBlockEntity;
 import com.portingdeadmods.portingdeadlibs.api.blockentities.RedstoneBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -16,11 +25,14 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -31,16 +43,26 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class MachineBlockEntity extends ContainerBlockEntity implements RedstoneBlockEntity {
+    protected final MachineRecipeLayout<?> recipeLayout;
     private final List<ChargingSlot> chargingSlots;
     private final List<BlockCapabilityCache<EnergyHandler, Direction>> caches;
     private EnergyHandler euStorage;
     private RedstoneSignalType redstoneSignalType = RedstoneSignalType.IGNORED;
     private int redstoneSignalStrength;
+    protected MachineRecipe cachedRecipe;
+    protected float progress;
+    protected float progressIncrement;
 
-    public MachineBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
-        super(blockEntityType, blockPos, blockState);
+    public MachineBlockEntity(IRMachine machine, BlockPos blockPos, BlockState blockState) {
+        super(machine.getBlockEntityType(), blockPos, blockState);
+        this.recipeLayout = machine.getRecipeLayout();
         this.caches = new ArrayList<>();
         this.chargingSlots = new ArrayList<>();
+        this.progressIncrement = 1F;
+    }
+
+    public MachineRecipe getCachedRecipe() {
+        return cachedRecipe;
     }
 
     @Override
@@ -62,6 +84,47 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
                     int filled = energyStorage.fillEnergy(amountPerBlock, false);
                     getEuStorage().drainEnergy(filled, false);
                 }
+            }
+        }
+
+        this.tickRecipe();
+
+    }
+
+    protected int getResultSlot() {
+        return 1;
+    }
+
+    protected @NotNull MachineRecipeInput createRecipeInput() {
+        return new MachineRecipeInput(List.of(this.getItemHandler().getStackInSlot(0)));
+    }
+
+    protected void onItemsChanged(int slot) {
+        this.updateData();
+
+        MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(this.recipeLayout.getRecipeType(), this.createRecipeInput(), this.level)
+                .map(RecipeHolder::value)
+                .orElse(null);
+        if (recipe != null && forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), this.getResultSlot(), recipe.getResultItem(this.level.registryAccess()).copy(), true, i -> {
+        }).isEmpty()) {
+            this.cachedRecipe = recipe;
+        } else {
+            this.cachedRecipe = null;
+        }
+    }
+
+    protected void tickRecipe() {
+        if (this.cachedRecipe != null) {
+            if (this.getProgress() >= this.getMaxProgress()) {
+                this.progress = 0;
+                ItemStack resultItem = this.cachedRecipe.getResultItem(this.level.registryAccess());
+                OutputComponentFlag output = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.OUTPUT);
+                if (output.isOutputted(this.level.random, 0)) {
+                    this.forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), this.getResultSlot(), resultItem.copy(), false, this::onItemsChanged);
+                }
+                this.getItemHandler().extractItem(0, 1, false);
+            } else {
+                this.progress += this.progressIncrement;
             }
         }
     }
@@ -103,6 +166,14 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
                 energyStorage.fillEnergy(newDrained, false);
             }
         }
+    }
+
+    public int getProgress() {
+        return (int) this.progress;
+    }
+
+    public int getMaxProgress() {
+        return this.cachedRecipe != null ? this.cachedRecipe.getComponent(TimeComponent.TYPE).time() : 0;
     }
 
     public boolean shouldSpreadEnergy() {
@@ -176,12 +247,14 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
 
         this.redstoneSignalStrength = tag.getInt("signal_strength");
         this.redstoneSignalType = RedstoneSignalType.CODEC.decode(NbtOps.INSTANCE, tag.get("redstone_signal")).result().orElse(Pair.of(RedstoneSignalType.IGNORED, new CompoundTag())).getFirst();
+        this.progress = tag.getFloat("progress");
     }
 
     @Override
     protected void saveData(CompoundTag tag, HolderLookup.Provider provider) {
         super.saveData(tag, provider);
 
+        tag.putFloat("progress", this.progress);
         tag.putInt("signal_strength", this.redstoneSignalStrength);
         Optional<Tag> tag1 = RedstoneSignalType.CODEC.encodeStart(NbtOps.INSTANCE, this.redstoneSignalType).result();
         tag1.ifPresent(value -> {

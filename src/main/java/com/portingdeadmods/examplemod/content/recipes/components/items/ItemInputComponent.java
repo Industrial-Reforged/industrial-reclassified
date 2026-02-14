@@ -9,6 +9,7 @@ import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
 import com.portingdeadmods.examplemod.api.recipes.RecipeFlagType;
 import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
+import com.portingdeadmods.portingdeadlibs.utils.RecipeUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -72,6 +73,18 @@ public record ItemInputComponent(Ingredient ingredient, int count, float chance)
     @Override
     public Type<?> type() {
         return TYPE;
+    }
+
+    @Override
+    public boolean test(List<ItemStack> items, boolean strict) {
+        if (strict) {
+            return items.size() == 1 && this.test(items.getFirst());
+        } else if (!items.isEmpty()) {
+            for (ItemStack item : items) {
+                if (this.test(item)) return true;
+            }
+        }
+        return false;
     }
 
     public boolean test(ItemStack itemStack) {

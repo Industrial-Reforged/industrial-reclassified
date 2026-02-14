@@ -2,6 +2,7 @@ package com.portingdeadmods.examplemod.content.recipes.flags;
 
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponentFlag;
 import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -9,4 +10,7 @@ public interface InputComponentFlag extends RecipeComponentFlag {
     List<IngredientWithCount> getIngredients();
 
     List<Float> getChances();
+
+    boolean test(List<ItemStack> items, boolean strict);
+
 }

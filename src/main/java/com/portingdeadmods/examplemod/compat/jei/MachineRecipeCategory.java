@@ -68,11 +68,12 @@ public class MachineRecipeCategory extends AbstractRecipeCategory<MachineRecipe>
                     });
                 }
             }
-        } else if (recipe.getId().equals(IRRecipeLayouts.FOOD_CANNING_MACHINE.getId())) {
-            builder.addOutputSlot(this.getWidth() - 16, this.getHeight() / 2 - 8)
-                    .addItemStack(IRItems.TIN_CAN_FOOD.toStack())
-                    .addRichTooltipCallback((view, tooltip) -> tooltip.add(Component.literal("Any Food Item").withStyle(ChatFormatting.DARK_GRAY)));
         }
+//        else if (recipe.getId().equals(IRRecipeLayouts.FOOD_CANNING_MACHINE.getId())) {
+//            builder.addOutputSlot(this.getWidth() - 16, this.getHeight() / 2 - 8)
+//                    .addItemStack(IRItems.TIN_CAN_FOOD.toStack())
+//                    .addRichTooltipCallback((view, tooltip) -> tooltip.add(Component.literal("Any Food Item").withStyle(ChatFormatting.DARK_GRAY)));
+//        }
 
     }
 

@@ -11,6 +11,7 @@ import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
 import com.portingdeadmods.examplemod.impl.energy.EnergyHandlerImpl;
 import com.portingdeadmods.examplemod.impl.items.LimitedItemHandler;
 import com.portingdeadmods.examplemod.registries.*;
+import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
 import com.portingdeadmods.portingdeadlibs.utils.capabilities.HandlerUtils;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.core.BlockPos;
@@ -38,7 +39,7 @@ public class CanningMachineBlockEntity extends MachineBlockEntity implements Men
     private int progress;
 
     public CanningMachineBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(IRMachines.CANNING_MACHINE.getBlockEntityType(), blockPos, blockState);
+        super(IRMachines.CANNING_MACHINE, blockPos, blockState);
         this.addEuStorage(EnergyHandlerImpl.NoDrain::new, IREnergyTiers.LOW, 4000, this::onEuChanged);
         this.addItemHandler(HandlerUtils::newItemStackHandler, builder -> builder
                 .slots(4)
@@ -67,7 +68,14 @@ public class CanningMachineBlockEntity extends MachineBlockEntity implements Men
                     InputComponentFlag inputs = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.INPUT);
                     forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), 2, resultItem.copy(), false, this::onItemsChanged);
                     for (int i = 0; i < 2; i++) {
-                        this.getItemHandler().extractItem(i, inputs.getIngredients().get(i).count(), false);
+                        List<IngredientWithCount> ingredients = inputs.getIngredients();
+                        int count;
+                        if (ingredients.size() == 2) {
+                            count = ingredients.get(i).count();
+                        } else {
+                            count = 1;
+                        }
+                        this.getItemHandler().extractItem(i, count, false);
                     }
                 }
             } else if (this.progress != 0) {
@@ -77,7 +85,8 @@ public class CanningMachineBlockEntity extends MachineBlockEntity implements Men
         }
     }
 
-    private @NotNull MachineRecipeInput createRecipeInput() {
+    @Override
+    protected @NotNull MachineRecipeInput createRecipeInput() {
         return new MachineRecipeInput(List.of(this.getItemHandler().getStackInSlot(0), this.getItemHandler().getStackInSlot(1)));
     }
 
@@ -93,7 +102,8 @@ public class CanningMachineBlockEntity extends MachineBlockEntity implements Men
         return this.cachedRecipe != null ? this.cachedRecipe.getComponent(TimeComponent.TYPE).time() : 0;
     }
 
-    private void onItemsChanged(int slot) {
+    @Override
+    protected void onItemsChanged(int slot) {
         this.updateData();
 
         MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(IRRecipeLayouts.CANNING_MACHINE.getRecipeType(), this.createRecipeInput(), this.level)

@@ -7,6 +7,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 public interface RecipeComponent {
@@ -21,6 +22,10 @@ public interface RecipeComponent {
             this(id, codec.codec(), streamCodec);
         }
 
+        public Type(ResourceLocation id) {
+            this(id, (Codec<C>) null, null);
+        }
+
         public Codec<RecipeComponent> rawCodec() {
             return (Codec<RecipeComponent>) codec;
         }
@@ -29,5 +34,16 @@ public interface RecipeComponent {
             return (StreamCodec<RegistryFriendlyByteBuf, RecipeComponent>) streamCodec;
         }
 
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.id);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof Type<?> that)
+                return Objects.equals(this.id, that.id);
+            return false;
+        }
     }
 }

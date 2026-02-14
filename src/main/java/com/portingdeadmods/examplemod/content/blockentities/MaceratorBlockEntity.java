@@ -36,7 +36,7 @@ public class MaceratorBlockEntity extends MachineBlockEntity implements MenuProv
     private int progress;
 
     public MaceratorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(IRMachines.MACERATOR.getBlockEntityType(), blockPos, blockState);
+        super(IRMachines.MACERATOR, blockPos, blockState);
         this.addEuStorage(EnergyHandlerImpl.NoDrain::new, IREnergyTiers.LOW, 4000, this::onEuChanged);
         this.addItemHandler(HandlerUtils::newItemStackHandler, builder -> builder
                 .slots(4)
@@ -88,7 +88,8 @@ public class MaceratorBlockEntity extends MachineBlockEntity implements MenuProv
         return this.cachedRecipe != null ? this.cachedRecipe.getComponent(TimeComponent.TYPE).time() : 0;
     }
 
-    private void onItemsChanged(int slot) {
+    @Override
+    protected void onItemsChanged(int slot) {
         this.updateData();
 
         MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(IRRecipeLayouts.MACERATOR.getRecipeType(), new MachineRecipeInput(this.getItemHandler().getStackInSlot(0)), this.level)

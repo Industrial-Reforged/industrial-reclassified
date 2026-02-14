@@ -1,7 +1,6 @@
 package com.portingdeadmods.examplemod.registries;
 
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.content.recipes.FoodCanningMachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.layouts.*;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
@@ -18,9 +17,8 @@ public final class IRRecipeLayouts {
     public static final CompressorRecipeLayout COMPRESSOR = register("compressor", CompressorRecipeLayout::new);
     public static final MaceratorRecipeLayout MACERATOR = register("macerator", MaceratorRecipeLayout::new);
     public static final ExtractorRecipeLayout EXTRACTOR = register("extractor", ExtractorRecipeLayout::new);
-    public static final RecipeType<MachineRecipe> CANNING_RECIPE_TYPE = RecipeType.simple(IndustrialReclassified.rl("canning_machine"));
     public static final CanningMachineRecipeLayout CANNING_MACHINE = register("canning_machine", CanningMachineRecipeLayout::new);
-    public static final FoodCanningMachineRecipeLayout FOOD_CANNING_MACHINE = register("food_canning_machine", FoodCanningMachineRecipeLayout::new);
+    public static final RecyclerRecipeLayout RECYCLER = register("recycler", RecyclerRecipeLayout::new);
 
     private static <L extends MachineRecipeLayout<?>> L register(String key, Function<ResourceLocation, L> factory) {
         ResourceLocation id = IndustrialReclassified.rl(key);

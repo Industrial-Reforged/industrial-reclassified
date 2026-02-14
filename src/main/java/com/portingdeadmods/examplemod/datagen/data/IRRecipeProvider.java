@@ -1,5 +1,7 @@
 package com.portingdeadmods.examplemod.datagen.data;
 
+import com.portingdeadmods.examplemod.content.recipes.components.EnumRecipeComponent;
+import com.portingdeadmods.examplemod.content.recipes.layouts.CanningMachineRecipeLayout;
 import com.portingdeadmods.examplemod.tags.IRTags;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent;
@@ -37,7 +39,9 @@ public class IRRecipeProvider extends RecipeProvider {
     }
 
     @Override
-    protected void buildRecipes(RecipeOutput output) {
+    protected void buildRecipes(RecipeOutput output0) {
+        RecipeOutput output = new IRRecipeOutput(output0);
+
         super.buildRecipes(output);
 
         this.compressorRecipe()
@@ -126,8 +130,9 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new EnergyComponent(800))
                 .save(output);
 
-        this.foodCanningMachineRecipe()
-                .component(new ItemInputComponent(IRItems.TIN_CAN))
+        this.canningMachineRecipe()
+                .component(new EnumRecipeComponent<>(CanningMachineRecipeLayout.Variant.FOOD_CANNING))
+                .component(new ItemInputListComponent(IRItems.TIN_CAN))
                 .component(new TimeComponent(200))
                 .component(new EnergyComponent(800))
                 .save(output, IndustrialReclassified.rl("food_canning"));
@@ -476,6 +481,8 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new EnergyComponent(800))
                 .save(output);
 
+        this.recyclerRecipe().save(output, IndustrialReclassified.rl("scrap_from_recycling"));
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.ENERGY_CRYSTAL)
                 .pattern("RRR")
                 .pattern("RDR")
@@ -773,12 +780,12 @@ public class IRRecipeProvider extends RecipeProvider {
         return new MachineRecipeBuilder(IRRecipeLayouts.EXTRACTOR);
     }
 
-    private MachineRecipeBuilder canningMachineRecipe() {
-        return new MachineRecipeBuilder(IRRecipeLayouts.CANNING_MACHINE);
+    private MachineRecipeBuilder recyclerRecipe() {
+        return new MachineRecipeBuilder(IRRecipeLayouts.RECYCLER);
     }
 
-    private MachineRecipeBuilder foodCanningMachineRecipe() {
-        return new MachineRecipeBuilder(IRRecipeLayouts.FOOD_CANNING_MACHINE);
+    private MachineRecipeBuilder canningMachineRecipe() {
+        return new MachineRecipeBuilder(IRRecipeLayouts.CANNING_MACHINE);
     }
 
     private static void generatorCraftingRecipes(RecipeOutput output) {

@@ -13,7 +13,7 @@ public class CompressorRecipeLayout extends MachineRecipeLayout<MachineRecipe> {
         super(id, MachineRecipe::new);
         this.addComponent(ItemInputComponent.TYPE, "input");
         this.addComponent(ItemOutputComponent.TYPE, "output");
-        this.addComponent(EnergyComponent.TYPE, "energy", new EnergyComponent(800));
-        this.addComponent(TimeComponent.TYPE, "duration", new TimeComponent(200));
+        this.addComponent(EnergyComponent.TYPE, "energy", () -> new EnergyComponent(800));
+        this.addComponent(TimeComponent.TYPE, "duration", () -> new TimeComponent(200));
     }
 }

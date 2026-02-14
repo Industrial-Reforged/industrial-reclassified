@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SolarPanelBlockEntity extends MachineBlockEntity implements MenuProvider, GeneratorBlockEntity {
     public SolarPanelBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(IRMachines.BASIC_SOLAR_PANEL.getBlockEntityType(), blockPos, blockState);
+        super(IRMachines.BASIC_SOLAR_PANEL, blockPos, blockState);
         addEuStorage(EnergyHandlerImpl.NoFill::new, IREnergyTiers.LOW, IRConfig.basicSolarPanelEnergyCapacity, this::onEuChanged);
     }
 
