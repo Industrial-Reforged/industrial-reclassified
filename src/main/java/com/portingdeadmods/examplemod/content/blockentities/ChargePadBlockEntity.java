@@ -20,10 +20,6 @@ public class ChargePadBlockEntity extends MachineBlockEntity {
         this.addEuStorage(EnergyHandlerImpl.NoDrain::new, IREnergyTiers.LOW, 64000, this::onEuChanged);
     }
 
-    private void onEuChanged(int amount) {
-        this.updateData();
-    }
-
     @Override
     public void tick() {
         super.tick();

@@ -2,11 +2,8 @@ package com.portingdeadmods.examplemod.content.blockentities;
 
 import com.portingdeadmods.examplemod.IRCapabilities;
 import com.portingdeadmods.examplemod.api.blockentities.MachineBlockEntity;
-import com.portingdeadmods.examplemod.content.menus.CompressorMenu;
 import com.portingdeadmods.examplemod.content.menus.RecyclerMenu;
-import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeInput;
-import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
 import com.portingdeadmods.examplemod.impl.energy.EnergyHandlerImpl;
 import com.portingdeadmods.examplemod.impl.items.LimitedItemHandler;
 import com.portingdeadmods.examplemod.registries.*;
@@ -14,19 +11,13 @@ import com.portingdeadmods.portingdeadlibs.utils.capabilities.HandlerUtils;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,57 +49,9 @@ public class RecyclerBlockEntity extends MachineBlockEntity implements MenuProvi
         return new RecyclerMenu(i, inventory, this);
     }
 
-//    @Override
-//    protected void tickRecipe() {
-//        if (!this.level.isClientSide()) {
-//            if (!this.getItemHandler().getStackInSlot(0).isEmpty() && this.getEuStorage().getEnergyStored() > 0) {
-//                if (this.progress < this.getMaxProgress()) {
-//                    this.progress++;
-//                    this.getEuStorage().forceDrainEnergy(3, false);
-//                } else {
-//                    this.progress = 0;
-//                    if (this.level.random.nextInt(0, 2) == 0) {
-//                        this.forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), 1, IRItems.SCRAP.toStack(), false, this::onItemsChanged);
-//                    }
-//                    this.getItemHandler().extractItem(0, 1, false);
-//                }
-//            } else if (this.progress != 0) {
-//                this.progress = 0;
-//                this.updateData();
-//            }
-//        }
-//    }
-
     @Override
     protected @NotNull MachineRecipeInput createRecipeInput() {
         return new MachineRecipeInput(this.getItemHandler().getStackInSlot(0));
-    }
-
-//    @Override
-//    public int getMaxProgress() {
-//        return 200;
-//    }
-
-    public MachineRecipe getCachedRecipe() {
-        return cachedRecipe;
-    }
-
-    @Override
-    protected void onItemsChanged(int slot) {
-        this.updateData();
-
-        MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(IRRecipeLayouts.RECYCLER.getRecipeType(), new MachineRecipeInput(this.getItemHandler().getStackInSlot(0)), this.level)
-                .map(RecipeHolder::value)
-                .orElse(null);
-        if (recipe != null && forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), 1, recipe.getResultItem(this.level.registryAccess()).copy(), true, i -> {}).isEmpty()) {
-            this.cachedRecipe = recipe;
-        } else {
-            this.cachedRecipe = null;
-        }
-    }
-
-    private void onEuChanged(int oldAmount) {
-        this.updateData();
     }
 
     @Override

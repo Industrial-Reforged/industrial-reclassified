@@ -21,11 +21,8 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class ElectricFurnaceBlockEntity extends MachineBlockEntity implements MenuProvider {
     private RecipeHolder<SmeltingRecipe> cachedRecipe;
@@ -52,12 +49,8 @@ public class ElectricFurnaceBlockEntity extends MachineBlockEntity implements Me
         return this.cachedRecipe != null ? this.cachedRecipe.value().getCookingTime() : 0;
     }
 
-    public RecipeHolder<SmeltingRecipe> getCachedRecipe() {
+    public RecipeHolder<SmeltingRecipe> getCachedSmeltingRecipe() {
         return this.cachedRecipe;
-    }
-
-    private void onEuChanged(int oldAmount) {
-        this.updateData();
     }
 
     @Override

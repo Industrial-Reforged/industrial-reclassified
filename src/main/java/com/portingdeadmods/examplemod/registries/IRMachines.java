@@ -56,7 +56,7 @@ public final class IRMachines {
                     .rotatable()
                     .ticking()
             )
-            //.recipeLayout(IRRecipeLayouts.RECYCLER)
+            .recipeLayout(IRRecipeLayouts.RECYCLER)
             .blockEntity(RecyclerBlockEntity::new)
             .menu(RecyclerMenu::new));
     public static final IRMachine MACERATOR = HELPER.registerMachine("macerator", IRMachine.builder(IREnergyTiers.LOW)

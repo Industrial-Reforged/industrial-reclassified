@@ -50,7 +50,7 @@ public class MaceratorBlockEntity extends MachineBlockEntity implements MenuProv
         this.exposedItemHandler = new LimitedItemHandler(this.getItemHandler(), IntSet.of(0), IntSet.of(1, 2), IntSet.of(3));
     }
 
-    private void onEuChanged(int oldAmount) {
+    protected void onEuChanged(int oldAmount) {
         this.updateData();
     }
 

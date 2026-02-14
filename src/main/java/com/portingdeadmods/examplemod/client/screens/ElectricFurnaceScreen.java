@@ -41,7 +41,7 @@ public class ElectricFurnaceScreen extends MachineScreen<ElectricFurnaceMenu> {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 
         float progress;
-        if (this.menu.blockEntity.getCachedRecipe() != null) {
+        if (this.menu.blockEntity.getCachedSmeltingRecipe() != null) {
             progress = (float) this.menu.blockEntity.getProgress() / this.menu.blockEntity.getMaxProgress();
         } else {
             progress = 0;

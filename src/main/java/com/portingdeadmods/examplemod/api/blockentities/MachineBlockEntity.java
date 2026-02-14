@@ -113,6 +113,10 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
         }
     }
 
+    protected void onEuChanged(int oldAmount) {
+        this.updateData();
+    }
+
     protected void tickRecipe() {
         if (this.cachedRecipe != null) {
             if (this.getProgress() >= this.getMaxProgress()) {

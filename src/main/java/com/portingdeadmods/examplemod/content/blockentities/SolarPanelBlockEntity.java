@@ -23,10 +23,6 @@ public class SolarPanelBlockEntity extends MachineBlockEntity implements MenuPro
         addEuStorage(EnergyHandlerImpl.NoFill::new, IREnergyTiers.LOW, IRConfig.basicSolarPanelEnergyCapacity, this::onEuChanged);
     }
 
-    private void onEuChanged(int amount) {
-        this.updateData();
-    }
-
     @Override
     public void tick() {
         super.tick();

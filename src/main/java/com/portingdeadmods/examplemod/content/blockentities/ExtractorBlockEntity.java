@@ -97,7 +97,7 @@ public class ExtractorBlockEntity extends MachineBlockEntity implements MenuProv
         }
     }
 
-    private void onEuChanged(int oldAmount) {
+    protected void onEuChanged(int oldAmount) {
         this.updateData();
     }
 

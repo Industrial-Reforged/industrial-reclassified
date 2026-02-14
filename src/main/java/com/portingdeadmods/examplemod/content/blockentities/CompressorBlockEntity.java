@@ -55,7 +55,8 @@ public class CompressorBlockEntity extends MachineBlockEntity implements MenuPro
         this.exposedItemHandler = new LimitedItemHandler(this.getItemHandler(), IntSet.of(0), IntSet.of(1), IntSet.of(2));
     }
 
-    private void onEuChanged(int oldAmount) {
+    @Override
+    protected void onEuChanged(int oldAmount) {
         this.updateData();
     }
 

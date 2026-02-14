@@ -117,10 +117,6 @@ public class CanningMachineBlockEntity extends MachineBlockEntity implements Men
         }
     }
 
-    private void onEuChanged(int oldAmount) {
-        this.updateData();
-    }
-
     @Override
     public IItemHandler getItemHandlerOnSide(Direction direction) {
         return this.exposedItemHandler;
