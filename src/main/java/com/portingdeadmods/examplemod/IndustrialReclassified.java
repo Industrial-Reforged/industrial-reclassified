@@ -11,16 +11,23 @@ import com.portingdeadmods.portingdeadlibs.api.config.PDLConfigHelper;
 import com.portingdeadmods.portingdeadlibs.api.data.PDLDataComponents;
 import com.portingdeadmods.portingdeadlibs.api.items.IFluidItem;
 import com.portingdeadmods.portingdeadlibs.utils.capabilities.CapabilityRegistrationHelper;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -43,12 +50,16 @@ public final class IndustrialReclassified {
     public static final String MODID = "examplemod";
     public static final String MODNAME = "Example Mod";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static final ModelResourceLocation WINDMILL_BLADE_MODEL = ModelResourceLocation.standalone(rl("block/windmill_blade"));
+    public static final ModelResourceLocation WATERMILL_BLADE_MODEL = ModelResourceLocation.standalone(rl("block/watermill_blade"));
 
     public IndustrialReclassified(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::registerPayloads);
         modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(this::registerRegistries);
         modEventBus.addListener(this::registerRecipeLayout);
+        modEventBus.addListener(this::addFeaturePacks);
+        modEventBus.addListener(this::registerAdditionalModels);
         modEventBus.addListener(RegisterEvent.class, event -> this.onRegister(event, modEventBus));
 
         IRItems.ITEMS.register(modEventBus);
@@ -67,6 +78,15 @@ public final class IndustrialReclassified {
         IRNetworks.NETWORKS.register(modEventBus);
 
         PDLConfigHelper.registerConfig(IRConfig.class, ModConfig.Type.COMMON, modContainer);
+    }
+
+    private void addFeaturePacks(AddPackFindersEvent event) {
+        event.addPackFinders(rl("data/examplemod/datapacks/ir_wip_features"), PackType.SERVER_DATA, Component.literal("Industrial Reclassified: WIP Content"), PackSource.FEATURE, false, Pack.Position.TOP);
+    }
+
+    private void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
+        event.register(WINDMILL_BLADE_MODEL);
+        event.register(WATERMILL_BLADE_MODEL);
     }
 
     private void registerRegistries(NewRegistryEvent event) {

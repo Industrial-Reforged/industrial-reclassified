@@ -77,8 +77,10 @@ public class IREnUsLangProvider extends LanguageProvider {
         addItem(IRItems.LAPOTRON_CRYSTAL, "Lapotoron Crystal");
 
         addItem(IRItems.FLUID_CELL, "Fluid Cell");
+        addItem(IRItems.FUSE, "Fuse");
         addItem(IRItems.TIN_CAN, "Tin Can");
         addItem(IRItems.TIN_CAN_FOOD, "Tin Can With Food");
+
         addItem(IRItems.STICKY_RESIN, "Sticky Resin");
         addItem(IRItems.RUBBER, "Rubber");
 
@@ -119,6 +121,8 @@ public class IREnUsLangProvider extends LanguageProvider {
         addBlock(IRBlocks.STICKY_RESIN_SHEET, "Sticky Resin Sheet");
 
         add(IRMachines.BASIC_GENERATOR.getBlock(), "Basic Generator");
+        add(IRMachines.WIND_MILL.getBlock(), "Wind Mill");
+        add(IRMachines.WATER_MILL.getBlock(), "Water Mill");
         add(IRMachines.ELECTRIC_FURNACE.getBlock(), "Electric Furnace");
         add(IRMachines.CHARGE_PAD.getBlock(), "Charge Pad");
         add(IRMachines.COMPRESSOR.getBlock(), "Compressor");

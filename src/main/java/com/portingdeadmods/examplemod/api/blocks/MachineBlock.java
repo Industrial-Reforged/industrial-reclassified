@@ -3,30 +3,51 @@ package com.portingdeadmods.examplemod.api.blocks;
 import com.mojang.serialization.MapCodec;
 import com.portingdeadmods.examplemod.api.blockentities.MachineBlockEntity;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
+import com.portingdeadmods.examplemod.api.energy.blocks.EnergyTierBlock;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
+import com.portingdeadmods.examplemod.registries.IRItems;
+import com.portingdeadmods.examplemod.utils.TooltipUtils;
 import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import com.portingdeadmods.portingdeadlibs.api.blockentities.ContainerBlockEntity;
+import com.portingdeadmods.portingdeadlibs.api.blockentities.multiblocks.FakeBlockEntity;
 import com.portingdeadmods.portingdeadlibs.api.blocks.ContainerBlock;
 import com.portingdeadmods.portingdeadlibs.api.utils.PDLBlockStateProperties;
 import com.portingdeadmods.portingdeadlibs.utils.BlockUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Supplier;
 
-public class MachineBlock extends ContainerBlock {
+public class MachineBlock extends ContainerBlock implements EnergyTierBlock {
     private final Supplier<? extends EnergyTier> energyTier;
     private BlockEntityType<? extends MachineBlockEntity> blockEntityType;
     private final boolean ticking;
@@ -49,12 +70,77 @@ public class MachineBlock extends ContainerBlock {
         if (this.activatable) {
             defaultState = defaultState.setValue(PDLBlockStateProperties.ACTIVE, false);
         }
-
-        this.registerDefaultState(defaultState);
     }
 
     public static boolean isActive(BlockState state) {
         return state.hasProperty(PDLBlockStateProperties.ACTIVE) && state.getValue(PDLBlockStateProperties.ACTIVE);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        MachineBlockEntity be = BlockUtils.getBE(MachineBlockEntity.class, level, pos);
+
+        if (be != null) {
+            double x = pos.getX();
+            double y = pos.getY();
+            double z = pos.getZ();
+
+            if (be.isBurnt()) {
+                if (random.nextInt(8) == 0) {
+                    level.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+                }
+
+                for (int i = 0; i < 5; i++) {
+                    level.addParticle(ParticleTypes.SMOKE, x + random.nextFloat(), y + 1D, z + random.nextFloat(), 0D, 0D, 0D);
+
+                    level.addParticle(ParticleTypes.SMOKE, x, y + 0.05D + random.nextFloat(), z + random.nextFloat(), 0D, 0D, 0D);
+                    level.addParticle(ParticleTypes.SMOKE, x + 1D, y + 0.05D + random.nextFloat(), z + random.nextFloat(), 0D, 0D, 0D);
+                    level.addParticle(ParticleTypes.SMOKE, x + random.nextFloat(), y + 0.05D + random.nextFloat(), z, 0D, 0D, 0D);
+                    level.addParticle(ParticleTypes.SMOKE, x + random.nextFloat(), y + 0.05D + random.nextFloat(), z + 1D, 0D, 0D, 0D);
+
+                    if (random.nextInt(8) == 0) {
+                        level.addParticle(ParticleTypes.FLAME, x, y + 0.05D + random.nextFloat(), z + random.nextFloat(), 0D, 0D, 0D);
+                    }
+
+                    if (random.nextInt(8) == 0) {
+                        level.addParticle(ParticleTypes.FLAME, x + 1D, y + 0.05D + random.nextFloat(), z + random.nextFloat(), 0D, 0D, 0D);
+                    }
+
+                    if (random.nextInt(8) == 0) {
+                        level.addParticle(ParticleTypes.FLAME, x + random.nextFloat(), y + 0.05D + random.nextFloat(), z, 0D, 0D, 0D);
+                    }
+
+                    if (random.nextInt(8) == 0) {
+                        level.addParticle(ParticleTypes.FLAME, x + random.nextFloat(), y + 0.05D + random.nextFloat(), z + 1D, 0D, 0D, 0D);
+                    }
+                }
+
+                level.addParticle(ParticleTypes.FLAME, x + random.nextFloat(), y + 1.1D, z + random.nextFloat(), 0D, 0D, 0D);
+                level.addParticle(ParticleTypes.LARGE_SMOKE, x + 0.5D, y + 1D, z + 0.5D, 0D, 0D, 0D);
+            }
+        }
+
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        MachineBlockEntity be = BlockUtils.getBE(MachineBlockEntity.class, level, pos);
+        if (be != null && be.isBurnt() && stack.is(IRItems.FUSE)) {
+            stack.shrink(1);
+            be.setBurnt(false);
+            level.playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.5f, 0.75f);
+            return ItemInteractionResult.SUCCESS;
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+    }
+
+    @Override
+    protected @NotNull InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        MachineBlockEntity be = BlockUtils.getBE(MachineBlockEntity.class, level, pos);
+        if (be != null && !be.isBurnt()) {
+            return super.useWithoutItem(state, level, pos, player, hitResult);
+        }
+        return InteractionResult.FAIL;
     }
 
     @Override
@@ -109,6 +195,19 @@ public class MachineBlock extends ContainerBlock {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    @Override
+    public @Nullable EnergyTier getEnergyTier() {
+        return this.energyTier.get();
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+
+        TooltipUtils.addEnergyTierTooltip(tooltipComponents, this.getEnergyTier());
+
     }
 
     public static class Builder {

@@ -94,6 +94,7 @@ public class IRItemModelProvider extends ItemModelProvider {
         batteryModel(IRItems.LAPOTRON_CRYSTAL.get());
 
         fluidCellModel(IRItems.FLUID_CELL.get());
+        basicItem(IRItems.FUSE.get());
         basicItem(IRItems.TIN_CAN.get());
         basicItem(IRItems.TIN_CAN_FOOD.get());
 

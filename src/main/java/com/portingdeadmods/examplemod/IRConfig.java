@@ -7,6 +7,8 @@ public final class IRConfig {
 
     @ConfigValue(key = "basic_generator", name = "Basic Generator Energy Capacity", comment = "The Energy Capacity of the Basic Generator", category = BLOCKS_ENERGY_CAPACITY)
     public static int basicGeneratorEnergyCapacity = 4000;
+    @ConfigValue(key = "geothermal_generator", name = "Geothermal Generator Energy Capacity", comment = "The Energy Capacity of the Geothermal Generator", category = BLOCKS_ENERGY_CAPACITY)
+    public static int geothermalGeneratorEnergyCapacity = 16000;
     @ConfigValue(key = "basic_solar_panel", name = "Basic Solar Panel Energy Capacity", comment = "The Energy Capacity of the Basic Solar Panel", category = BLOCKS_ENERGY_CAPACITY)
     public static int basicSolarPanelEnergyCapacity = 4000;
     @ConfigValue(key = "centrifuge", name = "Centrifuge Energy Capacity", comment = "The Energy Capacity of the Centrifuge", category = BLOCKS_ENERGY_CAPACITY)
@@ -18,30 +20,15 @@ public final class IRConfig {
 
     @ConfigValue(key = "basic_generator", name = "Basic Generator Energy Production", comment = "The amount of Energy produced by the Basic Generator", category = BLOCKS_ENERGY_PRODUCTION)
     public static int basicGeneratorEnergyProduction = 10;
+    @ConfigValue(key = "geothermal_generator", name = "Geothermal Generator Energy Production", comment = "The amount of Energy produced by the Geothermal Generator", category = BLOCKS_ENERGY_PRODUCTION)
+    public static int geothermalGeneratorEnergyProduction = 20;
     @ConfigValue(key = "basic_solar_panel", name = "Basic Solar Panel Energy Production", comment = "The amount of Energy produced by the Basic Solar Panel", category = BLOCKS_ENERGY_PRODUCTION)
     public static int basicSolarPanelEnergyProduction = 1;
 
     private static final String BLOCKS_FLUID_CAPACITY = "blocks.fluid.capacity";
 
-    @ConfigValue(key = "crucible", name = "Crucible Fluid Capacity", comment = "The Fluid Capacity of the Crucible", category = BLOCKS_FLUID_CAPACITY)
-    public static int crucibleFluidCapacity = 9000;
-    @ConfigValue(key = "blast_furnace", name = "Blast Furnace Fluid Capacity", comment = "The Fluid Capacity of the Blast Furnace", category = BLOCKS_FLUID_CAPACITY)
-    public static int blastFurnaceFluidCapacity = 9000;
-    @ConfigValue(key = "drain", name = "Drain Fluid Capacity", comment = "The Fluid Capacity of the Drain", category = BLOCKS_FLUID_CAPACITY)
-    public static int drainFluidCapacity = 1000;
-    @ConfigValue(key = "centrifuge", name = "Centrifuge Fluid Capacity", comment = "The Fluid Capacity of the Centrifuge", category = BLOCKS_FLUID_CAPACITY)
-    public static int centrifugeFluidCapacity = 400;
-
-    private static final String BLOCKS_HEAT_CAPACITY = "blocks.heat.capacity";
-
-    @ConfigValue(key = "small_firebox", name = "Small Firebox Heat Capacity", comment = "The Heat Capacity of the Small Firebox", category = BLOCKS_HEAT_CAPACITY)
-    public static float smallFireboxHeatCapacity = 1800;
-    @ConfigValue(key = "firebox", name = "Firebox Heat Capacity", comment = "The Heat Capacity of the Firebox", category = BLOCKS_HEAT_CAPACITY)
-    public static float fireboxHeatCapacity = 2400;
-    @ConfigValue(key = "crucible", name = "Crucible Heat Capacity", comment = "The Heat Capacity of the Crucible", category = BLOCKS_HEAT_CAPACITY)
-    public static float crucibleHeatCapacity = 1800;
-    @ConfigValue(key = "blast_furnace", name = "Blast Furnace Heat Capacity", comment = "The Heat Capacity of the Blast Furnace", category = BLOCKS_HEAT_CAPACITY)
-    public static float blastFurnaceHeatCapacity = 2400;
+    @ConfigValue(key = "geothermal_generator", name = "Geothermal Generator Fluid Capacity", comment = "The Fluid Capacity of the Geothermal Generator", category = BLOCKS_FLUID_CAPACITY)
+    public static int geothermalGeneratorFluidCapacity = 1000;
 
     private static final String ITEMS_ENERGY_CAPACITY = "items.energy.capacity";
 

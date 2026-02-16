@@ -324,8 +324,9 @@ public class IRRecipeProvider extends RecipeProvider {
 
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRBlocks.MACHINE_FRAME.get())
                 .pattern("###")
-                .pattern("# #")
+                .pattern("#F#")
                 .pattern("###")
+                .define('F', IRItems.FUSE)
                 .define('#', CTags.ItemTags.INGOTS_REFINED_IRON)
                 .unlockedBy("has_refined_iron", has(CTags.ItemTags.INGOTS_REFINED_IRON))
                 .save(output);

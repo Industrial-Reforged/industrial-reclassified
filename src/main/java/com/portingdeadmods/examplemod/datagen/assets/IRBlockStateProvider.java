@@ -5,6 +5,7 @@ import com.portingdeadmods.examplemod.api.blocks.PipeBlock;
 import com.portingdeadmods.examplemod.content.blocks.RubberTreeResinHoleBlock;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRMachines;
+import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import com.portingdeadmods.portingdeadlibs.api.datagen.ModelBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -67,14 +68,23 @@ public class IRBlockStateProvider extends BlockStateProvider {
                 .active()
                 .create();
 
-        modelBuilder(IRBlocks.WATER_MILL.get())
+        modelBuilder(IRMachines.GEOTHERMAL_GENERATOR.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .front(this::blockTextureSuffix, "_front")
+                .horizontalFacing()
+                //.active()
                 .create();
 
-        modelBuilder(IRBlocks.WIND_MILL.get())
+        modelBuilder(IRMachines.WATER_MILL.getBlock())
                 .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
                 .front(this::blockTextureSuffix, "_front")
+                .horizontalFacing()
+                .create();
+
+        modelBuilder(IRMachines.WIND_MILL.getBlock())
+                .defaultTexture(blockTexture(IRBlocks.MACHINE_FRAME.get()))
+                .front(this::blockTextureSuffix, "_front")
+                .horizontalFacing()
                 .create();
 
         modelBuilder(IRBlocks.NUCLEAR_REACTOR_CHAMBER.get())

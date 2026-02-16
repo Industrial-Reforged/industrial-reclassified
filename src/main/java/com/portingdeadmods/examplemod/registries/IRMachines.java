@@ -18,14 +18,14 @@ public final class IRMachines {
             )
             .blockEntity(BasicGeneratorBlockEntity::new)
             .menu(BasicGeneratorMenu::new));
-    //    public static final IRMachine GEOTHERMAL_GENERATOR = HELPER.registerMachine("geothermal_generator", IRMachine.builder(IREnergyTiers.MEDIUM)
-//            .block(MachineBlock::new, builder -> builder
-//                    .activatable()
-//                    .rotatable()
-//                    .ticking()
-//            )
-//            .blockEntity(BasicGeneratorBlockEntity::new)
-//            .menu(BasicGeneratorMenu::new));
+        public static final IRMachine GEOTHERMAL_GENERATOR = HELPER.registerMachine("geothermal_generator", IRMachine.builder(IREnergyTiers.MEDIUM)
+            .block(MachineBlock::new, builder -> builder
+                    .activatable()
+                    .rotatable()
+                    .ticking()
+            )
+            .blockEntity(GeothermalGeneratorBlockEntity::new)
+            .menu(GeothermalGeneratorMenu::new));
     public static final IRMachine ELECTRIC_FURNACE = HELPER.registerMachine("electric_furnace", IRMachine.builder(IREnergyTiers.LOW)
             .block(MachineBlock::new, builder -> builder
                     .activatable()
@@ -94,6 +94,22 @@ public final class IRMachines {
             )
             .blockEntity(SolarPanelBlockEntity::new)
             .menu(SolarPanelMenu::new));
+    public static final IRMachine WATER_MILL = HELPER.registerMachine("water_mill", IRMachine.builder(IREnergyTiers.MEDIUM)
+            .block(MachineBlock::new, builder -> builder
+                    .activatable()
+                    .rotatable()
+                    .ticking()
+            )
+            .blockEntity(WaterMillBlockEntity::new)
+            .menu(WaterMillMenu::new));
+    public static final IRMachine WIND_MILL = HELPER.registerMachine("wind_mill", IRMachine.builder(IREnergyTiers.HIGH)
+            .block(MachineBlock::new, builder -> builder
+                    .activatable()
+                    .rotatable()
+                    .ticking()
+            )
+            .blockEntity(WindMillBlockEntity::new)
+            .menu(WindMillMenu::new));
 //    public static final IRMachine CENTRIFUGE = HELPER.registerMachine("centrifuge", IRMachine.builder(IREnergyTiers.LOW)
 //            .block(CentrifugeBlock::new)
 //            .blockEntity(CentrifugeBlockEntity::new)

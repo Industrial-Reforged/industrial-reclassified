@@ -6,6 +6,7 @@ import com.portingdeadmods.examplemod.api.blockentities.GeneratorBlockEntity;
 import com.portingdeadmods.examplemod.api.blockentities.MachineBlockEntity;
 import com.portingdeadmods.examplemod.api.blocks.MachineBlock;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
+import com.portingdeadmods.examplemod.api.energy.TieredEnergy;
 import com.portingdeadmods.examplemod.content.menus.BasicGeneratorMenu;
 import com.portingdeadmods.examplemod.impl.energy.EnergyHandlerImpl;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;
@@ -47,10 +48,6 @@ public class BasicGeneratorBlockEntity extends MachineBlockEntity implements Men
                     default -> throw new IllegalArgumentException("Non existent slot " + slot + "on Basic Generator");
                 })
                 .onChange(this::onItemsChanged));
-    }
-
-    private void onEuChanged(int amount) {
-        this.updateData();
     }
 
     @Override
@@ -133,8 +130,8 @@ public class BasicGeneratorBlockEntity extends MachineBlockEntity implements Men
             EnergyHandler thisEnergyStorage = this.getEuStorage();
             if (level instanceof ServerLevel serverLevel) {
                 int min = Math.min(thisEnergyStorage.getEnergyTier().maxOutput(), thisEnergyStorage.getEnergyStored());
-                int remainder = IRNetworks.ENERGY.get().transport(serverLevel, this.worldPosition, min);
-                thisEnergyStorage.drainEnergy(min - remainder, false);
+                TieredEnergy remainder = IRNetworks.ENERGY.get().transport(serverLevel, this.worldPosition, new TieredEnergy(min, thisEnergyStorage.getEnergyTier()));
+                thisEnergyStorage.drainEnergy(min - remainder.energy(), false);
             }
         }
     }

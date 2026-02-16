@@ -4,6 +4,7 @@ import com.portingdeadmods.examplemod.IRCapabilities;
 import com.portingdeadmods.examplemod.api.blocks.PipeBlock;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
+import com.portingdeadmods.examplemod.api.energy.TieredEnergy;
 import com.portingdeadmods.examplemod.content.blocks.BurntCableBlock;
 import com.portingdeadmods.examplemod.content.blocks.CableBlock;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
@@ -20,13 +21,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-public class EnergyNetwork extends TransportNetworkImpl<Integer> {
-    protected EnergyNetwork(Builder<Integer> builder) {
+public class EnergyNetwork extends TransportNetworkImpl<TieredEnergy> {
+    protected EnergyNetwork(Builder<TieredEnergy> builder) {
         super(builder);
     }
 
     @Override
-    public Integer transport(ServerLevel serverLevel, BlockPos pos, Integer value, Direction... directions) {
+    public TieredEnergy transport(ServerLevel serverLevel, BlockPos pos, TieredEnergy value, Direction... directions) {
         // TODO: Get cap of block instead of be
         BlockEntity blockEntity = serverLevel.getBlockEntity(pos);
         if (blockEntity != null) {
@@ -39,13 +40,13 @@ public class EnergyNetwork extends TransportNetworkImpl<Integer> {
                     directions1 = directions;
                 }
                 for (Direction direction : directions1) {
-                    NetworkNode<Integer> node = this.getNodeAt(serverLevel, pos.relative(direction));
+                    NetworkNode<TieredEnergy> node = this.getNodeAt(serverLevel, pos.relative(direction));
                     if (node != null) {
-                        int remainder = super.transport(serverLevel, pos, value, directions);
-                        if (euStorage.getEnergyTier() != this.getEnergyTierOfCable(serverLevel, pos.relative(direction)) && value > 0) {
-                            List<NetworkRoute<Integer>> routes = this.getRouteCache(serverLevel).routes().get(pos);
+                        TieredEnergy remainder = super.transport(serverLevel, pos, value, directions);
+                        if (euStorage.getEnergyTier().compareTo(value.tier()) > 0 && value.energy() > 0) {
+                            List<NetworkRoute<TieredEnergy>> routes = this.getRouteCache(serverLevel).routes().get(pos);
                             if (routes != null && !routes.isEmpty()) {
-                                NetworkNode<Integer> nextNode = this.findNextNode(node, serverLevel, pos.relative(direction), direction);
+                                NetworkNode<TieredEnergy> nextNode = this.findNextNode(node, serverLevel, pos.relative(direction), direction);
                                 if (nextNode != null) {
                                     NetworkHelper.iterBlocksBetweenNodes(node, nextNode, pos1 -> {
                                         serverLevel.setBlockAndUpdate(pos1, copyConnections(serverLevel.getBlockState(pos1), IRBlocks.BURNT_CABLE.get().defaultBlockState()
@@ -80,7 +81,7 @@ public class EnergyNetwork extends TransportNetworkImpl<Integer> {
         return level.getBlockState(pos).getBlock() instanceof CableBlock energyTierBlock ? energyTierBlock.getEnergyTier() : null;
     }
 
-    public static EnergyNetwork build(Builder<Integer> builder) {
+    public static EnergyNetwork build(Builder<TieredEnergy> builder) {
         return new EnergyNetwork(builder);
     }
 

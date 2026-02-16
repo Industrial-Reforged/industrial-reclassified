@@ -111,24 +111,12 @@ public class IRMachine implements ItemLike {
         return name;
     }
 
-    public Supplier<? extends EnergyTier> energyTierSupplier() {
-        return energyTierSupplier;
-    }
-
-    public Supplier<? extends MachineBlock> blockSupplier() {
+    public Supplier<? extends MachineBlock> getBlockSupplier() {
         return blockSupplier;
     }
 
-    public Supplier<BlockItem> blockItemSupplier() {
+    public Supplier<BlockItem> getBlockItemSupplier() {
         return blockItemSupplier;
-    }
-
-    public Supplier<BlockEntityType<? extends MachineBlockEntity>> blockEntityTypeSupplier() {
-        return blockEntityTypeSupplier;
-    }
-
-    public @Nullable Supplier<MenuType<? extends MachineMenu<?>>> menuTypeSupplier() {
-        return menuTypeSupplier;
     }
 
     public static class Builder {

@@ -24,6 +24,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -42,23 +43,29 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class MachineBlockEntity extends ContainerBlockEntity implements RedstoneBlockEntity {
-    protected final MachineRecipeLayout<?> recipeLayout;
+public class MachineBlockEntity extends ContainerBlockEntity implements RedstoneBlockEntity, WrenchListenerBlockEntity {
     private final List<ChargingSlot> chargingSlots;
     private final List<BlockCapabilityCache<EnergyHandler, Direction>> caches;
+    protected final IRMachine machine;
     private EnergyHandler euStorage;
     private RedstoneSignalType redstoneSignalType = RedstoneSignalType.IGNORED;
     private int redstoneSignalStrength;
     protected MachineRecipe cachedRecipe;
     protected float progress;
     protected float progressIncrement;
+    protected boolean burnt;
+    private boolean removedByWrench;
 
     public MachineBlockEntity(IRMachine machine, BlockPos blockPos, BlockState blockState) {
         super(machine.getBlockEntityType(), blockPos, blockState);
-        this.recipeLayout = machine.getRecipeLayout();
+        this.machine = machine;
         this.caches = new ArrayList<>();
         this.chargingSlots = new ArrayList<>();
         this.progressIncrement = 1F;
+    }
+
+    public MachineRecipeLayout<?> getRecipeLayout() {
+        return this.machine.getRecipeLayout();
     }
 
     public MachineRecipe getCachedRecipe() {
@@ -91,6 +98,15 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
 
     }
 
+    public boolean isBurnt() {
+        return burnt;
+    }
+
+    public void setBurnt(boolean burnt) {
+        this.burnt = burnt;
+        this.updateData();
+    }
+
     protected int getResultSlot() {
         return 1;
     }
@@ -102,7 +118,7 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
     protected void onItemsChanged(int slot) {
         this.updateData();
 
-        MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(this.recipeLayout.getRecipeType(), this.createRecipeInput(), this.level)
+        MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(this.getRecipeLayout().getRecipeType(), this.createRecipeInput(), this.level)
                 .map(RecipeHolder::value)
                 .orElse(null);
         if (recipe != null && forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), this.getResultSlot(), recipe.getResultItem(this.level.registryAccess()).copy(), true, i -> {
@@ -200,13 +216,6 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
     }
 
     @Override
-    public void dropItems(IItemHandler handler) {
-        if (handler != null) {
-            super.dropItems(handler);
-        }
-    }
-
-    @Override
     public int emitRedstoneLevel() {
         return 0;
     }
@@ -241,6 +250,15 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
         this.initCapCache();
     }
 
+    @Override
+    public void dropItems(IItemHandler handler) {
+        if (!this.removedByWrench && handler != null) {
+            super.dropItems(handler);
+        } else {
+            this.removedByWrench = false;
+        }
+    }
+
     public int getRedstoneSignalStrength() {
         return redstoneSignalStrength;
     }
@@ -249,6 +267,7 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
     protected void loadData(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadData(tag, provider);
 
+        this.burnt = tag.getBoolean("burnt");
         this.redstoneSignalStrength = tag.getInt("signal_strength");
         this.redstoneSignalType = RedstoneSignalType.CODEC.decode(NbtOps.INSTANCE, tag.get("redstone_signal")).result().orElse(Pair.of(RedstoneSignalType.IGNORED, new CompoundTag())).getFirst();
         this.progress = tag.getFloat("progress");
@@ -258,6 +277,7 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
     protected void saveData(CompoundTag tag, HolderLookup.Provider provider) {
         super.saveData(tag, provider);
 
+        tag.putBoolean("burnt", this.burnt);
         tag.putFloat("progress", this.progress);
         tag.putInt("signal_strength", this.redstoneSignalStrength);
         Optional<Tag> tag1 = RedstoneSignalType.CODEC.encodeStart(NbtOps.INSTANCE, this.redstoneSignalType).result();
@@ -268,5 +288,10 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
 
     public @Nullable EnergyHandler getEuHandlerOnSide(@Nullable Direction direction) {
         return this.getEuStorage();
+    }
+
+    @Override
+    public void beforeRemoveByWrench(Player player) {
+        this.removedByWrench = true;
     }
 }

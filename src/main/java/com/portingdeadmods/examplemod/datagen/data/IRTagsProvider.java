@@ -46,23 +46,8 @@ public class IRTagsProvider {
         private void addTag(TagKey<Item> itemTagKey, Supplier<List<Either<ItemLike, TagKey<Item>>>> listSupplier) {
             IntrinsicTagAppender<Item> tag = tag(itemTagKey);
             for (Either<ItemLike, TagKey<Item>> entry : listSupplier.get()) {
-                entry.ifLeft(item -> tag.add(item.asItem()));
+                entry.left().map(ItemLike::asItem).ifPresent(tag::add);
                 entry.ifRight(tag::addTag);
-            }
-        }
-
-        private void tag(TagKey<Item> itemTagKey, ItemLike... items) {
-            IntrinsicTagAppender<Item> tag = tag(itemTagKey);
-            for (ItemLike item : items) {
-                tag.add(item.asItem());
-            }
-        }
-
-        @SafeVarargs
-        private void tag(TagKey<Item> itemTagKey, TagKey<Item>... items) {
-            IntrinsicTagAppender<Item> tag = tag(itemTagKey);
-            for (TagKey<Item> item : items) {
-                tag.addTag(item);
             }
         }
     }
@@ -74,20 +59,14 @@ public class IRTagsProvider {
 
         @Override
         protected void addTags(HolderLookup.Provider provider) {
+            IRTags.BlockTags.TAGS.forEach(this::addTag);
         }
 
-        private void tag(TagKey<Block> itemTagKey, Block... blocks) {
+        private void addTag(TagKey<Block> itemTagKey, Supplier<List<Either<Block, TagKey<Block>>>> listSupplier) {
             IntrinsicTagAppender<Block> tag = tag(itemTagKey);
-            for (Block block : blocks) {
-                tag.add(block);
-            }
-        }
-
-        @SafeVarargs
-        private void tag(TagKey<Block> itemTagKey, TagKey<Block>... blocks) {
-            IntrinsicTagAppender<Block> tag = tag(itemTagKey);
-            for (TagKey<Block> block : blocks) {
-                tag.addTag(block);
+            for (Either<Block, TagKey<Block>> entry : listSupplier.get()) {
+                entry.ifLeft(tag::add);
+                entry.ifRight(tag::addTag);
             }
         }
     }

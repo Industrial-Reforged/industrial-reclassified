@@ -18,8 +18,8 @@ public final class IRNetworks {
 
     public static final Supplier<EnergyNetwork> ENERGY = NETWORKS.register("energy", () -> EnergyNetwork.build(TransportNetworkImpl.builder(EnergyTransportHandler.INSTANCE)
             //.synced(ByteBufCodecs.INT)
-            .interactorCheck((level, pos, dir) -> {
-                BlockEntity be = level.getBlockEntity(pos.relative(dir));
+            .interactorCheck((level, cablePos, interactorPos, dir) -> {
+                BlockEntity be = level.getBlockEntity(interactorPos);
                 if (be != null) {
                     return level.getCapability(IRCapabilities.ENERGY_BLOCK, be.getBlockPos(), be.getBlockState(), be, dir) != null;
                 }

@@ -2,7 +2,12 @@ package com.portingdeadmods.examplemod.impl.networks;
 
 import com.mojang.serialization.Codec;
 import com.portingdeadmods.examplemod.IRCapabilities;
+import com.portingdeadmods.examplemod.api.blockentities.MachineBlockEntity;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
+import com.portingdeadmods.examplemod.api.energy.EnergyTier;
+import com.portingdeadmods.examplemod.api.energy.TieredEnergy;
+import com.portingdeadmods.examplemod.api.energy.blocks.EnergyTierBlock;
+import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import com.thepigcat.transportlib.api.TransportNetwork;
 import com.thepigcat.transportlib.api.Transporting;
 import com.thepigcat.transportlib.api.TransportingHandler;
@@ -14,66 +19,83 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class EnergyTransportHandler implements TransportingHandler<Integer> {
+public class EnergyTransportHandler implements TransportingHandler<TieredEnergy> {
     public static final EnergyTransportHandler INSTANCE = new EnergyTransportHandler();
 
     private EnergyTransportHandler() {
     }
 
     @Override
-    public Integer defaultValue() {
-        return 0;
+    public TieredEnergy defaultValue() {
+        return new TieredEnergy(0, IREnergyTiers.NONE.get());
     }
 
     @Override
-    public boolean validTransportValue(Integer value) {
-        return value >= 0;
+    public boolean validTransportValue(TieredEnergy value) {
+        return value.energy() >= 0;
     }
 
     @Override
-    public List<Integer> split(Integer value, int amount) {
+    public List<TieredEnergy> split(TieredEnergy value, int amount) {
         // TODO: Only split for interactors we can actually interact with
-        return splitNumberEvenly(value, amount);
+        List<Integer> split = splitNumberEvenly(value.energy(), amount);
+        List<TieredEnergy> split1 = new ArrayList<>();
+        for (Integer i : split) {
+            split1.add(new TieredEnergy(i, value.tier()));
+        }
+        return split1;
     }
 
     @Override
-    public @Nullable Integer join(Integer value0, Integer value1) {
-        if (value1 > 0 && value0 > Integer.MAX_VALUE - value1) {
+    public @Nullable TieredEnergy join(TieredEnergy value0, TieredEnergy value1) {
+        EnergyTier higherTier;
+        if (value0.tier().order() > value1.tier().order()) {
+            higherTier = value0.tier();
+        } else {
+            higherTier = value1.tier();
+        }
+        if (value1.energy() > 0 && value0.energy() > Integer.MAX_VALUE - value1.energy()) {
             return null;
-        } else if (value1 < 0 && value0 < Integer.MIN_VALUE - value1) {
+        } else if (value1.energy() < 0 && value0.energy() < Integer.MIN_VALUE - value1.energy()) {
             return null;
         }
-        return value0 + (int) value1;
+        return new TieredEnergy(value0.energy() + value1.energy(), higherTier);
     }
 
     @Override
-    public Integer remove(Integer value, Integer toRemove) {
-        return Math.max(value - toRemove, this.defaultValue());
+    public TieredEnergy remove(TieredEnergy value, TieredEnergy toRemove) {
+        return new TieredEnergy(Math.max(value.energy() - toRemove.energy(), this.defaultValue().energy()), value.tier());
     }
 
     @Override
-    public Codec<Integer> valueCodec() {
-        return Codec.INT;
+    public Codec<TieredEnergy> valueCodec() {
+        return TieredEnergy.CODEC;
     }
 
     @Override
-    public Integer receive(ServerLevel level, BlockPos interactorPos, Direction direction, Integer value) {
+    public TieredEnergy receive(ServerLevel level, BlockPos interactorPos, Direction direction, TieredEnergy value) {
         BlockEntity blockEntity = level.getBlockEntity(interactorPos);
 
         if (blockEntity != null) {
             EnergyHandler energyHandler = level.getCapability(IRCapabilities.ENERGY_BLOCK, interactorPos, blockEntity.getBlockState(), blockEntity, direction);
             if (energyHandler != null) {
-                int filled = energyHandler.fillEnergy(value, false);
-                return this.remove(value, filled);
+                if (value.tier() != null && energyHandler.getEnergyTier().compareTo(value.tier()) < 0) {
+                    if (blockEntity instanceof MachineBlockEntity machineBE) {
+                        machineBE.setBurnt(true);
+                    }
+                }
+                int filled = energyHandler.fillEnergy(value.energy(), false);
+                return this.remove(value, new TieredEnergy(filled, value.tier()));
             }
         }
         return value;
     }
 
     @Override
-    public Transporting<Integer> createTransporting(TransportNetwork<Integer> network) {
+    public Transporting<TieredEnergy> createTransporting(TransportNetwork<TieredEnergy> network) {
         return new TransportingImpl<>(network);
     }
 

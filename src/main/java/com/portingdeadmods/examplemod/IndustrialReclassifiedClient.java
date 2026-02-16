@@ -1,8 +1,12 @@
 package com.portingdeadmods.examplemod;
 
 import com.portingdeadmods.examplemod.api.fluid.SimpleFluidItem;
+import com.portingdeadmods.examplemod.client.blockentities.WaterMillBlockEntityRenderer;
+import com.portingdeadmods.examplemod.client.blockentities.WindMillBlockEntityRenderer;
 import com.portingdeadmods.examplemod.client.items.IRItemProperties;
 import com.portingdeadmods.examplemod.client.screens.*;
+import com.portingdeadmods.examplemod.content.blockentities.WaterMillBlockEntity;
+import com.portingdeadmods.examplemod.content.blockentities.WindMillBlockEntity;
 import com.portingdeadmods.examplemod.content.items.electric.BatteryItem;
 import com.portingdeadmods.examplemod.registries.*;
 import com.thepigcat.transportlib.client.debug.TransportNetworkRenderer;
@@ -13,6 +17,7 @@ import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -40,6 +45,7 @@ public final class IndustrialReclassifiedClient {
 
     private void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(IRMachines.BASIC_GENERATOR.getMenuType(), BasicGeneratorScreen::new);
+        event.register(IRMachines.GEOTHERMAL_GENERATOR.getMenuType(), GeothermalGeneratorScreen::new);
         event.register(IRMachines.ELECTRIC_FURNACE.getMenuType(), ElectricFurnaceScreen::new);
         event.register(IRMachines.COMPRESSOR.getMenuType(), CompressorScreen::new);
         event.register(IRMachines.MACERATOR.getMenuType(), MaceratorScreen::new);
@@ -60,6 +66,9 @@ public final class IndustrialReclassifiedClient {
 
     private void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(IREntityTypes.INDUSTRIAL_TNT.get(), TntRenderer::new);
+
+        event.registerBlockEntityRenderer((BlockEntityType<WindMillBlockEntity>) IRMachines.WIND_MILL.getBlockEntityType(), WindMillBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer((BlockEntityType<WaterMillBlockEntity>) IRMachines.WATER_MILL.getBlockEntityType(), WaterMillBlockEntityRenderer::new);
     }
 
     private void registerItemProperties() {

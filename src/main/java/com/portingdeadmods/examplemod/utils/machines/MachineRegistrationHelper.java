@@ -1,6 +1,5 @@
 package com.portingdeadmods.examplemod.utils.machines;
 
-import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.registries.IRItems;
 import net.minecraft.world.inventory.MenuType;
@@ -9,12 +8,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public final class MachineRegistrationHelper {
     private final List<IRMachine> machines;
@@ -33,8 +30,8 @@ public final class MachineRegistrationHelper {
 
     public <T extends IRMachine> T registerMachine(T machine) {
         this.machines.add(machine);
-        IRBlocks.BLOCKS.getBlockItems().add(() -> (BlockItem) machine.blockSupplier().get().asItem());
-        IRItems.ITEMS.getCreativeTabItems().add(machine.blockItemSupplier());
+        IRBlocks.BLOCKS.getBlockItems().add(() -> (BlockItem) machine.getBlockSupplier().get().asItem());
+        IRItems.ITEMS.getCreativeTabItems().add(machine.getBlockItemSupplier());
         return machine;
     }
 

@@ -53,6 +53,7 @@ public final class IRTranslations {
 
     private static final DefaultTranslationCategory MENUS_CATEGORY = TRANSLATIONS.createCategory("menus");
     public static final DeferredTranslation<TranslatableConstant> BASIC_GENERATOR = MENUS_CATEGORY.registerWithDefault("basic_generator", "Basic Generator");
+    public static final DeferredTranslation<TranslatableConstant> GEOTHERMAL_GENERATOR = MENUS_CATEGORY.registerWithDefault("geothermal_generator", "Geothermal Generator");
     public static final DeferredTranslation<TranslatableConstant> ELECTRIC_FURNACE = MENUS_CATEGORY.registerWithDefault("electric_furnace", "Electric Furnace");
     public static final DeferredTranslation<TranslatableConstant> BASIC_SOLAR_PANEL = MENUS_CATEGORY.registerWithDefault("basic_solar_panel", "Basic Solar Panel");
     public static final DeferredTranslation<TranslatableConstant> COMPRESSOR = MENUS_CATEGORY.registerWithDefault("compressor", "Compressor");
