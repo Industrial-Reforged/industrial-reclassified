@@ -25,22 +25,24 @@ import java.util.function.Supplier;
 
 public class BatteryItem extends SimpleEnergyItem {
     private final int stages;
+    private final boolean barVisible;
 
-    public BatteryItem(Properties properties, Supplier<? extends EnergyTier> energyTier, IntSupplier defaultEnergyCapacity, int stages) {
+    public BatteryItem(Properties properties, Supplier<? extends EnergyTier> energyTier, IntSupplier defaultEnergyCapacity, int stages, boolean barVisible) {
         super(properties, energyTier, defaultEnergyCapacity);
         this.stages = stages;
+        this.barVisible = barVisible;
     }
 
     public static BatteryItem batteryItem(Properties properties) {
-        return new BatteryItem(properties, IREnergyTiers.LOW, () -> IRConfig.basicBatteryCapacity, 6);
+        return new BatteryItem(properties, IREnergyTiers.LOW, () -> IRConfig.basicBatteryCapacity, 6, false);
     }
 
     public static BatteryItem energyCrystalItem(Properties properties) {
-        return new BatteryItem(properties, IREnergyTiers.HIGH, () -> IRConfig.energyCrystalCapacity, 2);
+        return new BatteryItem(properties, IREnergyTiers.HIGH, () -> IRConfig.energyCrystalCapacity, 2, true);
     }
 
     public static BatteryItem lapotronCrystalItem(Properties properties) {
-        return new BatteryItem(properties, IREnergyTiers.INSANE, () -> IRConfig.lapotronCrystalCapacity, 2);
+        return new BatteryItem(properties, IREnergyTiers.INSANE, () -> IRConfig.lapotronCrystalCapacity, 2, true);
     }
 
     public int getStages() {
@@ -54,7 +56,7 @@ public class BatteryItem extends SimpleEnergyItem {
 
     @Override
     public boolean isBarVisible(ItemStack p_150899_) {
-        return false;
+        return this.barVisible;
     }
 
     @Override

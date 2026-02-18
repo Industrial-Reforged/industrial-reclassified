@@ -1,6 +1,7 @@
 package com.portingdeadmods.examplemod.datagen.data;
 
 import com.mojang.datafixers.util.Either;
+import com.portingdeadmods.examplemod.registries.IRBlocks;
 import com.portingdeadmods.examplemod.tags.IRTags;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.tags.CTags;
@@ -60,6 +61,12 @@ public class IRTagsProvider {
         @Override
         protected void addTags(HolderLookup.Provider provider) {
             IRTags.BlockTags.TAGS.forEach(this::addTag);
+            this.tag(IRTags.BlockTags.WRENCHABLE)
+                    .add(IRBlocks.TIN_CABLE.get())
+                    .add(IRBlocks.COPPER_CABLE.get())
+                    .add(IRBlocks.GOLD_CABLE.get())
+                    .add(IRBlocks.HV_CABLE.get())
+                    .add(IRBlocks.GLASS_FIBRE_CABLE.get());
         }
 
         private void addTag(TagKey<Block> itemTagKey, Supplier<List<Either<Block, TagKey<Block>>>> listSupplier) {

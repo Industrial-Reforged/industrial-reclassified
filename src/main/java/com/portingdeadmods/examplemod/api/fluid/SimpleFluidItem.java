@@ -14,6 +14,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,17 @@ import java.util.List;
 public abstract class SimpleFluidItem extends Item implements IFluidItem {
     public SimpleFluidItem(Properties properties) {
         super(properties.component(IRDataComponents.FLUID.get(), SimpleFluidContent.EMPTY));
+    }
+
+    public static FluidStack getFluid(ItemStack stack) {
+        return stack.getCapability(Capabilities.FluidHandler.ITEM).getFluidInTank(0);
+    }
+
+    public static ItemStack withFluid(ItemStack stack, FluidStack fluid) {
+        ItemStack stack1 = stack.copy();
+        IFluidHandler fluidHandler = stack1.getCapability(Capabilities.FluidHandler.ITEM);
+        fluidHandler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+        return stack1;
     }
 
     @Override
