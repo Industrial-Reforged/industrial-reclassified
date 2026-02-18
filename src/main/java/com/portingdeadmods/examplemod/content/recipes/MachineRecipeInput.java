@@ -28,4 +28,14 @@ public record MachineRecipeInput(List<ItemStack> items, List<FluidStack> fluids)
     public int size() {
         return this.items().size();
     }
+
+    @Override
+    public boolean isEmpty() {
+        for(FluidStack fluid : this.fluids) {
+            if (!fluid.isEmpty()) {
+                return false;
+            }
+        }
+        return RecipeInput.super.isEmpty();
+    }
 }

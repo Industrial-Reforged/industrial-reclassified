@@ -4,16 +4,20 @@ import com.portingdeadmods.examplemod.IRCapabilities;
 import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.api.blockentities.GeneratorBlockEntity;
 import com.portingdeadmods.examplemod.api.blockentities.MachineBlockEntity;
+import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
+import com.portingdeadmods.examplemod.api.energy.TieredEnergy;
 import com.portingdeadmods.examplemod.content.menus.GeothermalGeneratorMenu;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeInput;
 import com.portingdeadmods.examplemod.impl.energy.EnergyHandlerImpl;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import com.portingdeadmods.examplemod.registries.IRMachines;
+import com.portingdeadmods.examplemod.registries.IRNetworks;
 import com.portingdeadmods.examplemod.registries.IRTranslations;
 import com.portingdeadmods.portingdeadlibs.utils.SerializerUtils;
 import com.portingdeadmods.portingdeadlibs.utils.capabilities.HandlerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -44,7 +48,7 @@ public class GeothermalGeneratorBlockEntity extends MachineBlockEntity implement
         this.addHandler(Capabilities.FluidHandler.BLOCK, HandlerUtils.newFluidTank(
                 (tank, fluid) -> true,
                 tank -> IRConfig.geothermalGeneratorFluidCapacity,
-                this::onFluidChanged,
+                this::onFluidsChanged,
                 1
         ), SerializerUtils::fluidTank);
     }
@@ -68,6 +72,16 @@ public class GeothermalGeneratorBlockEntity extends MachineBlockEntity implement
                 }
             }
         }
+
+        if (!level.isClientSide()) {
+            EnergyHandler thisEnergyStorage = this.getEuStorage();
+            if (level instanceof ServerLevel serverLevel) {
+                int min = Math.min(thisEnergyStorage.getEnergyTier().maxOutput(), thisEnergyStorage.getEnergyStored());
+                TieredEnergy remainder = IRNetworks.ENERGY.get().transport(serverLevel, this.worldPosition, new TieredEnergy(min, thisEnergyStorage.getEnergyTier()));
+                thisEnergyStorage.drainEnergy(min - remainder.energy(), false);
+            }
+        }
+
     }
 
     @Override
@@ -78,15 +92,6 @@ public class GeothermalGeneratorBlockEntity extends MachineBlockEntity implement
     @Override
     public boolean shouldSpreadEnergy() {
         return true;
-    }
-
-    private void onFluidChanged(int tank) {
-        super.onFluidsChanged(tank);
-    }
-
-    @Override
-    protected void onItemsChanged(int slot) {
-        this.updateData();
     }
 
     @Override

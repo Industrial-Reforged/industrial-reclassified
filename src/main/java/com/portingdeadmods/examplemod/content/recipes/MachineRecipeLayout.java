@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.energy.EnergyOutputComponent;
+import com.portingdeadmods.examplemod.content.recipes.flags.FluidInputComponentFlag;
 import com.portingdeadmods.examplemod.content.recipes.flags.FluidOutputComponentFlag;
 import com.portingdeadmods.examplemod.content.recipes.flags.ItemInputComponentFlag;
 import com.portingdeadmods.examplemod.content.recipes.flags.ItemOutputComponentFlag;
@@ -149,10 +150,14 @@ public abstract class MachineRecipeLayout<R extends MachineRecipe> {
 
     public boolean matches(R recipe, MachineRecipeInput input, Level level) {
         ItemInputComponentFlag inputComp = recipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_INPUT);
-        if (inputComp != null) {
-            return inputComp.test(input.items(), false);
+        if (inputComp != null && !inputComp.test(input.items(), false)) {
+            return false;
         }
-        return false;
+        FluidInputComponentFlag fluidInputComp = recipe.getComponentByFlag(IRRecipeComponentFlags.FLUID_INPUT);
+        if (fluidInputComp != null && !fluidInputComp.test(input.fluids(), false)) {
+            return false;
+        }
+        return true;
     }
 
     public ItemStack createResultItem(R recipe, @Nullable MachineRecipeInput input, HolderLookup.Provider provider) {

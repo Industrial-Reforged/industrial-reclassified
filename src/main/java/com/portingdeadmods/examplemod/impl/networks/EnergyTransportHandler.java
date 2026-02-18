@@ -3,6 +3,7 @@ package com.portingdeadmods.examplemod.impl.networks;
 import com.mojang.serialization.Codec;
 import com.portingdeadmods.examplemod.IRCapabilities;
 import com.portingdeadmods.examplemod.api.blockentities.MachineBlockEntity;
+import com.portingdeadmods.examplemod.api.blocks.MachineBlock;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import com.portingdeadmods.examplemod.api.energy.TieredEnergy;
@@ -81,8 +82,15 @@ public class EnergyTransportHandler implements TransportingHandler<TieredEnergy>
 
         if (blockEntity != null) {
             EnergyHandler energyHandler = level.getCapability(IRCapabilities.ENERGY_BLOCK, interactorPos, blockEntity.getBlockState(), blockEntity, direction);
+            if (blockEntity instanceof MachineBlockEntity machineBE && machineBE.isBurnt()) {
+                return value;
+            }
+
             if (energyHandler != null) {
-                if (value.tier() != null && energyHandler.getEnergyTier().compareTo(value.tier()) < 0) {
+                EnergyTier valueTier = value.tier();
+                EnergyTier handlerTier = energyHandler.getEnergyTier();
+                int tierDiff = valueTier.order() - handlerTier.order();
+                if (valueTier.compareTo(handlerTier) < 0 && tierDiff > 1) {
                     if (blockEntity instanceof MachineBlockEntity machineBE) {
                         machineBE.setBurnt(true);
                     }

@@ -580,6 +580,17 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new EnergyOutputComponent(20))
                 .save(output, IndustrialReclassified.rl("geothermal_energy_from_lava"));
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRBlocks.NUKE)
+                .pattern("UCU")
+                .pattern("TMT")
+                .pattern("UCU")
+                .define('T', Items.TNT)
+                .define('U', IRItems.QUAD_URANIUM_FUEL_ROD)
+                .define('M', IRBlocks.ADVANCED_MACHINE_FRAME)
+                .define('C', IRItems.ADVANCED_CIRCUIT)
+                .unlockedBy("has_item", has(IRItems.QUAD_URANIUM_FUEL_ROD))
+                .save(output);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRBlocks.NUCLEAR_REACTOR_CHAMBER)
                 .pattern(" C ")
                 .pattern("CMC")

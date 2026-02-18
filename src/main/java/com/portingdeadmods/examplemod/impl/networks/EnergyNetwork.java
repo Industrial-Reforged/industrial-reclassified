@@ -42,26 +42,23 @@ public class EnergyNetwork extends TransportNetworkImpl<TieredEnergy> {
                 for (Direction direction : directions1) {
                     NetworkNode<TieredEnergy> node = this.getNodeAt(serverLevel, pos.relative(direction));
                     if (node != null) {
-                        TieredEnergy remainder = super.transport(serverLevel, pos, value, directions);
-                        if (euStorage.getEnergyTier().compareTo(value.tier()) > 0 && value.energy() > 0) {
-                            List<NetworkRoute<TieredEnergy>> routes = this.getRouteCache(serverLevel).routes().get(pos);
-                            if (routes != null && !routes.isEmpty()) {
-                                NetworkNode<TieredEnergy> nextNode = this.findNextNode(node, serverLevel, pos.relative(direction), direction);
-                                if (nextNode != null) {
-                                    NetworkHelper.iterBlocksBetweenNodes(node, nextNode, pos1 -> {
-                                        serverLevel.setBlockAndUpdate(pos1, copyConnections(serverLevel.getBlockState(pos1), IRBlocks.BURNT_CABLE.get().defaultBlockState()
-                                                .setValue(BurntCableBlock.BURNT, true)));
-                                    });
+                        EnergyTier cableTier = this.getEnergyTierOfCable(serverLevel, pos.relative(direction));
+                        if (cableTier != null) {
+                            EnergyTier valueTier = value.tier();
+                            int tierDiff = valueTier.order() - cableTier.order();
+                            if (valueTier.compareTo(cableTier) > 0 && tierDiff > 1 && value.energy() > 0) {
+                                List<NetworkRoute<TieredEnergy>> routes = this.getRouteCache(serverLevel).routes().get(pos);
+                                if (routes != null && !routes.isEmpty()) {
                                     serverLevel.setBlockAndUpdate(node.getPos(), copyConnections(serverLevel.getBlockState(node.getPos()), IRBlocks.BURNT_CABLE.get().defaultBlockState()
                                             .setValue(BurntCableBlock.BURNT, true)));
-                                    serverLevel.setBlockAndUpdate(nextNode.getPos(), copyConnections(serverLevel.getBlockState(nextNode.getPos()), IRBlocks.BURNT_CABLE.get().defaultBlockState()
-                                            .setValue(BurntCableBlock.BURNT, true)));
+                                    return value;
                                 }
                             }
                         }
-                        return remainder;
                     }
                 }
+
+                return super.transport(serverLevel, pos, value, directions);
             }
         }
         return value;

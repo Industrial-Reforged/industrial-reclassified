@@ -3,6 +3,7 @@ package com.portingdeadmods.examplemod.content.recipes;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponentFlag;
 import com.portingdeadmods.examplemod.api.recipes.RecipeFlagType;
+import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.energy.EnergyOutputComponent;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.portingdeadlibs.api.recipes.PDLRecipe;
@@ -155,6 +156,10 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
 
     public static Builder<MachineRecipe> builder(MachineRecipeLayout<MachineRecipe> layout) {
         return new Builder<>(layout.getId(), MachineRecipe::new);
+    }
+
+    public boolean hasProgress() {
+        return this.getComponent(TimeComponent.TYPE) != null;
     }
 
     public static class Builder<R extends MachineRecipe> {

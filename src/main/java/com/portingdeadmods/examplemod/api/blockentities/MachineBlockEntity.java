@@ -10,6 +10,9 @@ import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeInput;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
+import com.portingdeadmods.examplemod.content.recipes.flags.FluidInputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.FluidOutputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemInputComponentFlag;
 import com.portingdeadmods.examplemod.content.recipes.flags.ItemOutputComponentFlag;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.examplemod.utils.machines.IRMachine;
@@ -81,6 +84,13 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
             this.tickChargingSlot(chargingSlot);
         }
 
+        this.tickEnergySpreading();
+
+        this.tickRecipe();
+
+    }
+
+    protected void tickEnergySpreading() {
         if (this.shouldSpreadEnergy() && !level.isClientSide()) {
             int amountPerBlock = this.getAmountPerBlock();
 
@@ -92,9 +102,6 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
                 }
             }
         }
-
-        this.tickRecipe();
-
     }
 
     public boolean isBurnt() {
@@ -137,25 +144,49 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
     }
 
     protected void tickRecipe() {
-        if (this.cachedRecipe != null) {
-            if (this.getProgress() >= this.getMaxProgress()) {
+        if (this.cachedRecipe != null && !this.level.isClientSide()) {
+            if (this.hasProgressFinished()) {
                 this.progress = 0;
                 RegistryAccess provider = this.level.registryAccess();
                 ItemStack resultItem = this.cachedRecipe.assemble(this.createRecipeInput(), provider);
-                ItemOutputComponentFlag output = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_OUTPUT);
+                FluidStack resultFluid = this.cachedRecipe.assembleFluid(this.createRecipeInput(), provider);
+
+                int resultEnergy = this.cachedRecipe.assembleEnergy(this.createRecipeInput(), provider);
+                ItemOutputComponentFlag itemOutput = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_OUTPUT);
+                FluidOutputComponentFlag fluidOutput = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.FLUID_OUTPUT);
+
+                ItemInputComponentFlag itemInput = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_INPUT);
+                FluidInputComponentFlag fluidInput = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.FLUID_INPUT);
+
                 boolean hasResultEnergy = this.cachedRecipe.hasResultEnergy(provider);
                 boolean hasResultItem = this.cachedRecipe.hasResultItem(provider);
+                boolean hasResultFluid = this.cachedRecipe.hasResultFluid(provider);
+
                 if (hasResultEnergy) {
-                    this.getEuStorage().forceFillEnergy(this.cachedRecipe.assembleEnergy(this.createRecipeInput(), provider), false);
+                    this.getEuStorage().forceFillEnergy(resultEnergy, false);
                 }
-                if (hasResultItem && output.isOutputted(this.level.random, 0)) {
+                if (hasResultItem && itemOutput.isOutputted(this.level.random, 0)) {
                     this.forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), this.getResultSlot(), resultItem.copy(), false, this::onItemsChanged);
                 }
-                this.getItemHandler().extractItem(0, 1, false);
+                if (hasResultFluid && fluidOutput.isOutputted(this.level.random, 0)) {
+                    this.forceFillTank(this.getFluidHandler(), resultFluid.copy(), IFluidHandler.FluidAction.EXECUTE, this::onFluidsChanged);
+                }
+
+                if (itemInput != null && !itemInput.getIngredients().isEmpty()) {
+                    this.getItemHandler().extractItem(0, itemInput.getIngredients().getFirst().count(), false);
+                }
+                if (fluidInput != null && !fluidInput.getIngredients().isEmpty()) {
+                    this.getFluidHandler().drain(fluidInput.getIngredients().getFirst().amount(), IFluidHandler.FluidAction.EXECUTE);
+                }
+
             } else {
                 this.progress += this.progressIncrement;
             }
         }
+    }
+
+    protected boolean hasProgressFinished() {
+        return this.cachedRecipe != null && (this.getProgress() >= this.getMaxProgress() || !this.cachedRecipe.hasProgress());
     }
 
     protected int getAmountPerBlock() {
@@ -202,7 +233,7 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
     }
 
     public int getMaxProgress() {
-        return this.cachedRecipe != null ? this.cachedRecipe.getComponent(TimeComponent.TYPE).time() : 0;
+        return this.cachedRecipe != null && this.cachedRecipe.hasProgress() ? this.cachedRecipe.getComponent(TimeComponent.TYPE).time() : 0;
     }
 
     public boolean shouldSpreadEnergy() {
@@ -306,35 +337,39 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
 
     private void refreshCachedRecipe() {
         MachineRecipeInput recipeInput = this.createRecipeInput();
-        MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(this.getRecipeLayout().getRecipeType(), recipeInput, this.level)
-                .map(RecipeHolder::value)
-                .orElse(null);
-        RegistryAccess provider = this.level.registryAccess();
-        if (recipe != null) {
-            if (recipe.hasResultItem(provider)) {
-                if (!forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), this.getResultSlot(), recipe.assemble(recipeInput, provider).copy(), true, i -> {
-                }).isEmpty()) {
-                    this.cachedRecipe = null;
-                    return;
+        if (this.getRecipeLayout() != null) {
+            MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(this.getRecipeLayout().getRecipeType(), recipeInput, this.level)
+                    .map(RecipeHolder::value)
+                    .orElse(null);
+            RegistryAccess provider = this.level.registryAccess();
+            if (recipe != null) {
+                if (recipe.hasResultItem(provider)) {
+                    if (!forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), this.getResultSlot(), recipe.assemble(recipeInput, provider).copy(), true, i -> {
+                    }).isEmpty()) {
+                        this.cachedRecipe = null;
+                        return;
+                    }
+                }
+                if (recipe.hasResultFluid(provider)) {
+                    FluidStack resultFluid = recipe.assembleFluid(recipeInput, provider);
+                    if (forceFillTank(this.getFluidHandler(), resultFluid.copy(), IFluidHandler.FluidAction.SIMULATE, i -> {
+                    }) != resultFluid.getAmount()) {
+                        this.cachedRecipe = null;
+                        return;
+                    }
+                }
+                if (recipe.hasResultEnergy(provider)) {
+                    int resultEnergy = recipe.assembleEnergy(recipeInput, provider);
+                    if (this.getEuStorage().forceFillEnergy(resultEnergy, true) != resultEnergy) {
+                        this.cachedRecipe = null;
+                        return;
+                    }
                 }
             }
-            if (recipe.hasResultFluid(provider)) {
-                FluidStack resultFluid = recipe.assembleFluid(recipeInput, provider);
-                if (forceFillTank(this.getFluidHandler(), resultFluid.copy(), IFluidHandler.FluidAction.SIMULATE, i -> {
-                }) != resultFluid.getAmount()) {
-                    this.cachedRecipe = null;
-                    return;
-                }
-            }
-            if (recipe.hasResultEnergy(provider)) {
-                int resultEnergy = recipe.assembleEnergy(recipeInput, provider);
-                if (this.getEuStorage().forceFillEnergy(resultEnergy, true) != resultEnergy) {
-                    this.cachedRecipe = null;
-                    return;
-                }
-            }
+            this.cachedRecipe = recipe;
+        } else {
+            this.cachedRecipe = null;
         }
-        this.cachedRecipe = recipe;
     }
 
     public int forceFillTank(IFluidHandler fluidHandler, FluidStack resource, IFluidHandler.FluidAction action, Consumer<Integer> onChange) {
