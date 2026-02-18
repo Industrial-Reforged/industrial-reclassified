@@ -3,11 +3,10 @@ package com.portingdeadmods.examplemod.content.blockentities;
 import com.portingdeadmods.examplemod.IRCapabilities;
 import com.portingdeadmods.examplemod.api.blockentities.MachineBlockEntity;
 import com.portingdeadmods.examplemod.content.menus.CanningMachineMenu;
-import com.portingdeadmods.examplemod.content.menus.ExtractorMenu;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeInput;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
-import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemInputComponentFlag;
 import com.portingdeadmods.examplemod.impl.energy.EnergyHandlerImpl;
 import com.portingdeadmods.examplemod.impl.items.LimitedItemHandler;
 import com.portingdeadmods.examplemod.registries.*;
@@ -65,7 +64,7 @@ public class CanningMachineBlockEntity extends MachineBlockEntity implements Men
                 } else {
                     this.progress = 0;
                     ItemStack resultItem = this.cachedRecipe.assemble(this.createRecipeInput(), this.level.registryAccess());
-                    InputComponentFlag inputs = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.INPUT);
+                    ItemInputComponentFlag inputs = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_INPUT);
                     forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), 2, resultItem.copy(), false, this::onItemsChanged);
                     for (int i = 0; i < 2; i++) {
                         List<IngredientWithCount> ingredients = inputs.getIngredients();

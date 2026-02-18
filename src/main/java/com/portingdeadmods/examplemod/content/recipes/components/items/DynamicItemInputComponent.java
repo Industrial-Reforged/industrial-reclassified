@@ -3,7 +3,7 @@ package com.portingdeadmods.examplemod.content.recipes.components.items;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.examplemod.api.recipes.RecipeFlagType;
-import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemInputComponentFlag;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
 import net.minecraft.world.item.ItemStack;
@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class DynamicItemInputComponent implements RecipeComponent, InputComponentFlag {
+public class DynamicItemInputComponent implements RecipeComponent, ItemInputComponentFlag {
     public static final Type<DynamicItemInputComponent> TYPE = new Type<>(IndustrialReclassified.rl("dynamic_item_input"));
-    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(IRRecipeComponentFlags.INPUT);
+    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(IRRecipeComponentFlags.ITEM_INPUT);
 
     private final BiPredicate<List<ItemStack>, Boolean> testFunction;
 

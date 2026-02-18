@@ -23,6 +23,6 @@ public class MachineMenu<BE extends MachineBlockEntity> extends PDLAbstractConta
 
     @Override
     protected int getMergeableSlotCount() {
-        return 0;
+        return 3;
     }
 }

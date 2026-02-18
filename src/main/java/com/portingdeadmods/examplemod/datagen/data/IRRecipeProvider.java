@@ -1,10 +1,12 @@
 package com.portingdeadmods.examplemod.datagen.data;
 
 import com.portingdeadmods.examplemod.content.recipes.components.EnumRecipeComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.energy.EnergyOutputComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.fluids.FluidInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.layouts.CanningMachineRecipeLayout;
 import com.portingdeadmods.examplemod.tags.IRTags;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
-import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.energy.EnergyInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputListComponent;
@@ -19,6 +21,7 @@ import com.portingdeadmods.examplemod.tags.CTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -48,68 +51,68 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new ItemInputComponent(IRItems.MIXED_METAL_INGOT))
                 .component(new ItemOutputComponent(IRItems.ADVANCED_ALLOY_PLATE))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
         this.compressorRecipe()
                 .component(new ItemInputComponent(IRItems.IRIDIUM_ALLOY_INGOT))
                 .component(new ItemOutputComponent(IRItems.IRIDIUM_INGOT))
                 .component(new TimeComponent(800))
-                .component(new EnergyComponent(3200))
+                .component(new EnergyInputComponent(3200))
                 .save(output);
         this.compressorRecipe()
                 .component(new ItemInputComponent(IRItems.CARBON_MESH))
                 .component(new ItemOutputComponent(IRItems.CARBON_PLATE))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
         this.compressorRecipe()
                 .component(new ItemInputComponent(IRItems.TIN_INGOT))
                 .component(new ItemOutputComponent(IRItems.TIN_PLATE))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
         this.compressorRecipe()
                 .component(new ItemInputComponent(Tags.Items.INGOTS_COPPER))
                 .component(new ItemOutputComponent(IRItems.COPPER_PLATE))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
         this.compressorRecipe()
                 .component(new ItemInputComponent(IRItems.COPPER_PLATE, 8))
                 .component(new ItemOutputComponent(IRItems.DENSE_COPPER_PLATE))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
 
         this.maceratorRecipe()
                 .component(new ItemInputComponent(IRItems.TIN_INGOT))
                 .component(new ItemOutputListComponent(IRItems.TIN_DUST))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
         this.maceratorRecipe()
                 .component(new ItemInputComponent(Tags.Items.INGOTS_COPPER))
                 .component(new ItemOutputListComponent(IRItems.COPPER_DUST))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
         this.maceratorRecipe()
                 .component(new ItemInputComponent(Tags.Items.INGOTS_IRON))
                 .component(new ItemOutputListComponent(IRItems.IRON_DUST))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
         this.maceratorRecipe()
                 .component(new ItemInputComponent(Tags.Items.INGOTS_GOLD))
                 .component(new ItemOutputListComponent(IRItems.GOLD_DUST))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
         this.maceratorRecipe()
                 .component(new ItemInputComponent(ItemTags.COALS))
                 .component(new ItemOutputListComponent(IRItems.COAL_DUST))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
 
         oreMacerationRecipe(Tags.Items.ORES_COPPER, Tags.Items.RAW_MATERIALS_COPPER, IRItems.COPPER_DUST, "copper", output);
@@ -120,21 +123,21 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new ItemInputComponent(IRItems.STICKY_RESIN))
                 .component(new ItemOutputListComponent(IRItems.RUBBER, 3))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output, IndustrialReclassified.rl("sticky_resin_extracting"));
 
         this.canningMachineRecipe()
                 .component(new ItemInputListComponent(Ingredient.of(IRItems.FLUID_CELL), Ingredient.of(CTags.ItemTags.INGOTS_URANIUM)))
                 .component(new ItemOutputComponent(IRItems.SINGLE_URANIUM_FUEL_ROD))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
 
         this.canningMachineRecipe()
                 .component(new EnumRecipeComponent<>(CanningMachineRecipeLayout.Variant.FOOD_CANNING))
                 .component(new ItemInputListComponent(IRItems.TIN_CAN))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output, IndustrialReclassified.rl("food_canning"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, IRItems.BRONZE_DUST, 3)
@@ -463,7 +466,7 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new ItemInputComponent(IRItems.COAL_BALL))
                 .component(new ItemOutputComponent(IRItems.COMPRESSED_COAL_BALL))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRItems.GRAPHENE)
@@ -479,7 +482,7 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new ItemInputComponent(IRItems.GRAPHENE))
                 .component(new ItemOutputComponent(Items.DIAMOND))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output);
 
         this.recyclerRecipe().save(output, IndustrialReclassified.rl("scrap_from_recycling"));
@@ -572,6 +575,11 @@ public class IRRecipeProvider extends RecipeProvider {
         plantBallRecipe(ItemTags.SAPLINGS, "sapling", output);
         plantBallRecipe(ItemTags.LEAVES, "leaves", output);
 
+        this.geothermalGeneratorRecipe()
+                .component(new FluidInputComponent(FluidTags.LAVA, 1))
+                .component(new EnergyOutputComponent(20))
+                .save(output, IndustrialReclassified.rl("geothermal_energy_from_lava"));
+
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRBlocks.NUCLEAR_REACTOR_CHAMBER)
                 .pattern(" C ")
                 .pattern("CMC")
@@ -652,13 +660,13 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new ItemInputComponent(oreTag))
                 .component(new ItemOutputListComponent(result, 2))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output, IndustrialReclassified.rl(oreName + "_dust_from_ore_maceration"));
         this.maceratorRecipe()
                 .component(new ItemInputComponent(rawTag, 4))
                 .component(new ItemOutputListComponent(result, 3))
                 .component(new TimeComponent(200))
-                .component(new EnergyComponent(800))
+                .component(new EnergyInputComponent(800))
                 .save(output, IndustrialReclassified.rl(oreName + "_dust_from_raw_ore_maceration"));
     }
 
@@ -785,6 +793,10 @@ public class IRRecipeProvider extends RecipeProvider {
         return new MachineRecipeBuilder(IRRecipeLayouts.RECYCLER);
     }
 
+    private MachineRecipeBuilder geothermalGeneratorRecipe() {
+        return new MachineRecipeBuilder(IRRecipeLayouts.GEOTHERMAL_GENERATOR);
+    }
+
     private MachineRecipeBuilder canningMachineRecipe() {
         return new MachineRecipeBuilder(IRRecipeLayouts.CANNING_MACHINE);
     }
@@ -801,7 +813,7 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_basic_circuit", has(IRItems.BASIC_CIRCUIT))
                 .save(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IRMachines.BASIC_GENERATOR.getBlock())
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRMachines.BASIC_GENERATOR.getBlock())
                 .pattern("B")
                 .pattern("M")
                 .pattern("F")
@@ -809,6 +821,17 @@ public class IRRecipeProvider extends RecipeProvider {
                 .define('M', IRBlocks.MACHINE_FRAME)
                 .define('F', Blocks.FURNACE)
                 .unlockedBy("has_redstone_battery", has(IRItems.REDSTONE_BATTERY))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, IRMachines.GEOTHERMAL_GENERATOR.getBlock())
+                .pattern("GCG")
+                .pattern("GCG")
+                .pattern("IBI")
+                .define('B', IRMachines.BASIC_GENERATOR.getBlock())
+                .define('I', IRItems.REFINED_IRON_INGOT)
+                .define('G', Tags.Items.GLASS_BLOCKS)
+                .define('C', IRItems.FLUID_CELL)
+                .unlockedBy("has_basic_generator", has(IRMachines.BASIC_GENERATOR.getBlock()))
                 .save(output);
     }
 }

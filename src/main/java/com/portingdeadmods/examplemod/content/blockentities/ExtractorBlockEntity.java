@@ -60,7 +60,7 @@ public class ExtractorBlockEntity extends MachineBlockEntity implements MenuProv
                 } else {
                     this.progress = 0;
                     ItemStack resultItem = this.cachedRecipe.getResultItem(this.level.registryAccess());
-                    int inputCount = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.INPUT).getIngredients().getFirst().count();
+                    int inputCount = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_INPUT).getIngredients().getFirst().count();
                     forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), 1, resultItem.copy(), false, this::onItemsChanged);
                     this.getItemHandler().extractItem(0, inputCount, false);
                 }

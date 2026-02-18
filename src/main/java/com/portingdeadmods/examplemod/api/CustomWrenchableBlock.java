@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Implement this if you want your block to drop a special
  * items when picked up with a wrench. Still requires the
- * block to have the {@link com.indref.industrial_reforged.tags.IRTags.Blocks.WRENCHABLE}
+ * block to have the {@link com.portingdeadmods.examplemod.tags.IRTags.BlockTags.WRENCHABLE}
  */
 public interface CustomWrenchableBlock {
     ItemStack getCustomDropItem();

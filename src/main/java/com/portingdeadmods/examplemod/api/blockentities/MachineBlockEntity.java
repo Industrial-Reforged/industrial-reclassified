@@ -5,21 +5,20 @@ import com.portingdeadmods.examplemod.IRCapabilities;
 import com.portingdeadmods.examplemod.api.capabilities.StorageChangedListener;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
-import com.portingdeadmods.examplemod.api.recipes.RecipeComponentFlag;
 import com.portingdeadmods.examplemod.content.menus.ChargingSlot;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeInput;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
-import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemOutputComponentFlag;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
-import com.portingdeadmods.examplemod.registries.IRRecipeLayouts;
 import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import com.portingdeadmods.portingdeadlibs.api.blockentities.ContainerBlockEntity;
 import com.portingdeadmods.portingdeadlibs.api.blockentities.RedstoneBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -27,10 +26,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
@@ -111,6 +110,10 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
         return 1;
     }
 
+    protected int getResultTank() {
+        return 0;
+    }
+
     protected @NotNull MachineRecipeInput createRecipeInput() {
         return new MachineRecipeInput(List.of(this.getItemHandler().getStackInSlot(0)));
     }
@@ -118,28 +121,34 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
     protected void onItemsChanged(int slot) {
         this.updateData();
 
-        MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(this.getRecipeLayout().getRecipeType(), this.createRecipeInput(), this.level)
-                .map(RecipeHolder::value)
-                .orElse(null);
-        if (recipe != null && forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), this.getResultSlot(), recipe.getResultItem(this.level.registryAccess()).copy(), true, i -> {
-        }).isEmpty()) {
-            this.cachedRecipe = recipe;
-        } else {
-            this.cachedRecipe = null;
-        }
+        this.refreshCachedRecipe();
+    }
+
+    protected void onFluidsChanged(int tank) {
+        this.updateData();
+
+        this.refreshCachedRecipe();
     }
 
     protected void onEuChanged(int oldAmount) {
         this.updateData();
+
+        this.refreshCachedRecipe();
     }
 
     protected void tickRecipe() {
         if (this.cachedRecipe != null) {
             if (this.getProgress() >= this.getMaxProgress()) {
                 this.progress = 0;
-                ItemStack resultItem = this.cachedRecipe.getResultItem(this.level.registryAccess());
-                OutputComponentFlag output = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.OUTPUT);
-                if (output.isOutputted(this.level.random, 0)) {
+                RegistryAccess provider = this.level.registryAccess();
+                ItemStack resultItem = this.cachedRecipe.assemble(this.createRecipeInput(), provider);
+                ItemOutputComponentFlag output = this.cachedRecipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_OUTPUT);
+                boolean hasResultEnergy = this.cachedRecipe.hasResultEnergy(provider);
+                boolean hasResultItem = this.cachedRecipe.hasResultItem(provider);
+                if (hasResultEnergy) {
+                    this.getEuStorage().forceFillEnergy(this.cachedRecipe.assembleEnergy(this.createRecipeInput(), provider), false);
+                }
+                if (hasResultItem && output.isOutputted(this.level.random, 0)) {
                     this.forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), this.getResultSlot(), resultItem.copy(), false, this::onItemsChanged);
                 }
                 this.getItemHandler().extractItem(0, 1, false);
@@ -294,4 +303,76 @@ public class MachineBlockEntity extends ContainerBlockEntity implements Redstone
     public void beforeRemoveByWrench(Player player) {
         this.removedByWrench = true;
     }
+
+    private void refreshCachedRecipe() {
+        MachineRecipeInput recipeInput = this.createRecipeInput();
+        MachineRecipe recipe = this.level.getRecipeManager().getRecipeFor(this.getRecipeLayout().getRecipeType(), recipeInput, this.level)
+                .map(RecipeHolder::value)
+                .orElse(null);
+        RegistryAccess provider = this.level.registryAccess();
+        if (recipe != null) {
+            if (recipe.hasResultItem(provider)) {
+                if (!forceInsertItem((IItemHandlerModifiable) this.getItemHandler(), this.getResultSlot(), recipe.assemble(recipeInput, provider).copy(), true, i -> {
+                }).isEmpty()) {
+                    this.cachedRecipe = null;
+                    return;
+                }
+            }
+            if (recipe.hasResultFluid(provider)) {
+                FluidStack resultFluid = recipe.assembleFluid(recipeInput, provider);
+                if (forceFillTank(this.getFluidHandler(), resultFluid.copy(), IFluidHandler.FluidAction.SIMULATE, i -> {
+                }) != resultFluid.getAmount()) {
+                    this.cachedRecipe = null;
+                    return;
+                }
+            }
+            if (recipe.hasResultEnergy(provider)) {
+                int resultEnergy = recipe.assembleEnergy(recipeInput, provider);
+                if (this.getEuStorage().forceFillEnergy(resultEnergy, true) != resultEnergy) {
+                    this.cachedRecipe = null;
+                    return;
+                }
+            }
+        }
+        this.cachedRecipe = recipe;
+    }
+
+    public int forceFillTank(IFluidHandler fluidHandler, FluidStack resource, IFluidHandler.FluidAction action, Consumer<Integer> onChange) {
+        if (resource.isEmpty()) {
+            return 0;
+        }
+
+        FluidStack fluid = fluidHandler.getFluidInTank(0);
+        int capacity = fluidHandler.getTankCapacity(0);
+
+        if (action.simulate()) {
+            if (fluid.isEmpty()) {
+                return Math.min(capacity, resource.getAmount());
+            }
+            if (!FluidStack.isSameFluidSameComponents(fluid, resource)) {
+                return 0;
+            }
+            return Math.min(capacity - fluid.getAmount(), resource.getAmount());
+        }
+        if (fluid.isEmpty()) {
+            fluid = resource.copyWithAmount(Math.min(capacity, resource.getAmount()));
+            onChange.accept(0);
+            return fluid.getAmount();
+        }
+        if (!FluidStack.isSameFluidSameComponents(fluid, resource)) {
+            return 0;
+        }
+        int filled = capacity - fluid.getAmount();
+
+        if (resource.getAmount() < filled) {
+            fluid.grow(resource.getAmount());
+            filled = resource.getAmount();
+        } else {
+            fluid.setAmount(capacity);
+        }
+        if (filled > 0)
+            onChange.accept(0);
+        return filled;
+    }
+
 }

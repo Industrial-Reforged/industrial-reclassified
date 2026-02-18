@@ -1,15 +1,12 @@
 package com.portingdeadmods.examplemod.compat.jei;
 
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
-import com.portingdeadmods.examplemod.content.recipes.MachineRecipeInput;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
-import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.energy.EnergyInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
-import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
-import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
-import com.portingdeadmods.examplemod.registries.IRItems;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemInputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemOutputComponentFlag;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
-import com.portingdeadmods.examplemod.registries.IRRecipeLayouts;
 import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -31,8 +28,8 @@ public class MachineRecipeCategory extends AbstractRecipeCategory<MachineRecipe>
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, MachineRecipe recipe, IFocusGroup focuses) {
-        InputComponentFlag input = recipe.getComponentByFlag(IRRecipeComponentFlags.INPUT);
-        OutputComponentFlag output = recipe.getComponentByFlag(IRRecipeComponentFlags.OUTPUT);
+        ItemInputComponentFlag input = recipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_INPUT);
+        ItemOutputComponentFlag output = recipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_OUTPUT);
 
         for (int i = 0; i < input.getIngredients().size(); i++) {
             IngredientWithCount ingredient = input.getIngredients().get(i);
@@ -79,8 +76,8 @@ public class MachineRecipeCategory extends AbstractRecipeCategory<MachineRecipe>
 
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, MachineRecipe recipe, IFocusGroup focuses) {
-        InputComponentFlag input = recipe.getComponentByFlag(IRRecipeComponentFlags.INPUT);
-        int energy = recipe.getComponent(EnergyComponent.TYPE).energy();
+        ItemInputComponentFlag input = recipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_INPUT);
+        int energy = recipe.getComponent(EnergyInputComponent.TYPE).energy();
         int time = recipe.getComponent(TimeComponent.TYPE).time();
         int xPos = this.getWidth() / 2 - 12;
         builder.addAnimatedRecipeArrow(time).setPosition(Math.max(xPos, input.getIngredients().size() * 16 + 6), this.getHeight() / 2 - 8);

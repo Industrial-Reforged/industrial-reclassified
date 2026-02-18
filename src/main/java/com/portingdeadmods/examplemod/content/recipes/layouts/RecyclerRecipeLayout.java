@@ -2,7 +2,7 @@ package com.portingdeadmods.examplemod.content.recipes.layouts;
 
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
-import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.energy.EnergyInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.DynamicItemInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputComponent;
@@ -17,7 +17,7 @@ public class RecyclerRecipeLayout extends MachineRecipeLayout<MachineRecipe> {
         super(id, MachineRecipe::new);
         this.addComponent(DynamicItemInputComponent.TYPE, "input", () -> new DynamicItemInputComponent(RecyclerRecipeLayout::testInput));
         this.addComponent(ItemOutputComponent.TYPE, "output", () -> new ItemOutputComponent(IRItems.SCRAP.toStack(), 0.33f));
-        this.addComponent(EnergyComponent.TYPE, "energy", () -> new EnergyComponent(800));
+        this.addComponent(EnergyInputComponent.TYPE, "energy", () -> new EnergyInputComponent(800));
         this.addComponent(TimeComponent.TYPE, "duration", () -> new TimeComponent(200));
     }
 

@@ -28,6 +28,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -110,7 +111,7 @@ public final class IndustrialReclassified {
 
             if (item instanceof IFluidItem fluidItem) {
                 event.registerItem(Capabilities.FluidHandler.ITEM,
-                        (stack, ctx) -> new FluidHandlerItemStackSimple(PDLDataComponents.FLUID, stack, fluidItem.getFluidCapacity()), item);
+                        (stack, ctx) -> new FluidHandlerItemStack(PDLDataComponents.FLUID, stack, fluidItem.getFluidCapacity()), item);
             }
 
         }

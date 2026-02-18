@@ -13,7 +13,7 @@ import net.minecraft.util.StringRepresentable;
 import java.util.function.Supplier;
 
 public record EnumRecipeComponent<E extends Enum<E> & StringRepresentable>(E value) implements RecipeComponent {
-    public static final ResourceLocation ID = IndustrialReclassified.rl("enum_component");
+    public static final ResourceLocation ID = IndustrialReclassified.rl("enum");
 
     @Override
     public Type<EnumRecipeComponent<E>> type() {

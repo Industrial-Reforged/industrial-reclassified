@@ -19,6 +19,7 @@ public final class IRRecipeLayouts {
     public static final ExtractorRecipeLayout EXTRACTOR = register("extractor", ExtractorRecipeLayout::new);
     public static final CanningMachineRecipeLayout CANNING_MACHINE = register("canning_machine", CanningMachineRecipeLayout::new);
     public static final RecyclerRecipeLayout RECYCLER = register("recycler", RecyclerRecipeLayout::new);
+    public static final GeothermalGeneratorRecipeLayout GEOTHERMAL_GENERATOR = register("geothermal_generator", GeothermalGeneratorRecipeLayout::new);
 
     private static <L extends MachineRecipeLayout<?>> L register(String key, Function<ResourceLocation, L> factory) {
         ResourceLocation id = IndustrialReclassified.rl(key);

@@ -1,12 +1,11 @@
 package com.portingdeadmods.examplemod.content.recipes.components.items;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
-import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemOutputComponentFlag;
 import com.portingdeadmods.examplemod.api.recipes.RecipeFlagType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.ItemLike;
 import java.util.List;
 import java.util.Set;
 
-public record ItemOutputComponent(ItemStack item, float chance) implements RecipeComponent, OutputComponentFlag {
+public record ItemOutputComponent(ItemStack item, float chance) implements RecipeComponent, ItemOutputComponentFlag {
     public static final Codec<ItemOutputComponent> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ItemStack.OPTIONAL_CODEC.fieldOf("items").forGetter(ItemOutputComponent::item),
             Codec.FLOAT.optionalFieldOf("chances", 1f).forGetter(ItemOutputComponent::chance)
@@ -31,7 +30,7 @@ public record ItemOutputComponent(ItemStack item, float chance) implements Recip
             ItemOutputComponent::new
     );
     public static final Type<ItemOutputComponent> TYPE = new Type<>(IndustrialReclassified.rl("item_output"), CODEC, STREAM_CODEC);
-    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(IRRecipeComponentFlags.OUTPUT);
+    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(IRRecipeComponentFlags.ITEM_OUTPUT);
 
     public ItemOutputComponent(ItemStack item) {
         this(item, 1);

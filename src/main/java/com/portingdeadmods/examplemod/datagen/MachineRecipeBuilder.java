@@ -35,7 +35,7 @@ public class MachineRecipeBuilder implements RecipeBuilder {
 
     @Override
     public Item getResult() {
-        return this.builder.build().getComponentByFlag(IRRecipeComponentFlags.OUTPUT).getOutputs().getFirst().getItem();
+        return this.builder.build().getComponentByFlag(IRRecipeComponentFlags.ITEM_OUTPUT).getOutputs().getFirst().getItem();
     }
 
     @Override

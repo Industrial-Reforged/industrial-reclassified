@@ -1,20 +1,17 @@
 package com.portingdeadmods.examplemod.content.recipes.layouts;
 
-import com.google.errorprone.annotations.Var;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipe;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeInput;
 import com.portingdeadmods.examplemod.content.recipes.MachineRecipeLayout;
-import com.portingdeadmods.examplemod.content.recipes.components.EnergyComponent;
+import com.portingdeadmods.examplemod.content.recipes.components.energy.EnergyInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.EnumRecipeComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.TimeComponent;
-import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemInputListComponent;
 import com.portingdeadmods.examplemod.content.recipes.components.items.ItemOutputComponent;
-import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemInputComponentFlag;
 import com.portingdeadmods.examplemod.registries.IRItems;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
-import com.portingdeadmods.examplemod.registries.IRRecipeLayouts;
 import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
@@ -22,14 +19,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 public class CanningMachineRecipeLayout extends MachineRecipeLayout<MachineRecipe> {
     public static final RecipeComponent.Type<EnumRecipeComponent<Variant>> TYPE = EnumRecipeComponent.createType(Variant.class);
@@ -39,7 +33,7 @@ public class CanningMachineRecipeLayout extends MachineRecipeLayout<MachineRecip
         this.addComponent(TYPE, "variant", () -> new EnumRecipeComponent<>(Variant.DEFAULT));
         this.addComponent(ItemInputListComponent.TYPE, "inputs");
         this.addComponent(ItemOutputComponent.TYPE, "output", () -> new ItemOutputComponent(ItemStack.EMPTY));
-        this.addComponent(EnergyComponent.TYPE, "energy", () -> new EnergyComponent(800));
+        this.addComponent(EnergyInputComponent.TYPE, "energy", () -> new EnergyInputComponent(800));
         this.addComponent(TimeComponent.TYPE, "duration", () -> new TimeComponent(200));
     }
 
@@ -48,7 +42,7 @@ public class CanningMachineRecipeLayout extends MachineRecipeLayout<MachineRecip
         Variant variant = this.getVariant(recipe);
         if (variant == Variant.FOOD_CANNING) {
             if (input.getItem(0).has(DataComponents.FOOD) || input.getItem(1).has(DataComponents.FOOD)) {
-                InputComponentFlag recipeInput = recipe.getComponentByFlag(IRRecipeComponentFlags.INPUT);
+                ItemInputComponentFlag recipeInput = recipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_INPUT);
                 for (IngredientWithCount ingredient : recipeInput.getIngredients()) {
                     if (ingredient.test(input.getItem(0)) || ingredient.test(input.getItem(1))) return true;
                 }

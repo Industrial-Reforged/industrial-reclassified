@@ -1,26 +1,25 @@
 package com.portingdeadmods.examplemod.content.recipes;
 
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
-import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
-import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponentFlag;
 import com.portingdeadmods.examplemod.api.recipes.RecipeFlagType;
+import com.portingdeadmods.examplemod.content.recipes.components.energy.EnergyOutputComponent;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.portingdeadlibs.api.recipes.PDLRecipe;
-import com.portingdeadmods.portingdeadlibs.utils.RecipeUtils;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Files;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
     private RecipeSerializer<? extends MachineRecipe> serializer;
@@ -69,9 +68,21 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
         return layout.matches((R) this, machineRecipeInput, level);
     }
 
+    public boolean hasResultItem(HolderLookup.Provider provider) {
+        return this.getComponentByFlag(IRRecipeComponentFlags.ITEM_OUTPUT) != null;
+    }
+
+    public boolean hasResultFluid(HolderLookup.Provider provider) {
+        return this.getComponentByFlag(IRRecipeComponentFlags.FLUID_OUTPUT) != null;
+    }
+
+    public boolean hasResultEnergy(HolderLookup.Provider provider) {
+        return this.getComponent(EnergyOutputComponent.TYPE) != null;
+    }
+
     @Override
     public @NotNull ItemStack getResultItem(HolderLookup.Provider provider) {
-        return createResultItemSimple(provider);
+        return createResultItem(null, provider);
     }
 
     @Override
@@ -79,9 +90,30 @@ public class MachineRecipe implements PDLRecipe<MachineRecipeInput> {
         return createResultItem(container, provider);
     }
 
-    private <R extends MachineRecipe> ItemStack createResultItemSimple(HolderLookup.Provider provider) {
+    public FluidStack getResultFluid(HolderLookup.Provider provider) {
+        return createResultFluid(null, provider);
+    }
+
+    public FluidStack assembleFluid(@NotNull MachineRecipeInput container, HolderLookup.Provider provider) {
+        return createResultFluid(container, provider);
+    }
+
+    public int getResultEnergy(HolderLookup.Provider provider) {
+        return createResultEnergy(null, provider);
+    }
+
+    public int assembleEnergy(@NotNull MachineRecipeInput container, HolderLookup.Provider provider) {
+        return createResultEnergy(container, provider);
+    }
+
+    private <R extends MachineRecipe> int createResultEnergy(MachineRecipeInput input, HolderLookup.Provider provider) {
         MachineRecipeLayout<R> layout = (MachineRecipeLayout<R>) this.getLayout();
-        return layout.createResultItem((R) this, null, provider);
+        return layout.createResultEnergy((R) this, input, provider);
+    }
+
+    private <R extends MachineRecipe> FluidStack createResultFluid(MachineRecipeInput input, HolderLookup.Provider provider) {
+        MachineRecipeLayout<R> layout = (MachineRecipeLayout<R>) this.getLayout();
+        return layout.createResultFluid((R) this, input, provider);
     }
 
     private <R extends MachineRecipe> ItemStack createResultItem(MachineRecipeInput input, HolderLookup.Provider provider) {

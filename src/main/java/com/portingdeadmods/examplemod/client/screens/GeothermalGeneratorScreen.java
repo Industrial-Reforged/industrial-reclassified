@@ -35,7 +35,7 @@ public class GeothermalGeneratorScreen extends MachineScreen<GeothermalGenerator
         addRenderableOnly(new BatterySlotWidget(this.leftPos + 8, this.topPos + 14 + energyBarWidget.getHeight() + 5));
 
         FluidTankWidget fluidTankWidget = addRenderableWidget(
-                new FluidTankWidget(this.leftPos + (this.imageWidth - 18) / 2, this.topPos + 24, FluidTankWidget.TankVariants.SMALL, menu.blockEntity)
+                new FluidTankWidget(this.leftPos + (this.imageWidth - 18) / 2 + 10, this.topPos + 23, FluidTankWidget.TankVariants.SMALL, menu.blockEntity)
         );
 
     }

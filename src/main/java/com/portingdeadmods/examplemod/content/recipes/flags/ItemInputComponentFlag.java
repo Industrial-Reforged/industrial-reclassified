@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public interface InputComponentFlag extends RecipeComponentFlag {
+public interface ItemInputComponentFlag extends RecipeComponentFlag {
     List<IngredientWithCount> getIngredients();
 
     List<Float> getChances();

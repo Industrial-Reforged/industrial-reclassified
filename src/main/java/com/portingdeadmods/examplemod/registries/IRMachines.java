@@ -4,6 +4,7 @@ package com.portingdeadmods.examplemod.registries;
 import com.portingdeadmods.examplemod.api.blocks.MachineBlock;
 import com.portingdeadmods.examplemod.content.blockentities.*;
 import com.portingdeadmods.examplemod.content.menus.*;
+import com.portingdeadmods.examplemod.content.recipes.layouts.GeothermalGeneratorRecipeLayout;
 import com.portingdeadmods.examplemod.utils.machines.IRMachine;
 import com.portingdeadmods.examplemod.utils.machines.MachineRegistrationHelper;
 
@@ -18,12 +19,13 @@ public final class IRMachines {
             )
             .blockEntity(BasicGeneratorBlockEntity::new)
             .menu(BasicGeneratorMenu::new));
-        public static final IRMachine GEOTHERMAL_GENERATOR = HELPER.registerMachine("geothermal_generator", IRMachine.builder(IREnergyTiers.MEDIUM)
+    public static final IRMachine GEOTHERMAL_GENERATOR = HELPER.registerMachine("geothermal_generator", IRMachine.builder(IREnergyTiers.MEDIUM)
             .block(MachineBlock::new, builder -> builder
                     .activatable()
                     .rotatable()
                     .ticking()
             )
+            .recipeLayout(IRRecipeLayouts.GEOTHERMAL_GENERATOR)
             .blockEntity(GeothermalGeneratorBlockEntity::new)
             .menu(GeothermalGeneratorMenu::new));
     public static final IRMachine ELECTRIC_FURNACE = HELPER.registerMachine("electric_furnace", IRMachine.builder(IREnergyTiers.LOW)

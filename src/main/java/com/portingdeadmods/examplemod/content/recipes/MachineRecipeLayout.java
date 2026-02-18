@@ -3,8 +3,10 @@ package com.portingdeadmods.examplemod.content.recipes;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
-import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
-import com.portingdeadmods.examplemod.content.recipes.flags.OutputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.components.energy.EnergyOutputComponent;
+import com.portingdeadmods.examplemod.content.recipes.flags.FluidOutputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemInputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemOutputComponentFlag;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.portingdeadlibs.utils.RecipeUtils;
 import net.minecraft.core.HolderLookup;
@@ -16,12 +18,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -146,7 +148,7 @@ public abstract class MachineRecipeLayout<R extends MachineRecipe> {
     /* Recipe related methods */
 
     public boolean matches(R recipe, MachineRecipeInput input, Level level) {
-        InputComponentFlag inputComp = recipe.getComponentByFlag(IRRecipeComponentFlags.INPUT);
+        ItemInputComponentFlag inputComp = recipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_INPUT);
         if (inputComp != null) {
             return inputComp.test(input.items(), false);
         }
@@ -154,11 +156,27 @@ public abstract class MachineRecipeLayout<R extends MachineRecipe> {
     }
 
     public ItemStack createResultItem(R recipe, @Nullable MachineRecipeInput input, HolderLookup.Provider provider) {
-        OutputComponentFlag output = recipe.getComponentByFlag(IRRecipeComponentFlags.OUTPUT);
+        ItemOutputComponentFlag output = recipe.getComponentByFlag(IRRecipeComponentFlags.ITEM_OUTPUT);
         if (output != null) {
             return output.getOutputs().getFirst();
         }
         return ItemStack.EMPTY;
+    }
+
+    public FluidStack createResultFluid(R recipe, @Nullable MachineRecipeInput input, HolderLookup.Provider provider) {
+        FluidOutputComponentFlag output = recipe.getComponentByFlag(IRRecipeComponentFlags.FLUID_OUTPUT);
+        if (output != null) {
+            return output.getOutputs().getFirst();
+        }
+        return FluidStack.EMPTY;
+    }
+
+    public int createResultEnergy(R recipe, @Nullable MachineRecipeInput input, HolderLookup.Provider provider) {
+        EnergyOutputComponent output = recipe.getComponent(EnergyOutputComponent.TYPE);
+        if (output != null) {
+            return output.energy();
+        }
+        return 0;
     }
 
     public static class Builder {

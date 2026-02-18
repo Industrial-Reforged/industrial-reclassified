@@ -121,6 +121,7 @@ public class IREnUsLangProvider extends LanguageProvider {
         addBlock(IRBlocks.STICKY_RESIN_SHEET, "Sticky Resin Sheet");
 
         add(IRMachines.BASIC_GENERATOR.getBlock(), "Basic Generator");
+        add(IRMachines.GEOTHERMAL_GENERATOR.getBlock(), "Geothermal Generator");
         add(IRMachines.WIND_MILL.getBlock(), "Wind Mill");
         add(IRMachines.WATER_MILL.getBlock(), "Water Mill");
         add(IRMachines.ELECTRIC_FURNACE.getBlock(), "Electric Furnace");

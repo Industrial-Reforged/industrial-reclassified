@@ -1,12 +1,10 @@
 package com.portingdeadmods.examplemod.content.recipes.components.items;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.api.recipes.RecipeComponent;
 import com.portingdeadmods.examplemod.api.recipes.RecipeFlagType;
-import com.portingdeadmods.examplemod.content.recipes.flags.InputComponentFlag;
+import com.portingdeadmods.examplemod.content.recipes.flags.ItemInputComponentFlag;
 import com.portingdeadmods.examplemod.registries.IRRecipeComponentFlags;
 import com.portingdeadmods.examplemod.utils.IRRecipeUtils;
 import com.portingdeadmods.portingdeadlibs.api.recipes.IngredientWithCount;
@@ -24,11 +22,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public record ItemInputListComponent(List<ItemInputComponent> inputs) implements RecipeComponent, InputComponentFlag {
+public record ItemInputListComponent(List<ItemInputComponent> inputs) implements RecipeComponent, ItemInputComponentFlag {
     public static final Codec<ItemInputListComponent> CODEC = ItemInputComponent.CODEC.listOf().xmap(ItemInputListComponent::new, ItemInputListComponent::inputs);
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemInputListComponent> STREAM_CODEC = ItemInputComponent.STREAM_CODEC.apply(ByteBufCodecs.list()).map(ItemInputListComponent::new, ItemInputListComponent::inputs);
     public static final Type<ItemInputListComponent> TYPE = new Type<>(IndustrialReclassified.rl("item_input_list"), CODEC, STREAM_CODEC);
-    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(IRRecipeComponentFlags.INPUT);
+    public static final Set<RecipeFlagType<?>> FLAGS = Set.of(IRRecipeComponentFlags.ITEM_INPUT);
 
     public ItemInputListComponent(Ingredient ingredient, int count) {
         this(List.of(new ItemInputComponent(ingredient, count, 1)));
