@@ -1,15 +1,18 @@
 package com.portingdeadmods.examplemod.content.items.electric;
 
+import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.api.CustomWrenchableBlock;
 import com.portingdeadmods.examplemod.api.energy.*;
 import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
 import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
+import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,6 +29,10 @@ public class ElectricWrenchItem extends SimpleEnergyItem implements ElectricTool
     public ElectricWrenchItem(Item.Properties properties, Supplier<? extends EnergyTier> energyTier, IntSupplier energyUsage, IntSupplier defaultEnergyCapacity) {
         super(properties, energyTier, defaultEnergyCapacity);
         this.energyUsage = energyUsage;
+    }
+
+    public static ElectricWrenchItem defaultItem() {
+        return new ElectricWrenchItem(new Item.Properties(), IREnergyTiers.LOW, () -> IRConfig.electricWrenchEnergyUsage, () -> IRConfig.electricWrenchCapacity);
     }
 
     @Override

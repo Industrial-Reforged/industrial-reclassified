@@ -1,13 +1,11 @@
 package com.portingdeadmods.examplemod.registries;
 
-import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.content.items.*;
 import com.portingdeadmods.examplemod.content.items.electric.*;
 import com.portingdeadmods.portingdeadlibs.api.utils.PDLDeferredRegisterItems;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 public final class IRItems {
@@ -45,10 +43,9 @@ public final class IRItems {
     public static final DeferredItem<WrenchItem> WRENCH = ITEMS.registerItem("wrench", WrenchItem::defaultItem);
     public static final DeferredItem<CutterItem> CUTTER = ITEMS.registerItem("cutter", CutterItem::defaultItem);
     /* Electric Tools */
-    public static final DeferredItem<ElectricTreetapItem> ELECTRIC_TREETAP = ITEMS.register("electric_treetap", () -> new ElectricTreetapItem(new Item.Properties(), IREnergyTiers.LOW, () -> IRConfig.electricTreeTapEnergyUsage, () -> IRConfig.electricTreeTapCapacity));
-    public static final DeferredItem<ElectricWrenchItem> ELECTRIC_WRENCH = ITEMS.register("electric_wrench", () -> new ElectricWrenchItem(new Item.Properties(), IREnergyTiers.LOW, () -> IRConfig.electricWrenchEnergyUsage, () -> IRConfig.electricWrenchCapacity));
-    public static final DeferredItem<ElectricHoeItem> ELECTRIC_HOE = ITEMS.register("electric_hoe",
-            () -> new ElectricHoeItem(new Item.Properties(), Tiers.IRON, 1, -2.8F, IREnergyTiers.LOW, () -> IRConfig.electricHoeEnergyUsage, () -> IRConfig.electricHoeCapacity));
+    public static final DeferredItem<ElectricTreetapItem> ELECTRIC_TREETAP = ITEMS.register("electric_treetap", ElectricTreetapItem::defaultItem);
+    public static final DeferredItem<ElectricWrenchItem> ELECTRIC_WRENCH = ITEMS.register("electric_wrench", ElectricWrenchItem::defaultItem);
+    public static final DeferredItem<ElectricHoeItem> ELECTRIC_HOE = ITEMS.register("electric_hoe", ElectricHoeItem::defaultItem);
     public static final DeferredItem<MiningLaserItem> MINING_LASER = ITEMS.registerItem("mining_laser", MiningLaserItem::defaultItem);
     public static final DeferredItem<NanoSaberItem> NANO_SABER = ITEMS.registerItem("nano_saber", NanoSaberItem::defaultItem);
     public static final DeferredItem<ElectricDrillItem> BASIC_DRILL = ITEMS.registerItem("basic_drill", ElectricDrillItem::basicItem);
@@ -102,4 +99,5 @@ public final class IRItems {
 
     /* Plant stuff - mmmmm yummy */
     public static final DeferredItem<Item> PLANT_BALL = ITEMS.registerSimpleItem("plant_ball");
+
 }

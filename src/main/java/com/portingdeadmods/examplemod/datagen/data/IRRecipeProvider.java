@@ -363,7 +363,6 @@ public class IRRecipeProvider extends RecipeProvider {
 
         oreBlasting(output, List.of(IRItems.RAW_URANIUM), RecipeCategory.MISC, IRItems.URANIUM_INGOT, 0.7F, 100, "uranium_ingot");
         oreBlasting(output, List.of(IRItems.RAW_TIN), RecipeCategory.MISC, IRItems.TIN_INGOT, 0.7F, 100, "tin_ingot");
-        oreBlasting(output, List.of(IRItems.RAW_IRIDIUM), RecipeCategory.MISC, IRItems.IRIDIUM_INGOT, 0.7F, 100, "iridium_ingot");
 
         generatorCraftingRecipes(output);
 

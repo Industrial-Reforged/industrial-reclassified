@@ -1,17 +1,20 @@
 package com.portingdeadmods.examplemod.content.items.electric;
 
+import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
 import com.portingdeadmods.examplemod.content.blocks.RubberTreeResinHoleBlock;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
+import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import com.portingdeadmods.examplemod.registries.IRItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -30,6 +33,10 @@ public class ElectricTreetapItem extends SimpleEnergyItem implements ElectricToo
         super(properties, energyTier, defaultEnergyCapacity);
         this.energyUsage = energyUsage;
         this.energyCapacity = defaultEnergyCapacity;
+    }
+
+    public static ElectricTreetapItem defaultItem() {
+        return new ElectricTreetapItem(new Item.Properties(), IREnergyTiers.LOW, () -> IRConfig.electricTreeTapEnergyUsage, () -> IRConfig.electricTreeTapCapacity);
     }
 
     public int getEnergyUsage() {

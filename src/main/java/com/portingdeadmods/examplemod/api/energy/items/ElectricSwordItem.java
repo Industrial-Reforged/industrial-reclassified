@@ -5,6 +5,7 @@ import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import com.portingdeadmods.examplemod.impl.energy.ComponentEuStorage;
 import com.portingdeadmods.examplemod.utils.ItemBarUtils;
 import com.portingdeadmods.examplemod.utils.TooltipUtils;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public abstract class ElectricSwordItem extends SwordItem implements EnergyItem,
 
     public ElectricSwordItem(Properties properties, Tier tier, int baseAttackDamage, float baseAttackSpeed, Supplier<? extends EnergyTier> energyTier, IntSupplier energyUsage, IntSupplier energyCapacity) {
         super(tier, properties
-                .attributes(SwordItem.createAttributes(tier, baseAttackDamage, baseAttackSpeed))
+                .component(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY)
                 .component(IRDataComponents.ENERGY, new ComponentEuStorage(0, energyCapacity.getAsInt())));
         this.energyTier = energyTier;
         this.energyUsage = energyUsage;

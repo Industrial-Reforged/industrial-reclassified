@@ -95,9 +95,14 @@ public final class IRBlocks {
             () -> new FenceGateBlock(RUBBER_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_FENCE_GATE)));
     public static final DeferredBlock<SlabBlock> RUBBER_TREE_SLAB = BLOCKS.registerWithItem("rubber_tree_slab",
             () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SLAB)));
+    public static final DeferredBlock<TntBlock> NUKE = BLOCKS.registerBlockWithItem("nuke", TntBlock::new);
+
     public static final DeferredBlock<Block> TIN_ORE = BLOCKS.registerWithItem("tin_ore",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
-    public static final DeferredBlock<TntBlock> NUKE = BLOCKS.registerBlockWithItem("nuke", TntBlock::new);
+    public static final DeferredBlock<Block> URANIUM_ORE = BLOCKS.registerWithItem("uranium_ore",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
+    public static final DeferredBlock<Block> IRIDIUM_ORE = BLOCKS.registerWithItem("iridium_ore",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
 
     static {
         CUSTOM_ITEM_MODELS = Set.of(

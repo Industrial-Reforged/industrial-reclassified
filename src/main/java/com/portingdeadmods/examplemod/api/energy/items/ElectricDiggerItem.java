@@ -18,6 +18,7 @@ import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,8 +31,8 @@ import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 public abstract class ElectricDiggerItem extends DiggerItem implements EnergyItem, ElectricToolItem {
-    private final float baseAttackDamage;
-    private final float attackSpeed;
+    protected final float baseAttackDamage;
+    protected final float attackSpeed;
     private final Tier tier;
     @org.jetbrains.annotations.NotNull
     private final TagKey<Block> blocks;
@@ -42,8 +43,8 @@ public abstract class ElectricDiggerItem extends DiggerItem implements EnergyIte
     public ElectricDiggerItem(Properties properties, float attackSpeed, float baseAttackDamage, Tier tier, TagKey<Block> blocks, Supplier<? extends EnergyTier> energyTier, IntSupplier energyUsage, IntSupplier defaultEnergyCapacity) {
         super(tier, blocks, properties
                 .durability(0)
-                .attributes(DiggerItem.createAttributes(tier, baseAttackDamage, attackSpeed))
-                .component(IRDataComponents.ENERGY, new ComponentEuStorage(defaultEnergyCapacity.getAsInt())));
+                .component(IRDataComponents.ENERGY, new ComponentEuStorage(defaultEnergyCapacity.getAsInt()))
+                .component(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY));
         this.baseAttackDamage = baseAttackDamage;
         this.attackSpeed = attackSpeed;
         this.energyUsage = energyUsage;
@@ -57,8 +58,17 @@ public abstract class ElectricDiggerItem extends DiggerItem implements EnergyIte
     public void initEnergyStorage(EnergyHandler energyStorage, ItemStack itemStack) {
         if (energyStorage.getEnergyStored() == 0) {
             itemStack.remove(DataComponents.TOOL);
+            itemStack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
         } else {
             itemStack.set(DataComponents.TOOL, tier.createToolProperties(this.blocks));
+            itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, DiggerItem.createAttributes(
+                    tier,
+                    !requireEnergyToWork(itemStack, null)
+                            || energyStorage.getEnergyStored() >= getEnergyUsage(itemStack, null)
+                            ? baseAttackDamage
+                            : 0,
+                    attackSpeed
+            ));
         }
     }
 
@@ -66,18 +76,19 @@ public abstract class ElectricDiggerItem extends DiggerItem implements EnergyIte
     public void onEnergyChanged(ItemStack itemStack, int oldAmount) {
         EnergyHandler energyStorage = itemStack.getCapability(IRCapabilities.ENERGY_ITEM);
 
-        itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, DiggerItem.createAttributes(
-                tier,
-                !requireEnergyToWork(itemStack, null)
-                        || energyStorage.getEnergyStored() >= getEnergyUsage(itemStack, null)
-                        ? baseAttackDamage
-                        : 0,
-                attackSpeed
-        ));
         if (energyStorage.getEnergyStored() == 0) {
             itemStack.remove(DataComponents.TOOL);
+            itemStack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
         } else if (oldAmount == 0) {
             itemStack.set(DataComponents.TOOL, tier.createToolProperties(this.blocks));
+            itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, DiggerItem.createAttributes(
+                    tier,
+                    !requireEnergyToWork(itemStack, null)
+                            || energyStorage.getEnergyStored() >= getEnergyUsage(itemStack, null)
+                            ? baseAttackDamage
+                            : 0,
+                    attackSpeed
+            ));
         }
     }
 

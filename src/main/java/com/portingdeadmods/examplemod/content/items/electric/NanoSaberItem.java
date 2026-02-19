@@ -46,8 +46,8 @@ public class NanoSaberItem extends ElectricSwordItem {
                 ItemAttributeModifiers.Builder modifiers = ItemAttributeModifiers.builder();
 
                 if (stack.getOrDefault(IRDataComponents.ACTIVE, false)) {
-                    modifiers.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(IndustrialReclassified.MODID, "attack_modifier"), IRConfig.nanoSaberAttackDamage, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
-                    modifiers.add(Attributes.ATTACK_SPEED, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(IndustrialReclassified.MODID, "attack_speed"), IRConfig.nanoSaberAttackSpeed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+                    modifiers.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, IRConfig.nanoSaberAttackDamage, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+                    modifiers.add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, IRConfig.nanoSaberAttackSpeed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
                 }
 
                 return modifiers.build();
@@ -75,14 +75,30 @@ public class NanoSaberItem extends ElectricSwordItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean b) {
-        EnergyHandler energyStorage = getEnergyCap(stack);
-        if (stack.getOrDefault(IRDataComponents.ACTIVE, false)) {
-            if (level.getGameTime() % 20 == 0) {
-                int drained = energyStorage.drainEnergy(getEnergyUsage(stack, entity), false);
-                if (drained == 0) {
-                    stack.set(IRDataComponents.ACTIVE, false);
+        if (!level.isClientSide()) {
+            EnergyHandler energyStorage = getEnergyCap(stack);
+            if (stack.getOrDefault(IRDataComponents.ACTIVE, false)) {
+                if (level.getGameTime() % 20 == 0) {
+                    energyStorage.drainEnergy(getEnergyUsage(stack, entity), false);
                 }
             }
+        }
+    }
+
+    @Override
+    public void initEnergyStorage(EnergyHandler energyHandler, ItemStack itemStack) {
+        if (energyHandler.getEnergyStored() == 0) {
+            itemStack.set(IRDataComponents.ACTIVE, false);
+            itemStack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
+        }
+    }
+
+    @Override
+    public void onEnergyChanged(ItemStack itemStack, int oldAmount) {
+        EnergyHandler energyHandler = getEnergyCap(itemStack);
+        if (energyHandler.getEnergyStored() == 0) {
+            itemStack.set(IRDataComponents.ACTIVE, false);
+            itemStack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
         }
     }
 

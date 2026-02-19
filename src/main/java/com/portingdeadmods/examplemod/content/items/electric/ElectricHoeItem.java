@@ -1,11 +1,13 @@
 package com.portingdeadmods.examplemod.content.items.electric;
 
 import com.mojang.datafixers.util.Pair;
+import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.IRDataComponents;
 import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
 import com.portingdeadmods.examplemod.api.energy.items.EnergyItem;
 import com.portingdeadmods.examplemod.impl.energy.ComponentEuStorage;
 import com.portingdeadmods.examplemod.impl.energy.EnergyTierImpl;
+import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import com.portingdeadmods.examplemod.utils.ItemBarUtils;
 import com.portingdeadmods.examplemod.utils.TooltipUtils;
 import net.minecraft.core.BlockPos;
@@ -15,10 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.HoeItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,13 +35,16 @@ public class ElectricHoeItem extends HoeItem implements EnergyItem, ElectricTool
     private final IntSupplier energyUsage;
     private final IntSupplier defaultEnergyCapacity;
 
-    public ElectricHoeItem(Properties properties, Tier tier, int baseAttackDamage, float baseAttackSpeed, Supplier<EnergyTierImpl> energyTier, IntSupplier energyUsage, IntSupplier defaultEnergyCapacity) {
+    public ElectricHoeItem(Properties properties, Tier tier, Supplier<EnergyTierImpl> energyTier, IntSupplier energyUsage, IntSupplier defaultEnergyCapacity) {
         super(tier, properties.stacksTo(1)
-                .attributes(HoeItem.createAttributes(tier, baseAttackDamage, baseAttackSpeed))
                 .component(IRDataComponents.ENERGY, new ComponentEuStorage(defaultEnergyCapacity.getAsInt())));
         this.energyTier = energyTier;
         this.energyUsage = energyUsage;
         this.defaultEnergyCapacity = defaultEnergyCapacity;
+    }
+
+    public static ElectricHoeItem defaultItem() {
+        return new ElectricHoeItem(new Item.Properties(), Tiers.IRON, IREnergyTiers.LOW, () -> IRConfig.electricHoeEnergyUsage, () -> IRConfig.electricHoeCapacity);
     }
 
     public int getEnergyUsage() {
