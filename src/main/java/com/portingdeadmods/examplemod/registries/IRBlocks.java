@@ -99,10 +99,16 @@ public final class IRBlocks {
 
     public static final DeferredBlock<Block> TIN_ORE = BLOCKS.registerWithItem("tin_ore",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
+    public static final DeferredBlock<Block> DEEPSLATE_TIN_ORE = BLOCKS.registerWithItem("deepslate_tin_ore",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
     public static final DeferredBlock<Block> URANIUM_ORE = BLOCKS.registerWithItem("uranium_ore",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
+    public static final DeferredBlock<Block> DEEPSLATE_URANIUM_ORE = BLOCKS.registerWithItem("deepslate_uranium_ore",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
     public static final DeferredBlock<Block> IRIDIUM_ORE = BLOCKS.registerWithItem("iridium_ore",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
+    public static final DeferredBlock<Block> DEEPSLATE_IRIDIUM_ORE = BLOCKS.registerWithItem("deepslate_iridium_ore",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
 
     static {
         CUSTOM_ITEM_MODELS = Set.of(

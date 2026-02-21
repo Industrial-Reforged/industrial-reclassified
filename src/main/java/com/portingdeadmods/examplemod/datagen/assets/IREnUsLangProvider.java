@@ -117,6 +117,13 @@ public class IREnUsLangProvider extends LanguageProvider {
         addBlock(IRBlocks.REINFORCED_GLASS, "Reinforced Glass");
         addBlock(IRBlocks.REINFORCED_STONE, "Reinforced Stone");
 
+        addBlock(IRBlocks.TIN_ORE, "Tin Ore");
+        addBlock(IRBlocks.URANIUM_ORE, "Uranium Ore");
+        addBlock(IRBlocks.IRIDIUM_ORE, "Iridium Ore");
+        addBlock(IRBlocks.DEEPSLATE_TIN_ORE, "Deepslate Tin Ore");
+        addBlock(IRBlocks.DEEPSLATE_URANIUM_ORE, "Deepslate Uranium Ore");
+        addBlock(IRBlocks.DEEPSLATE_IRIDIUM_ORE, "Deepslate Iridium Ore");
+
         addBlock(IRBlocks.RUBBER_SHEET, "Rubber Sheet");
         addBlock(IRBlocks.STICKY_RESIN_SHEET, "Sticky Resin Sheet");
 

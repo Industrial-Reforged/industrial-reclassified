@@ -25,7 +25,7 @@ public record ItemInputComponent(Ingredient ingredient, int count, float chance)
     public static final Codec<ItemInputComponent> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Ingredient.CODEC.fieldOf("ingredient").forGetter(ItemInputComponent::ingredient),
             Codec.INT.optionalFieldOf("count", 1).forGetter(ItemInputComponent::count),
-            Codec.FLOAT.optionalFieldOf("chances", 1f).forGetter(ItemInputComponent::chance)
+            Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter(ItemInputComponent::chance)
     ).apply(inst, ItemInputComponent::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemInputComponent> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC,

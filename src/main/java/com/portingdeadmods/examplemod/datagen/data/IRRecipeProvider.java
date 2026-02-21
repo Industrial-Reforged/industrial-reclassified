@@ -18,6 +18,7 @@ import com.portingdeadmods.examplemod.registries.IRItems;
 import com.portingdeadmods.examplemod.registries.IRMachines;
 import com.portingdeadmods.examplemod.registries.IRRecipeLayouts;
 import com.portingdeadmods.examplemod.tags.CTags;
+import net.minecraft.client.gui.screens.recipebook.SmeltingRecipeBookComponent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -27,6 +28,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
@@ -37,6 +39,10 @@ import java.util.concurrent.CompletableFuture;
 import static com.portingdeadmods.examplemod.IndustrialReclassified.rl;
 
 public class IRRecipeProvider extends RecipeProvider {
+
+    public static final List<ItemLike> URANIUM_ORE_SMELTABLES = List.of(IRItems.RAW_URANIUM, IRBlocks.URANIUM_ORE, IRBlocks.DEEPSLATE_URANIUM_ORE);
+    public static final List<ItemLike> TIN_ORE_SMELTABLES = List.of(IRItems.RAW_TIN, IRBlocks.TIN_ORE, IRBlocks.DEEPSLATE_TIN_ORE);
+
     public IRRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
@@ -114,6 +120,20 @@ public class IRRecipeProvider extends RecipeProvider {
                 .component(new TimeComponent(200))
                 .component(new EnergyInputComponent(800))
                 .save(output);
+
+        this.maceratorRecipe()
+                .component(new ItemInputComponent(IRBlocks.IRIDIUM_ORE))
+                .component(new ItemOutputListComponent(new ItemOutputComponent(IRItems.RAW_IRIDIUM), new ItemOutputComponent(IRItems.RAW_IRIDIUM, 0.5f)))
+                .component(new TimeComponent(800))
+                .component(new EnergyInputComponent(3200))
+                .save(output);
+
+        this.maceratorRecipe()
+                .component(new ItemInputComponent(IRBlocks.DEEPSLATE_IRIDIUM_ORE))
+                .component(new ItemOutputListComponent(new ItemOutputComponent(IRItems.RAW_IRIDIUM), new ItemOutputComponent(IRItems.RAW_IRIDIUM, 0.5f)))
+                .component(new TimeComponent(800))
+                .component(new EnergyInputComponent(3200))
+                .save(output, IndustrialReclassified.rl("raw_iridium_from_deepslate_iridium_ore"));
 
         oreMacerationRecipe(Tags.Items.ORES_COPPER, Tags.Items.RAW_MATERIALS_COPPER, IRItems.COPPER_DUST, "copper", output);
         oreMacerationRecipe(Tags.Items.ORES_IRON, Tags.Items.RAW_MATERIALS_IRON, IRItems.IRON_DUST, "iron", output);
@@ -354,15 +374,19 @@ public class IRRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_advanced_alloy_plate", has(IRItems.ADVANCED_ALLOY_PLATE))
                 .save(output, IndustrialReclassified.rl("advanced_machine_frame1"));
 
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(CTags.ItemTags.DUSTS_BRONZE), RecipeCategory.MISC, IRItems.BRONZE_INGOT, 0.7f, 200)
+                .unlockedBy("has_bronze_dust", has(CTags.ItemTags.DUSTS_BRONZE))
+                .save(output);
+
         nineBlockStorageRecipes(output, RecipeCategory.MISC, IRItems.BRONZE_INGOT, RecipeCategory.BUILDING_BLOCKS, IRBlocks.BRONZE_BLOCK);
         nineBlockStorageRecipes(output, RecipeCategory.MISC, IRItems.URANIUM_INGOT, RecipeCategory.BUILDING_BLOCKS, IRBlocks.URANIUM_BLOCK);
         nineBlockStorageRecipes(output, RecipeCategory.MISC, IRItems.TIN_INGOT, RecipeCategory.BUILDING_BLOCKS, IRBlocks.TIN_BLOCK);
 
-        oreSmelting(output, List.of(IRItems.RAW_URANIUM), RecipeCategory.MISC, IRItems.URANIUM_INGOT, 0.7F, 200, "uranium_ingot");
-        oreSmelting(output, List.of(IRItems.RAW_TIN), RecipeCategory.MISC, IRItems.TIN_INGOT, 0.7F, 200, "tin_ingot");
+        oreSmelting(output, URANIUM_ORE_SMELTABLES, RecipeCategory.MISC, IRItems.URANIUM_INGOT, 0.7F, 200, "uranium_ingot");
+        oreSmelting(output, TIN_ORE_SMELTABLES, RecipeCategory.MISC, IRItems.TIN_INGOT, 0.7F, 200, "tin_ingot");
 
-        oreBlasting(output, List.of(IRItems.RAW_URANIUM), RecipeCategory.MISC, IRItems.URANIUM_INGOT, 0.7F, 100, "uranium_ingot");
-        oreBlasting(output, List.of(IRItems.RAW_TIN), RecipeCategory.MISC, IRItems.TIN_INGOT, 0.7F, 100, "tin_ingot");
+        oreBlasting(output, URANIUM_ORE_SMELTABLES, RecipeCategory.MISC, IRItems.URANIUM_INGOT, 0.7F, 100, "uranium_ingot");
+        oreBlasting(output, TIN_ORE_SMELTABLES, RecipeCategory.MISC, IRItems.TIN_INGOT, 0.7F, 100, "tin_ingot");
 
         generatorCraftingRecipes(output);
 

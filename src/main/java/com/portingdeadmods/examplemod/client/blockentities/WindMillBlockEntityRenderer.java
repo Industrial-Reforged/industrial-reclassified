@@ -3,6 +3,7 @@ package com.portingdeadmods.examplemod.client.blockentities;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
+import com.portingdeadmods.examplemod.content.blockentities.WaterMillBlockEntity;
 import com.portingdeadmods.examplemod.content.blockentities.WindMillBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -25,9 +26,9 @@ public class WindMillBlockEntityRenderer implements BlockEntityRenderer<WindMill
     }
 
     @Override
-    public void render(WindMillBlockEntity windMillBlockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay) {
-        Direction direction = windMillBlockEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
-        int light = LevelRenderer.getLightColor(windMillBlockEntity.getLevel(), windMillBlockEntity.getBlockPos().relative(direction));
+    public void render(WindMillBlockEntity be, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay) {
+        Direction direction = be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+        int light = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
         poseStack.pushPose();
         {
             poseStack.translate(0.5, 0.5, 0.5);
@@ -35,11 +36,7 @@ public class WindMillBlockEntityRenderer implements BlockEntityRenderer<WindMill
             poseStack.mulPose(Axis.XP.rotationDegrees(90)); // orient blades upright
 
             // --- Apply rotation (spin blades) ---
-            int y = windMillBlockEntity.getBlockPos().getY() - windMillBlockEntity.getLevel().getMinBuildHeight();
-            int height = windMillBlockEntity.getLevel().getMaxBuildHeight() - windMillBlockEntity.getLevel().getMinBuildHeight();
-            float speed = ((float) y / height) * 50.0f;
-            float rotation = (windMillBlockEntity.getLevel().getGameTime() + partialTicks) * speed; // speed factor
-            poseStack.mulPose(Axis.YP.rotationDegrees(rotation == 0 ? 45 : rotation));
+            poseStack.mulPose(Axis.YP.rotationDegrees(be.getIndependentAngle(partialTicks)));
 
             // --- Center model for rendering ---
             poseStack.translate(-0.5, -0.5, -0.5);

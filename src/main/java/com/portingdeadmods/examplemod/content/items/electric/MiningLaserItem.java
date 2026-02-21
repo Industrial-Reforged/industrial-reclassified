@@ -5,6 +5,7 @@ import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,4 +30,16 @@ public class MiningLaserItem extends SimpleEnergyItem implements ElectricToolIte
     public int getEnergyUsage(ItemStack itemStack, @Nullable Entity entity) {
         return 0;
     }
+
+    public static ItemStack getLaserInHand(Player player) {
+        ItemStack heldItem = player.getMainHandItem();
+        if (!(heldItem.getItem() instanceof MiningLaserItem)) {
+            heldItem = player.getOffhandItem();
+            if (!(heldItem.getItem() instanceof MiningLaserItem)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        return heldItem;
+    }
+
 }

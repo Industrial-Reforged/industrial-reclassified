@@ -20,7 +20,7 @@ import java.util.Set;
 public record ItemOutputComponent(ItemStack item, float chance) implements RecipeComponent, ItemOutputComponentFlag {
     public static final Codec<ItemOutputComponent> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ItemStack.OPTIONAL_CODEC.fieldOf("items").forGetter(ItemOutputComponent::item),
-            Codec.FLOAT.optionalFieldOf("chances", 1f).forGetter(ItemOutputComponent::chance)
+            Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter(ItemOutputComponent::chance)
     ).apply(inst, ItemOutputComponent::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemOutputComponent> STREAM_CODEC = StreamCodec.composite(
             ItemStack.STREAM_CODEC,
@@ -37,7 +37,11 @@ public record ItemOutputComponent(ItemStack item, float chance) implements Recip
     }
 
     public ItemOutputComponent(ItemLike item) {
-        this(new ItemStack(item), 1);
+        this(item, 1);
+    }
+
+    public ItemOutputComponent(ItemLike item, float chance) {
+        this(new ItemStack(item), chance);
     }
 
     @Override

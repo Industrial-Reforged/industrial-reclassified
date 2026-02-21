@@ -34,6 +34,10 @@ public record ItemOutputListComponent(List<ItemOutputComponent> outputs) impleme
         this(List.of(new ItemOutputComponent(new ItemStack(item, count))));
     }
 
+    public ItemOutputListComponent(ItemOutputComponent ...outputs) {
+        this(List.of(outputs));
+    }
+
     @Override
     public RecipeComponent.Type<?> type() {
         return TYPE;

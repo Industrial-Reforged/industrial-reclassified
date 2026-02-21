@@ -35,6 +35,7 @@ public final class CTags {
         public static final TagKey<Item> DUSTS_IRON = createTag("dusts/iron", () -> List.of(item(IRItems.IRON_DUST)));
         public static final TagKey<Item> DUSTS_COPPER = createTag("dusts/copper", () -> List.of(item(IRItems.COPPER_DUST)));
         public static final TagKey<Item> DUSTS_TIN = createTag("dusts/tin", () -> List.of(item(IRItems.TIN_DUST)));
+        public static final TagKey<Item> DUSTS_BRONZE = createTag("dusts/bronze", () -> List.of(item(IRItems.BRONZE_DUST)));
         public static final TagKey<Item> DUSTS = createTag("dusts", () -> List.of(tag(DUSTS_COPPER), tag(DUSTS_TIN), tag(DUSTS_IRON), tag(DUSTS_COAL), tag(DUSTS_GOLD)));
 
         public static final TagKey<Item> RAW_MATERIALS_IRIDIUM = createTag("raw_materials/iridium", () -> List.of(item(IRItems.RAW_IRIDIUM)));

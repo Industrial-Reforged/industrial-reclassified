@@ -8,15 +8,20 @@ import com.portingdeadmods.examplemod.client.screens.*;
 import com.portingdeadmods.examplemod.content.blockentities.WaterMillBlockEntity;
 import com.portingdeadmods.examplemod.content.blockentities.WindMillBlockEntity;
 import com.portingdeadmods.examplemod.content.items.electric.BatteryItem;
+import com.portingdeadmods.examplemod.content.items.electric.MiningLaserItem;
 import com.portingdeadmods.examplemod.registries.*;
 import com.thepigcat.transportlib.client.debug.TransportNetworkRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.TntRenderer;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -26,10 +31,12 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.NeoForgeMod;
+
+import java.util.List;
 
 @Mod(value = IndustrialReclassified.MODID, dist = Dist.CLIENT)
 public final class IndustrialReclassifiedClient {

@@ -9,6 +9,10 @@ public final class IRConfig {
     public static int basicGeneratorEnergyCapacity = 4000;
     @ConfigValue(key = "geothermal_generator", name = "Geothermal Generator Energy Capacity", comment = "The Energy Capacity of the Geothermal Generator", category = BLOCKS_ENERGY_CAPACITY)
     public static int geothermalGeneratorEnergyCapacity = 16000;
+    @ConfigValue(key = "wind_mill", name = "Wind Mill Energy Capacity", comment = "The Energy Capacity of the Wind Mill", category = BLOCKS_ENERGY_CAPACITY)
+    public static int windMillEnergyCapacity = 16000;
+    @ConfigValue(key = "water_mill", name = "Water Mill Energy Capacity", comment = "The Energy Capacity of the Water Mill", category = BLOCKS_ENERGY_CAPACITY)
+    public static int waterMillEnergyCapacity = 16000;
     @ConfigValue(key = "basic_solar_panel", name = "Basic Solar Panel Energy Capacity", comment = "The Energy Capacity of the Basic Solar Panel", category = BLOCKS_ENERGY_CAPACITY)
     public static int basicSolarPanelEnergyCapacity = 4000;
     @ConfigValue(key = "centrifuge", name = "Centrifuge Energy Capacity", comment = "The Energy Capacity of the Centrifuge", category = BLOCKS_ENERGY_CAPACITY)
@@ -24,6 +28,10 @@ public final class IRConfig {
     public static int geothermalGeneratorEnergyProduction = 20;
     @ConfigValue(key = "basic_solar_panel", name = "Basic Solar Panel Energy Production", comment = "The amount of Energy produced by the Basic Solar Panel", category = BLOCKS_ENERGY_PRODUCTION)
     public static int basicSolarPanelEnergyProduction = 1;
+    @ConfigValue(key = "water_mill", name = "Water Mill", comment = "The amount of Energy produced by the Water Mill", category = BLOCKS_ENERGY_PRODUCTION)
+    public static int waterMillEnergyProduction = 6;
+    @ConfigValue(key = "wind_mill", name = "Wind Mill", comment = "The amount of Energy produced by the Wind Mill", category = BLOCKS_ENERGY_PRODUCTION)
+    public static int windMillEnergyProduction = 10;
 
     private static final String BLOCKS_FLUID_CAPACITY = "blocks.fluid.capacity";
 

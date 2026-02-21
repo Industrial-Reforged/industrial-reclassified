@@ -33,6 +33,9 @@ public class IRBlockStateProvider extends BlockStateProvider {
         simpleBlock(IRBlocks.TIN_ORE.get());
         simpleBlock(IRBlocks.URANIUM_ORE.get());
         simpleBlock(IRBlocks.IRIDIUM_ORE.get());
+        simpleBlock(IRBlocks.DEEPSLATE_TIN_ORE.get());
+        simpleBlock(IRBlocks.DEEPSLATE_URANIUM_ORE.get());
+        simpleBlock(IRBlocks.DEEPSLATE_IRIDIUM_ORE.get());
         simpleBlock(IRBlocks.MACHINE_FRAME.get());
         simpleBlock(IRBlocks.ADVANCED_MACHINE_FRAME.get());
         simpleBlock(IRBlocks.REINFORCED_STONE.get());

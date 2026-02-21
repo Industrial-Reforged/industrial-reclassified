@@ -26,9 +26,9 @@ public class WaterMillBlockEntityRenderer implements BlockEntityRenderer<WaterMi
     }
 
     @Override
-    public void render(WaterMillBlockEntity windMillBlockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay) {
-        Direction direction = windMillBlockEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
-        int light = LevelRenderer.getLightColor(windMillBlockEntity.getLevel(), windMillBlockEntity.getBlockPos().relative(direction));
+    public void render(WaterMillBlockEntity be, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay) {
+        Direction direction = be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+        int light = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
         poseStack.pushPose();
         {
             poseStack.translate(0.5, 0.5, 0.5);
@@ -36,9 +36,7 @@ public class WaterMillBlockEntityRenderer implements BlockEntityRenderer<WaterMi
             poseStack.mulPose(Axis.XP.rotationDegrees(90)); // orient blades upright
 
             // --- Apply rotation (spin blades) ---
-            float speed = 15.0f;
-            float rotation = (windMillBlockEntity.getLevel().getGameTime() + partialTicks) * speed; // speed factor
-            poseStack.mulPose(Axis.YP.rotationDegrees(rotation == 0 ? 45 : rotation));
+            poseStack.mulPose(Axis.YP.rotationDegrees(be.spinningDirection * be.getIndependentAngle(partialTicks)));
 
             // --- Center model for rendering ---
             poseStack.translate(-0.5, -0.5, -0.5);
