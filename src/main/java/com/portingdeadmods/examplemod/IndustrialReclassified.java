@@ -77,6 +77,8 @@ public final class IndustrialReclassified {
         IRMachines.HELPER.register(modEventBus);
         IRArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
         IRNetworks.NETWORKS.register(modEventBus);
+        IRSoundEvents.SOUND_EVENTS.register(modEventBus);
+        IRFluids.HELPER.register(modEventBus);
 
         PDLConfigHelper.registerConfig(IRConfig.class, ModConfig.Type.COMMON, modContainer);
     }

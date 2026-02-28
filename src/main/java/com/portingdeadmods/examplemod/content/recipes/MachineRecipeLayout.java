@@ -61,6 +61,10 @@ public abstract class MachineRecipeLayout<R extends MachineRecipe> {
         return this.components.get(componentType);
     }
 
+    public Map<RecipeComponent.Type<?>, String> getComponents() {
+        return components;
+    }
+
     public ResourceLocation getId() {
         return id;
     }

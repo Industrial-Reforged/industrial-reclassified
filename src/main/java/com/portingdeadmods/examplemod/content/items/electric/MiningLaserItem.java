@@ -1,6 +1,6 @@
 package com.portingdeadmods.examplemod.content.items.electric;
 
-import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricConsumerItem;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public class MiningLaserItem extends SimpleEnergyItem implements ElectricToolItem {
+public class MiningLaserItem extends SimpleEnergyItem implements ElectricConsumerItem {
     public MiningLaserItem(Properties properties, Supplier<? extends EnergyTier> energyTier, IntSupplier defaultEnergyCapacity) {
         super(properties, energyTier, defaultEnergyCapacity);
     }

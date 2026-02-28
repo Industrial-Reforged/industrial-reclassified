@@ -4,11 +4,13 @@ import com.portingdeadmods.examplemod.IRCapabilities;
 import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.content.items.FluidCellItem;
+import com.portingdeadmods.examplemod.content.items.FuelJetpackItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -38,6 +40,11 @@ public final class IRCreativeTabs {
                                 out.accept(copy);
                             }
                         }
+                    } else if (stack.getItem() instanceof FuelJetpackItem) {
+                        ItemStack copy = stack.copy();
+                        IFluidHandlerItem fluidHandlerItem = copy.getCapability(Capabilities.FluidHandler.ITEM);
+                        fluidHandlerItem.fill(new FluidStack(IRFluids.BIO_FUEL.getStillFluid(), fluidHandlerItem.getTankCapacity(0)), IFluidHandler.FluidAction.EXECUTE);
+                        out.accept(copy);
                     }
                 }).forEach(out::accept);
             })

@@ -3,7 +3,7 @@ package com.portingdeadmods.examplemod.content.items.electric;
 import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.api.CustomWrenchableBlock;
 import com.portingdeadmods.examplemod.api.energy.*;
-import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricConsumerItem;
 import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
 import com.portingdeadmods.examplemod.registries.IREnergyTiers;
 import net.minecraft.core.BlockPos;
@@ -12,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public class ElectricWrenchItem extends SimpleEnergyItem implements ElectricToolItem {
+public class ElectricWrenchItem extends SimpleEnergyItem implements ElectricConsumerItem {
     private final IntSupplier energyUsage;
 
     public ElectricWrenchItem(Item.Properties properties, Supplier<? extends EnergyTier> energyTier, IntSupplier energyUsage, IntSupplier defaultEnergyCapacity) {

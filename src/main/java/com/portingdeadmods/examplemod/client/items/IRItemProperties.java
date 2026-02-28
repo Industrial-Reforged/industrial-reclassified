@@ -8,6 +8,7 @@ import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.content.items.electric.BatteryItem;
 import com.portingdeadmods.examplemod.content.items.electric.ElectricChainsawItem;
 import com.portingdeadmods.examplemod.content.items.electric.ElectricDrillItem;
+import com.portingdeadmods.examplemod.content.items.electric.ElectricJetpackItem;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,6 +45,11 @@ public final class IRItemProperties {
 
     public static float getBatteryStage(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {
         return ((BatteryItem) stack.getItem()).getBatteryStage(stack);
+    }
+
+
+    public static float getJetpackStage(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {
+        return ((ElectricJetpackItem) stack.getItem()).getJetpackStage(stack);
     }
 
 //    public static float getJetpackStage(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {

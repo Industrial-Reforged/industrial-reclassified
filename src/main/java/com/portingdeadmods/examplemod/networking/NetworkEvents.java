@@ -4,6 +4,7 @@ import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.networking.bidirectional.ExampleBidirectionalPayload;
 import com.portingdeadmods.examplemod.networking.clientbound.ExampleClientboundPayload;
 import com.portingdeadmods.examplemod.networking.serverbound.ExampleServerboundPayload;
+import com.portingdeadmods.examplemod.networking.serverbound.UpdateInputPayload;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -19,6 +20,11 @@ public class NetworkEvents {
                 ExampleServerboundPayload.TYPE,
                 ExampleServerboundPayload.STREAM_CODEC,
                 ExampleServerboundPayload::exampleServerboundAction
+        );
+        registrar.playToServer(
+                UpdateInputPayload.TYPE,
+                UpdateInputPayload.STREAM_CODEC,
+                UpdateInputPayload::handle
         );
 
         registrar.playToClient(

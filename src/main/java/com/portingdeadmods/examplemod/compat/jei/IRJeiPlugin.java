@@ -13,11 +13,14 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,10 +38,16 @@ public class IRJeiPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registerCategory(registration, new MachineRecipeCategory(registration.getJeiHelpers().getGuiHelper(), IRRecipeLayouts.COMPRESSOR, Component.literal("Compressor"), IRMachines.COMPRESSOR.getBlock()), IRRecipeLayouts.COMPRESSOR);
-        registerCategory(registration, new MachineRecipeCategory(registration.getJeiHelpers().getGuiHelper(), IRRecipeLayouts.MACERATOR, Component.literal("Macerator"), IRMachines.MACERATOR.getBlock()), IRRecipeLayouts.MACERATOR);
-        registerCategory(registration, new MachineRecipeCategory(registration.getJeiHelpers().getGuiHelper(), IRRecipeLayouts.EXTRACTOR, Component.literal("Extractor"), IRMachines.EXTRACTOR.getBlock()), IRRecipeLayouts.EXTRACTOR);
-        registerCategory(registration, new MachineRecipeCategory(registration.getJeiHelpers().getGuiHelper(), IRRecipeLayouts.CANNING_MACHINE, Component.literal("Canning Machine"), IRMachines.CANNING_MACHINE.getBlock()), IRRecipeLayouts.CANNING_MACHINE);
+        registerCategory(registration, createCategory(registration, IRRecipeLayouts.COMPRESSOR, Component.literal("Compressor"), IRMachines.COMPRESSOR.getBlock()), IRRecipeLayouts.COMPRESSOR);
+        registerCategory(registration, createCategory(registration, IRRecipeLayouts.MACERATOR, Component.literal("Macerator"), IRMachines.MACERATOR.getBlock()), IRRecipeLayouts.MACERATOR);
+        registerCategory(registration, createCategory(registration, IRRecipeLayouts.EXTRACTOR, Component.literal("Extractor"), IRMachines.EXTRACTOR.getBlock()), IRRecipeLayouts.EXTRACTOR);
+        registerCategory(registration, createCategory(registration, IRRecipeLayouts.CANNING_MACHINE, Component.literal("Canning Machine"), IRMachines.CANNING_MACHINE.getBlock()), IRRecipeLayouts.CANNING_MACHINE);
+    }
+
+    private static @NotNull MachineRecipeCategory createCategory(IRecipeCategoryRegistration registration, MachineRecipeLayout<MachineRecipe> layout, Component component, ItemLike icon) {
+        ClientLevel level = Minecraft.getInstance().level;
+        List<MachineRecipe> recipes = level.getRecipeManager().getAllRecipesFor(layout.getRecipeType()).stream().map(RecipeHolder::value).toList();
+        return new MachineRecipeCategory(registration.getJeiHelpers().getGuiHelper(), layout, recipes, component, icon);
     }
 
     private void registerCategory(IRecipeCategoryRegistration registration, MachineRecipeCategory category, MachineRecipeLayout<?> layout) {

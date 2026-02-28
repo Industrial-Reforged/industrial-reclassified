@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public abstract class ElectricDiggerItem extends DiggerItem implements EnergyItem, ElectricToolItem {
+public abstract class ElectricDiggerItem extends DiggerItem implements EnergyItem, ElectricConsumerItem {
     protected final float baseAttackDamage;
     protected final float attackSpeed;
     private final Tier tier;

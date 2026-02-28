@@ -102,6 +102,7 @@ public class IREnUsLangProvider extends LanguageProvider {
         addItem(IRItems.QUAD_URANIUM_FUEL_ROD, "Quad Uranium Fuel Rod");
 
         addBlock(IRBlocks.INDUSTRIAL_TNT, "Industrial Tnt");
+        addBlock(IRBlocks.NUKE, "Nuke");
 
         addBlock(IRBlocks.MACHINE_FRAME, "Machine Frame");
         addBlock(IRBlocks.ADVANCED_MACHINE_FRAME, "Machine Frame");

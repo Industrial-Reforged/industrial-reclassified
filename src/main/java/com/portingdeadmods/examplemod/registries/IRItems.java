@@ -63,8 +63,8 @@ public final class IRItems {
     public static final DeferredItem<Item> QUANTUM_LEGGINGS = ITEMS.registerItem("quantum_leggings", props -> QuantumArmorItem.defaultItem(props, ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> QUANTUM_BOOTS = ITEMS.registerItem("quantum_boots", props -> QuantumArmorItem.defaultItem(props, ArmorItem.Type.BOOTS));
 
-    public static final DeferredItem<Item> JETPACK = ITEMS.registerSimpleItem("jetpack");
-    public static final DeferredItem<Item> ELECTRIC_JETPACK = ITEMS.registerSimpleItem("electric_jetpack");
+    public static final DeferredItem<FuelJetpackItem> JETPACK = ITEMS.registerItem("jetpack", FuelJetpackItem::defaultItem);
+    public static final DeferredItem<ElectricJetpackItem> ELECTRIC_JETPACK = ITEMS.registerItem("electric_jetpack", ElectricJetpackItem::defaultItem);
     /* Batteries */
     public static final DeferredItem<BatteryItem> REDSTONE_BATTERY = ITEMS.registerItem("redstone_battery", BatteryItem::batteryItem);
     public static final DeferredItem<BatteryItem> ENERGY_CRYSTAL = ITEMS.registerItem("energy_crystal", BatteryItem::energyCrystalItem);

@@ -34,13 +34,9 @@ public class IRWorldgenProvider {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         context.register(IRWorldgenKeys.RUBBER_TREE_KEY.placedFeature(), new PlacedFeature(configuredFeatures.getOrThrow(IRWorldgenKeys.RUBBER_TREE_KEY.configuredFeature()),
                 VegetationPlacements.treePlacement(PlacementUtils.countExtra(1, 0.01F, 1), IRBlocks.RUBBER_TREE_SAPLING.get())));
-//        registerPlacedOre(context, IRWorldgenKeys.BAUXITE_ORE_KEY, 22, -40, 80);
-//        registerPlacedOre(context, IRWorldgenKeys.CHROMIUM_ORE_KEY, 4, -50, 20);
-//        registerPlacedOre(context, IRWorldgenKeys.IRIDIUM_ORE_KEY, 4, -64, -40);
-//        registerPlacedOre(context, IRWorldgenKeys.LEAD_ORE_KEY, 18, -50, 30);
-//        registerPlacedOre(context, IRWorldgenKeys.NICKEL_ORE_KEY, 12, -40, 30);
-//        registerPlacedOre(context, IRWorldgenKeys.TIN_ORE_KEY, 26, -30, 120);
-//        registerPlacedOre(context, IRWorldgenKeys.URANIUM_ORE_KEY, 12, -64, -20);
+        registerPlacedOre(context, IRWorldgenKeys.TIN_ORE_KEY,  18, -20, 120);
+        registerPlacedOre(context, IRWorldgenKeys.URANIUM_ORE_KEY, 12, -64, -8);
+        registerPlacedOre(context, IRWorldgenKeys.IRIDIUM_ORE_KEY, 4, -64, -40);
     }
 
     private static void registerPlacedOre(BootstrapContext<PlacedFeature> context, IRWorldgenKeys.Feature ore, int count, int minHeight, int maxHeight) {
@@ -64,13 +60,9 @@ public class IRWorldgenProvider {
                 new RubberTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1)),
                 new TwoLayersFeatureSize(2, 0, 2)).build())
         );
-//        registerConfiguredOre(context, IRWorldgenKeys.BAUXITE_ORE_KEY, IRBlocks.BAUXITE_ORE.get(), IRBlocks.DEEPSLATE_BAUXITE_ORE.get(), 10);
-//        registerConfiguredOre(context, IRWorldgenKeys.CHROMIUM_ORE_KEY, IRBlocks.CHROMIUM_ORE.get(), IRBlocks.DEEPSLATE_CHROMIUM_ORE.get(), 5, 0.2f);
-//        registerConfiguredOre(context, IRWorldgenKeys.IRIDIUM_ORE_KEY, IRBlocks.IRIDIUM_ORE.get(), IRBlocks.DEEPSLATE_IRIDIUM_ORE.get(), 3, 0.5f);
-//        registerConfiguredOre(context, IRWorldgenKeys.LEAD_ORE_KEY, IRBlocks.LEAD_ORE.get(), IRBlocks.DEEPSLATE_LEAD_ORE.get(), 6);
-//        registerConfiguredOre(context, IRWorldgenKeys.NICKEL_ORE_KEY, IRBlocks.NICKEL_ORE.get(), IRBlocks.DEEPSLATE_NICKEL_ORE.get(), 6);
-//        registerConfiguredOre(context, IRWorldgenKeys.TIN_ORE_KEY, IRBlocks.TIN_ORE.get(), IRBlocks.DEEPSLATE_TIN_ORE.get(), 8);
-//        registerConfiguredOre(context, IRWorldgenKeys.URANIUM_ORE_KEY, IRBlocks.URANIUM_ORE.get(), IRBlocks.DEEPSLATE_URANIUM_ORE.get(), 4);
+        registerConfiguredOre(context, IRWorldgenKeys.TIN_ORE_KEY, IRBlocks.TIN_ORE.get(), IRBlocks.DEEPSLATE_TIN_ORE.get(), 8);
+        registerConfiguredOre(context, IRWorldgenKeys.URANIUM_ORE_KEY, IRBlocks.URANIUM_ORE.get(), IRBlocks.DEEPSLATE_URANIUM_ORE.get(), 4);
+        registerConfiguredOre(context, IRWorldgenKeys.IRIDIUM_ORE_KEY, IRBlocks.IRIDIUM_ORE.get(), IRBlocks.DEEPSLATE_IRIDIUM_ORE.get(), 3, 0.5f);
     }
 
     private static void registerConfiguredOre(BootstrapContext<ConfiguredFeature<?, ?>> context, IRWorldgenKeys.Feature ore, Block oreBlock, Block deepslateOreBlock, int size) {

@@ -1,9 +1,9 @@
 {
-  "example": {
+  "jetpack": {
     "category": "players",
-    "subtitle": "examplemod.example",
+    "subtitle": "examplemod.jetpack",
     "sounds": [
-      "examplemod:example"
+      "examplemod:jetpack"
     ]
   }
 }

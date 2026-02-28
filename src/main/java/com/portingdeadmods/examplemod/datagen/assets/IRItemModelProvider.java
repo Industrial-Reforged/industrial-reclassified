@@ -4,7 +4,9 @@ import com.portingdeadmods.examplemod.IndustrialReclassified;
 import com.portingdeadmods.examplemod.client.items.IRItemProperties;
 import com.portingdeadmods.examplemod.content.items.electric.BatteryItem;
 import com.portingdeadmods.examplemod.registries.IRBlocks;
+import com.portingdeadmods.examplemod.registries.IRFluids;
 import com.portingdeadmods.examplemod.registries.IRItems;
+import com.portingdeadmods.portingdeadlibs.api.fluids.PDLFluid;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -12,6 +14,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
@@ -93,10 +96,15 @@ public class IRItemModelProvider extends ItemModelProvider {
         batteryModel(IRItems.ENERGY_CRYSTAL.get());
         batteryModel(IRItems.LAPOTRON_CRYSTAL.get());
 
-        fluidCellModel(IRItems.FLUID_CELL.get());
+        fluidContainerModel(IRItems.FLUID_CELL.get());
+        fluidContainerModel(IRItems.JETPACK.get());
         basicItem(IRItems.FUSE.get());
         basicItem(IRItems.TIN_CAN.get());
         basicItem(IRItems.TIN_CAN_FOOD.get());
+
+        for (PDLFluid fluid : IRFluids.HELPER.getFluids()) {
+            bucket(fluid.getStillFluid());
+        }
 
         basicItem(IRItems.STICKY_RESIN.get());
         basicItem(IRItems.RUBBER.get());
@@ -135,9 +143,12 @@ public class IRItemModelProvider extends ItemModelProvider {
 
         basicItem(IRItems.PLANT_BALL.get());
 
+        overrideItemModel(6, basicItem(IRItems.ELECTRIC_JETPACK, itemTexture(IRItems.ELECTRIC_JETPACK).withSuffix("_0")), IRItemProperties.JETPACK_STAGE_KEY,
+                i -> basicItem(IRItems.ELECTRIC_JETPACK, "_" + i));
+
     }
 
-    private void fluidCellModel(ItemLike item) {
+    private void fluidContainerModel(ItemLike item) {
         withExistingParent(name(item), ResourceLocation.fromNamespaceAndPath("neoforge", "item/default"))
                 .texture("base", itemTexture(item))
                 .texture("fluid", itemTexture(item).withSuffix("_overlay"))
@@ -175,6 +186,12 @@ public class IRItemModelProvider extends ItemModelProvider {
                     .end();
         }
 
+    }
+
+    private void bucket(Fluid f) {
+        withExistingParent(key(f.getBucket()).getPath(), ResourceLocation.fromNamespaceAndPath("neoforge", "item/bucket_drip"))
+                .customLoader(DynamicFluidContainerModelBuilder::begin)
+                .fluid(f);
     }
 
     private void batteryModel(BatteryItem item) {

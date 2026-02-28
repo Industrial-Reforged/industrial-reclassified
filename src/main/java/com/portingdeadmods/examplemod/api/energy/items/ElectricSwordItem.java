@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public abstract class ElectricSwordItem extends SwordItem implements EnergyItem, ElectricToolItem {
+public abstract class ElectricSwordItem extends SwordItem implements EnergyItem, ElectricConsumerItem {
     protected final Supplier<? extends EnergyTier> energyTier;
     private final IntSupplier energyUsage;
     private final IntSupplier energyCapacity;

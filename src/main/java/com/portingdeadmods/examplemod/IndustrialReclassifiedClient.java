@@ -86,7 +86,7 @@ public final class IndustrialReclassifiedClient {
         ItemProperties.register(IRItems.ADVANCED_DRILL.get(), IRItemProperties.ACTIVE_KEY, (ClampedItemPropertyFunction) IRItemProperties::isItemHeld);
 
         // IMPORTANT: WE DON'T USE CLAMPED ITEM PROPERTY FUNCTION HERE CUZ IT MEANS PROPERTIES CANT GO ABOVE 1
-//        ItemProperties.register(IRItems.JETPACK.get(), IRItemProperties.JETPACK_STAGE_KEY, IRItemProperties::getJetpackStage);
+        ItemProperties.register(IRItems.ELECTRIC_JETPACK.get(), IRItemProperties.JETPACK_STAGE_KEY, IRItemProperties::getJetpackStage);
         for (Item item : BuiltInRegistries.ITEM) {
             if (item instanceof BatteryItem) {
                 ItemProperties.register(item, IRItemProperties.BATTERY_STAGE_KEY, IRItemProperties::getBatteryStage);
@@ -96,6 +96,7 @@ public final class IndustrialReclassifiedClient {
 
     private void registerItemColor(RegisterColorHandlersEvent.Item event) {
         event.register(new SimpleFluidItem.Colors(), IRItems.FLUID_CELL.get());
+        event.register(new SimpleFluidItem.Colors(), IRItems.JETPACK.get());
 //        for (PDLFluid fluid : IRFluids.HELPER.getFluids()) {
 //            if (fluid instanceof MoltenMetalFluid) {
 //                event.register(new DynamicFluidContainerModel.Colors(), fluid.getDeferredBucket());

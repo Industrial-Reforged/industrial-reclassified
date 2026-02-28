@@ -6,7 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public interface ElectricToolItem {
+public interface ElectricConsumerItem {
     default boolean requireEnergyToWork(ItemStack itemStack) {
         return requireEnergyToWork(itemStack, null);
     }

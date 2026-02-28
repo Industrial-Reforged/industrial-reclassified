@@ -1,7 +1,7 @@
 package com.portingdeadmods.examplemod.content.items.electric;
 
 import com.portingdeadmods.examplemod.IRConfig;
-import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricConsumerItem;
 import com.portingdeadmods.examplemod.api.energy.EnergyHandler;
 import com.portingdeadmods.examplemod.api.energy.EnergyTier;
 import com.portingdeadmods.examplemod.api.energy.items.SimpleEnergyItem;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public class ElectricTreetapItem extends SimpleEnergyItem implements ElectricToolItem {
+public class ElectricTreetapItem extends SimpleEnergyItem implements ElectricConsumerItem {
     private final IntSupplier energyUsage;
     private final IntSupplier energyCapacity;
 

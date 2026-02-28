@@ -24,6 +24,14 @@ import java.util.function.Supplier;
 public final class IRArmorMaterials {
     public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, IndustrialReclassified.MODID);
 
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> FUEL_JETPACK = register("fuel_jetpack",
+            Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.CHESTPLATE, 10);
+            }), 10, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.0F, 0.0F, () -> Ingredient.EMPTY);
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ELECTRIC_JETPACK = register("electric_jetpack",
+            Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.CHESTPLATE, 10);
+            }), 10, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.0F, 0.0F, () -> Ingredient.EMPTY);
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> NANO = register("nano",
             Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.BOOTS, 10);

@@ -3,7 +3,7 @@ package com.portingdeadmods.examplemod.content.items.electric;
 import com.mojang.datafixers.util.Pair;
 import com.portingdeadmods.examplemod.IRConfig;
 import com.portingdeadmods.examplemod.IRDataComponents;
-import com.portingdeadmods.examplemod.api.energy.items.ElectricToolItem;
+import com.portingdeadmods.examplemod.api.energy.items.ElectricConsumerItem;
 import com.portingdeadmods.examplemod.api.energy.items.EnergyItem;
 import com.portingdeadmods.examplemod.impl.energy.ComponentEuStorage;
 import com.portingdeadmods.examplemod.impl.energy.EnergyTierImpl;
@@ -30,7 +30,7 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class ElectricHoeItem extends HoeItem implements EnergyItem, ElectricToolItem {
+public class ElectricHoeItem extends HoeItem implements EnergyItem, ElectricConsumerItem {
     private final Supplier<EnergyTierImpl> energyTier;
     private final IntSupplier energyUsage;
     private final IntSupplier defaultEnergyCapacity;
